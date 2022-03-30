@@ -1,4 +1,4 @@
-package core.backend.likeWorkBook.entity;
+package core.backend.likeWorkbook.entity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,7 +12,7 @@ import javax.persistence.Id;
 
 @Entity @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class LikeWorkBook {
+public class LikeWorkbook {
     @Id @GeneratedValue
     private Long id;
 
@@ -24,7 +24,7 @@ public class LikeWorkBook {
 
     //-- 비즈니스 로직 --//
     @Builder
-    public LikeWorkBook(Long memberId, Long workbookId) {
+    public LikeWorkbook(Long memberId, Long workbookId) {
         this.memberId = memberId;
         this.workbookId = workbookId;
     }
