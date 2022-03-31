@@ -2,7 +2,6 @@ package core.backend.wrongAnswer.repository;
 
 import core.backend.wrongAnswer.domain.WrongAnswer;
 import core.backend.wrongAnswer.dto.WrongAnswerCondition;
-import core.backend.wrongAnswer.dto.WrongAnswerDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
