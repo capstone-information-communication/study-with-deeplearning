@@ -42,4 +42,10 @@ public class Problem {
         this.answer = answer;
         setWorkbook(workbook);
     }
+
+    public Problem update(String question, String answer) {
+        this.question = question;
+        this.answer = answer;
+        return this;
+    }
 }
