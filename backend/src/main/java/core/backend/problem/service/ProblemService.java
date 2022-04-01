@@ -22,6 +22,11 @@ public class ProblemService {
         return problem.getId();
     }
 
+    @Transactional
+    public void deleteById(Long id) {
+        problemRepository.deleteById(id);
+    }
+
     public Problem findByIdOrThrow(Long id) {
         return problemRepository.findById(id)
                 .orElseThrow(ProblemNotFound::new);
