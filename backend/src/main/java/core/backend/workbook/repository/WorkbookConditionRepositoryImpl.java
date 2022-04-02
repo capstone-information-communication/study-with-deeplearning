@@ -1,5 +1,6 @@
 package core.backend.workbook.repository;
 
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import core.backend.global.error.exception.TotalNotFound;
@@ -25,39 +26,28 @@ public class WorkbookConditionRepositoryImpl implements WorkbookConditionReposit
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Workbook> findByIdOrThrow(Long id) {
-        return Optional.of(
-                queryFactory
-                        .selectFrom(workbook)
-                        .where(
-                                idEq(id)
-                        )
-                        .fetch()
-        ).orElseThrow(WorkbookNotFound::new);
-    }
-
-    @Override
-    public List<Workbook> findByTitleOrThrow(String title) {
+    public Optional<Workbook> findByTitle(String title) {
         return Optional.of(
                 queryFactory
                         .selectFrom(workbook)
                         .where(
                                 titleEq(title)
                         )
-                        .fetch()
-        ).orElseThrow(WorkbookNotFound::new);
+                        .fetchFirst()
+        );
     }
 
     @Override
-    public List<Workbook> findByDescriptionOrThrow(String description) {
-        return Optional.of(
+    public Page<Workbook> findAllWithOrderBy(String title, Pageable pageable) {
+        List<Workbook> result = Optional.of(
                 queryFactory
                         .selectFrom(workbook)
-                        .where(
-                                descriptionEq(description)
-                        )
+                        .offset(pageable.getOffset())
+                        .limit(pageable.getPageSize())
+                        .orderBy(orderByTitleAsc(title))
                         .fetch()
         ).orElseThrow(WorkbookNotFound::new);
+        return new PageImpl<>(result, pageable, getWorkbookTotalCount());
     }
 
     @Override
@@ -66,32 +56,38 @@ public class WorkbookConditionRepositoryImpl implements WorkbookConditionReposit
                 queryFactory
                         .selectFrom(workbook)
                         .where(
-                                titleEq(condition.getTitle()),
-                                descriptionEq(condition.getDescription())
+                                titleContains(condition.getTitle()),
+                                descriptionContains(condition.getDescription())
                         )
                         .offset(pageable.getOffset())
                         .limit(pageable.getPageSize())
                         .fetch()
         ).orElseThrow(WorkbookNotFound::new);
+        return new PageImpl<>(content, pageable, getWorkbookTotalCount());
+    }
 
-        Long total = Optional.ofNullable(
+    private Long getWorkbookTotalCount() {
+        return Optional.ofNullable(
                 queryFactory
                         .select(workbook.count())
                         .from(workbook)
                         .fetchOne()
         ).orElseThrow(TotalNotFound::new);
-        return new PageImpl<>(content, pageable, total);
-    }
-
-    private BooleanExpression idEq(Long id) {
-        return hasText(String.valueOf(id)) ? workbook.id.eq(id) : null;
     }
 
     private BooleanExpression titleEq(String title) {
         return hasText(title) ? workbook.title.eq(title) : null;
     }
 
-    private BooleanExpression descriptionEq(String description) {
-        return hasText(description) ? workbook.description.eq(description) : null;
+    private OrderSpecifier<String> orderByTitleAsc(String title) {
+        return hasText(title) ? workbook.title.asc() : null;
+    }
+
+    private BooleanExpression titleContains(String title) {
+        return hasText(title) ? workbook.title.contains(title) : null;
+    }
+
+    private BooleanExpression descriptionContains(String description) {
+        return hasText(description) ? workbook.description.contains(description) : null;
     }
 }
