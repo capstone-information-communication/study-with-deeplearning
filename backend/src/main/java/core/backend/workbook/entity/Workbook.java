@@ -38,4 +38,10 @@ public class Workbook {
         this.description = description;
         this.problemList = problemList;
     }
+
+    public Long update(String title, String description) {
+        this.title = title;
+        this.description = description;
+        return id;
+    }
 }
