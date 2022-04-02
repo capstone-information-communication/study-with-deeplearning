@@ -5,14 +5,12 @@ import core.backend.workbook.entity.Workbook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface WorkbookConditionRepository {
-    List<Workbook> findByIdOrThrow(Long id);
+    Optional<Workbook> findByTitle(String title);
 
-    List<Workbook> findByTitleOrThrow(String title);
-
-    List<Workbook> findByDescriptionOrThrow(String description);
+    Page<Workbook> findAllWithOrderBy(String title, Pageable pageable);
 
     Page<Workbook> searchOrThrow(WorkbookCondition condition, Pageable pageable);
 }
