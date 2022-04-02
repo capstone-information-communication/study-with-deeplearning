@@ -1,7 +1,7 @@
 package core.backend.workbook.repository;
 
 import core.backend.workbook.dto.WorkbookCondition;
-import core.backend.workbook.entity.Workbook;
+import core.backend.workbook.domain.Workbook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

@@ -1,4 +1,4 @@
-package core.backend.likeWorkbook.entity;
+package core.backend.likeWorkbook.domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;

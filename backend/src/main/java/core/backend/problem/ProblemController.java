@@ -6,7 +6,7 @@ import core.backend.problem.dto.ProblemResponseDto;
 import core.backend.problem.dto.ProblemSaveRequestDto;
 import core.backend.problem.dto.ProblemUpdateRequestDto;
 import core.backend.problem.service.ProblemService;
-import core.backend.workbook.entity.Workbook;
+import core.backend.workbook.domain.Workbook;
 import core.backend.workbook.repository.WorkbookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

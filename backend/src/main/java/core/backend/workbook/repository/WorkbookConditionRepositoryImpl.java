@@ -4,7 +4,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import core.backend.global.error.exception.TotalNotFound;
 import core.backend.workbook.dto.WorkbookCondition;
-import core.backend.workbook.entity.Workbook;
+import core.backend.workbook.domain.Workbook;
 import core.backend.workbook.exception.WorkbookNotFound;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-import static core.backend.workbook.entity.QWorkbook.workbook;
+import static core.backend.workbook.domain.QWorkbook.workbook;
 import static org.springframework.util.StringUtils.hasText;
 
 @Repository

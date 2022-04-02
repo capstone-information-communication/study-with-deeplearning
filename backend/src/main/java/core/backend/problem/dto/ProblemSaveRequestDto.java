@@ -1,7 +1,7 @@
 package core.backend.problem.dto;
 
 import core.backend.problem.domain.Problem;
-import core.backend.workbook.entity.Workbook;
+import core.backend.workbook.domain.Workbook;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,4 +1,4 @@
-package core.backend.workbook.entity;
+package core.backend.workbook.domain;
 
 import core.backend.problem.domain.Problem;
 import lombok.AccessLevel;
