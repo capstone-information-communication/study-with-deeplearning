@@ -4,9 +4,9 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import core.backend.global.error.exception.TotalNotFound;
-import core.backend.workbook.dto.WorkbookCondition;
 import core.backend.workbook.domain.Workbook;
-import core.backend.workbook.exception.WorkbookNotFound;
+import core.backend.workbook.dto.WorkbookCondition;
+import core.backend.workbook.exception.WorkbookNotAuthorException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -46,7 +46,7 @@ public class WorkbookConditionRepositoryImpl implements WorkbookConditionReposit
                         .limit(pageable.getPageSize())
                         .orderBy(orderByTitleAsc(title))
                         .fetch()
-        ).orElseThrow(WorkbookNotFound::new);
+        ).orElseThrow(WorkbookNotAuthorException::new);
         return new PageImpl<>(result, pageable, getWorkbookTotalCount());
     }
 
@@ -62,7 +62,7 @@ public class WorkbookConditionRepositoryImpl implements WorkbookConditionReposit
                         .offset(pageable.getOffset())
                         .limit(pageable.getPageSize())
                         .fetch()
-        ).orElseThrow(WorkbookNotFound::new);
+        ).orElseThrow(WorkbookNotAuthorException::new);
         return new PageImpl<>(content, pageable, getWorkbookTotalCount());
     }
 
