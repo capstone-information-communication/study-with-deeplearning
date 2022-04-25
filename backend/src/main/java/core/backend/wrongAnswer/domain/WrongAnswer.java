@@ -25,13 +25,13 @@ public class WrongAnswer {
     private Long workbookId;
 
     @Column(nullable = false)
-    private Long problemId;
+    private Long questionId;
 
     //-- 비즈니스 로직 --//
     @Builder
-    public WrongAnswer(Long memberId, Long workbookId, Long problemId) {
+    public WrongAnswer(Long memberId, Long workbookId, Long questionId) {
         this.memberId = memberId;
         this.workbookId = workbookId;
-        this.problemId = problemId;
+        this.questionId = questionId;
     }
 }
