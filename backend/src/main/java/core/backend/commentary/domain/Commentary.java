@@ -1,4 +1,4 @@
-package core.backend.likeWorkbook.domain;
+package core.backend.commentary.domain;
 
 import core.backend.global.domain.BaseTimeEntity;
 import lombok.AccessLevel;
@@ -11,22 +11,20 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-@Entity @Getter
+@Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class LikeWorkbook extends BaseTimeEntity {
-    @Id @GeneratedValue
+public class Commentary extends BaseTimeEntity {
+    @Id
+    @GeneratedValue
     private Long id;
 
     @Column(nullable = false)
-    private Long memberId;
-
-    @Column(nullable = false)
-    private Long workbookId;
+    private String content;
 
     //-- 비즈니스 로직 --//
     @Builder
-    public LikeWorkbook(Long memberId, Long workbookId) {
-        this.memberId = memberId;
-        this.workbookId = workbookId;
+    public Commentary(String content) {
+        this.content = content;
     }
 }

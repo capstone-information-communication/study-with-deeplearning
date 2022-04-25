@@ -1,22 +1,24 @@
 package core.backend.member.domain;
 
+import core.backend.global.domain.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Member extends BaseTimeEntity {
     @Id
     @GeneratedValue
     private Long id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
 
     @Column(nullable = false)
     private String name;
@@ -32,7 +34,8 @@ public class Member {
 
     //-- 비즈니스 로직 --//
     @Builder
-    public Member(String name, String nickname, String email, String password) {
+    public Member(Role role, String name, String nickname, String email, String password) {
+        this.role = role;
         this.name = name;
         this.nickname = nickname;
         this.email = email;

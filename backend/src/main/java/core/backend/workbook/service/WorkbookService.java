@@ -1,8 +1,9 @@
 package core.backend.workbook.service;
 
+import core.backend.workbook.domain.Workbook;
+import core.backend.workbook.dto.WorkbookCondition;
 import core.backend.workbook.dto.WorkbookUpdateRequestDto;
-import core.backend.workbook.entity.Workbook;
-import core.backend.workbook.exception.WorkbookNotFound;
+import core.backend.workbook.exception.WorkbookNotAuthorException;
 import core.backend.workbook.repository.WorkbookConditionRepository;
 import core.backend.workbook.repository.WorkbookRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +36,7 @@ public class WorkbookService {
 
     public Workbook findByIdOrThrow(Long id) {
         return workbookRepository.findById(id)
-                .orElseThrow(WorkbookNotFound::new);
+                .orElseThrow(WorkbookNotAuthorException::new);
     }
 
     public Page<Workbook> findAll(Pageable pageable) {
@@ -44,9 +47,12 @@ public class WorkbookService {
         return workbookConditionRepository.findAllWithOrderBy(title, pageable);
     }
 
-    public Workbook findByTitleOrThrow(String title) {
-        return workbookConditionRepository.findByTitle(title)
-                .orElseThrow(WorkbookNotFound::new);
+    public Page<Workbook> search(WorkbookCondition condition, Pageable pageable) {
+        return workbookConditionRepository.searchOrThrow(condition, pageable);
+    }
+
+    public Optional<Workbook> findByTitleOrThrow(String title) {
+        return workbookConditionRepository.findByTitle(title);
     }
 
     @Transactional
