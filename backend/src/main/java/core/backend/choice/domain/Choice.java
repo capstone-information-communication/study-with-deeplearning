@@ -1,5 +1,6 @@
 package core.backend.choice.domain;
 
+import core.backend.choice.dto.ChoiceUpdateRequestDto;
 import core.backend.global.domain.BaseTimeEntity;
 import core.backend.question.domain.Question;
 import lombok.AccessLevel;
@@ -44,5 +45,10 @@ public class Choice extends BaseTimeEntity {
         this.state = state;
         this.content = content;
         setQuestion(question);
+    }
+
+    public void update(ChoiceUpdateRequestDto dto) {
+        this.state = dto.getState();
+        this.content = dto.getContent();
     }
 }
