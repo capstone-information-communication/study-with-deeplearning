@@ -1,5 +1,6 @@
 package core.backend.commentary.domain;
 
+import core.backend.commentary.dto.CommentaryUpdateRequestDto;
 import core.backend.global.domain.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -26,5 +27,9 @@ public class Commentary extends BaseTimeEntity {
     @Builder
     public Commentary(String content) {
         this.content = content;
+    }
+
+    public void update(CommentaryUpdateRequestDto dto) {
+        this.content = dto.getContent();
     }
 }
