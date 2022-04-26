@@ -6,6 +6,7 @@ import core.backend.likeWorkbook.repository.LikeWorkbookRepository;
 import core.backend.workbook.repository.WorkbookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,8 +29,8 @@ public class LikeWorkbookService {
         likeWorkbookRepository.deleteById(id);
     }
 
-    public Page<LikeWorkbook> findByMemberId(Long memberId) {
-        return likeWorkbookRepository.findByMemberId(memberId);
+    public Page<LikeWorkbook> findByMemberId(Long memberId, Pageable pageable) {
+        return likeWorkbookRepository.findByMemberId(memberId, pageable);
     }
 
     public LikeWorkbook findByIdOrThrow(Long id) {
