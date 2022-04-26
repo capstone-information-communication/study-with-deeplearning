@@ -3,6 +3,7 @@ package core.backend.question.domain;
 import core.backend.choice.domain.Choice;
 import core.backend.commentary.domain.Commentary;
 import core.backend.global.domain.BaseTimeEntity;
+import core.backend.question.dto.QuestionUpdateRequestDto;
 import core.backend.workbook.domain.Workbook;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -33,14 +34,16 @@ public class Question extends BaseTimeEntity {
     private Category category;
 
     //- 연관관계 코드 -//
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "question")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "question",
+            cascade = CascadeType.PERSIST,
+            orphanRemoval = true)
     private List<Choice> choiceList = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "workbook_id")
     private Workbook workbook;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "commentary_id")
     private Commentary commentary;
 
@@ -61,5 +64,11 @@ public class Question extends BaseTimeEntity {
         this.category = category;
         this.commentary = commentary;
         setWorkbook(workbook);
+    }
+
+    public void update(QuestionUpdateRequestDto dto) {
+        this.title = dto.getTitle();
+        this.content = dto.getContent();
+        this.category = dto.getCategory();
     }
 }
