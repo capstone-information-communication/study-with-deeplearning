@@ -2,6 +2,11 @@ package core.backend.global.error.exception;
 
 import core.backend.choice.exception.ChoiceNotFoundException;
 import core.backend.member.exception.*;
+import core.backend.commentary.exception.CommentaryNotFoundException;
+import core.backend.member.exception.ExpiredTokenException;
+import core.backend.member.exception.InvalidTokenException;
+import core.backend.member.exception.MemberNotFound;
+import core.backend.member.exception.WrongTokenException;
 import core.backend.question.exception.QuestionNotFoundException;
 import core.backend.workbook.exception.WorkbookExistTitleException;
 import core.backend.workbook.exception.WorkbookNotAuthorException;
@@ -34,6 +39,7 @@ public enum ErrorCode {
     CLASS_NOT_FOUND(NOT_FOUND, "에러 클래스를 찾을 수 없습니다", NotFoundClassException.class),
     QUESTION_NOT_FOUND(NOT_FOUND, "문제를 찾을 수 없습니다", QuestionNotFoundException.class),
     CHOICE_NOT_FOUND(NOT_FOUND, "선택지를 찾을 수 없습니다", ChoiceNotFoundException.class),
+    COMMENTARY_NOT_FOUND(NOT_FOUND, "문제 해설을 찾을 수 없습니다", CommentaryNotFoundException.class),
     ;
 
     private final HttpStatus httpStatus;
