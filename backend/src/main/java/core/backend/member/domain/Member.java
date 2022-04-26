@@ -1,10 +1,12 @@
 package core.backend.member.domain;
 
 import core.backend.global.domain.BaseTimeEntity;
+import core.backend.member.dto.MemberUpdateRequestDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 
@@ -40,5 +42,15 @@ public class Member extends BaseTimeEntity {
         this.nickname = nickname;
         this.email = email;
         this.password = password;
+    }
+
+    public void update(MemberUpdateRequestDto dto) {
+        this.email = dto.getEmail();
+        this.role = dto.getRole();
+        this.nickname = dto.getNickname();
+    }
+
+    public void updatePassword(String password, PasswordEncoder encoder) {
+        this.password = encoder.encode(password);
     }
 }

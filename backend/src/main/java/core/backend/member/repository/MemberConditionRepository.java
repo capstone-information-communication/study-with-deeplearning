@@ -5,10 +5,6 @@ import core.backend.member.dto.MemberCondition;
 
 import java.util.Optional;
 
-public interface MemberCredentialRepository {
-    Optional<Member> findByEmail(String email);
-
-    Optional<Member> findByNickname(String nickname);
-
+public interface MemberConditionRepository {
     Optional<Member> findByCondition(MemberCondition condition);
 }

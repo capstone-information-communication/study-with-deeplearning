@@ -14,33 +14,9 @@ import static core.backend.member.domain.QMember.member;
 
 @Repository
 @RequiredArgsConstructor
-public class MemberCredentialRepositoryImpl implements MemberCredentialRepository {
+public class MemberConditionRepositoryImpl implements MemberConditionRepository {
 
     private final JPAQueryFactory queryFactory;
-
-    @Override
-    public Optional<Member> findByEmail(String email) {
-        return Optional.ofNullable(
-                queryFactory
-                        .selectFrom(member)
-                        .where(
-                                emailEq(email)
-                        )
-                        .fetchOne()
-        );
-    }
-
-    @Override
-    public Optional<Member> findByNickname(String nickname) {
-        return Optional.ofNullable(
-                queryFactory
-                        .selectFrom(member)
-                        .where(
-                                nicknameEq(nickname)
-                        )
-                        .fetchOne()
-        );
-    }
 
     @Override
     public Optional<Member> findByCondition(MemberCondition condition) {

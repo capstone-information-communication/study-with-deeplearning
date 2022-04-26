@@ -1,6 +1,7 @@
 package core.backend.global.error.exception;
 
 import core.backend.choice.exception.ChoiceNotFoundException;
+import core.backend.member.exception.*;
 import core.backend.commentary.exception.CommentaryNotFoundException;
 import core.backend.member.exception.ExpiredTokenException;
 import core.backend.member.exception.InvalidTokenException;
@@ -15,7 +16,8 @@ import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Getter
 public enum ErrorCode {
@@ -25,14 +27,15 @@ public enum ErrorCode {
     EXPIRED_TOKEN(BAD_REQUEST, "만료된 토큰입니다", ExpiredTokenException.class),
     INVALID_TOKEN(BAD_REQUEST, "옳바르지 않은 형식의 토큰입니다", InvalidTokenException.class),
     WRONG_TOKEN(BAD_REQUEST, "잘못된 토큰입니다", WrongTokenException.class),
+    EXIST_EMAIL(BAD_REQUEST, "이미 존재하는 이메일입니다", EmailExistException.class),
+    EXIST_NICKNAME(BAD_REQUEST, "이미 존재하는 닉네임입니다", NickNameExistException.class),
+    SIGN_IN_FAILED(BAD_REQUEST, "이메일 혹은 비밀번호를 확인해주시기 바랍니다", SignInFailedException.class),
 
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
-    MEMBER_NOT_FOUND(NOT_FOUND, "회원을 찾을 수 없습니다", MemberNotFound.class),
+    MEMBER_NOT_FOUND(NOT_FOUND, "회원을 찾을 수 없습니다", MemberNotFoundException.class),
     WORKBOOK_NOT_FOUND(NOT_FOUND, "문제집을 찾을 수 없습니다", WorkbookNotAuthorException.class),
     WRONG_ANSWER_NOT_FOUND(NOT_FOUND, "오답 문제를 찾을 수 없습니다", WrongAnswerNotFound.class),
     TOTAL_NOT_FOUND(NOT_FOUND, "합계 퀴리 결과를 가져올 수 없습니다", TotalNotFound.class),
-
-    /* 404 NOT_FOUND : 에러 클래스를 찾을 수 없는 경우 */
     CLASS_NOT_FOUND(NOT_FOUND, "에러 클래스를 찾을 수 없습니다", NotFoundClassException.class),
     QUESTION_NOT_FOUND(NOT_FOUND, "문제를 찾을 수 없습니다", QuestionNotFoundException.class),
     CHOICE_NOT_FOUND(NOT_FOUND, "선택지를 찾을 수 없습니다", ChoiceNotFoundException.class),
