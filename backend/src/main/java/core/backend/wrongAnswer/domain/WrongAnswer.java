@@ -1,5 +1,6 @@
 package core.backend.wrongAnswer.domain;
 
+import core.backend.global.domain.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import javax.persistence.Id;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class WrongAnswer {
+public class WrongAnswer extends BaseTimeEntity {
     @Id
     @GeneratedValue
     private Long id;
