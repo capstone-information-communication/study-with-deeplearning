@@ -29,7 +29,6 @@ public class MemberService {
 
     @Transactional
     public Long save(Member member) {
-        isValidEmailAndNickname(member.getEmail(), member.getNickname());
         memberRepository.save(member);
         return member.getId();
     }
