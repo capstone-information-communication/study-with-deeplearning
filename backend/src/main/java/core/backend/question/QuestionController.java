@@ -1,10 +1,13 @@
 package core.backend.question;
 
+import core.backend.commentary.service.CommentaryService;
 import core.backend.global.dto.DataResponse;
 import core.backend.question.domain.Category;
 import core.backend.question.dto.QuestionResponseDto;
+import core.backend.question.dto.QuestionSaveRequestDto;
 import core.backend.question.dto.QuestionUpdateRequestDto;
 import core.backend.question.service.QuestionService;
+import core.backend.workbook.service.WorkbookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -21,6 +24,8 @@ import java.util.stream.Collectors;
 public class QuestionController {
 
     private final QuestionService questionService;
+    private final WorkbookService workbookService;
+    private final CommentaryService commentaryService;
 
     @GetMapping("/question/{id}")
     public ResponseEntity<QuestionResponseDto> findByIdV1(
@@ -50,6 +55,38 @@ public class QuestionController {
 
         return ResponseEntity.ok(
                 DataResponse.builder().data(result).count(result.size()).build());
+    }
+
+    @PostMapping("/question")
+    public ResponseEntity<QuestionResponseDto> saveV1(
+            @RequestBody QuestionSaveRequestDto dto) {
+        return ResponseEntity.status(201)
+                .body(new QuestionResponseDto(
+                        questionService.findByIdOrThrow(saveAndGetQuestionId(dto))));
+    }
+
+    @PostMapping("/questions")
+    public ResponseEntity<DataResponse> saveListV1(
+            @RequestBody List<QuestionSaveRequestDto> dtoList) {
+        List<QuestionResponseDto> result = saveAndGetQuestionIdList(dtoList).stream()
+                .map(id -> new QuestionResponseDto(
+                        questionService.findByIdOrThrow(id)))
+                .collect(Collectors.toList());
+        return ResponseEntity.status(201)
+                .body(DataResponse.builder().data(result).count(result.size()).build());
+    }
+
+    private List<Long> saveAndGetQuestionIdList(List<QuestionSaveRequestDto> dtoList) {
+        return dtoList.stream()
+                .map(this::saveAndGetQuestionId)
+                .collect(Collectors.toList());
+    }
+
+    private Long saveAndGetQuestionId(QuestionSaveRequestDto dto) {
+        return questionService.save(
+                dto.toEntity(
+                        commentaryService.findByIdOrThrow(dto.getCommentaryId()),
+                        workbookService.findByIdOrThrow(dto.getWorkbookId())));
     }
 
     @PutMapping("/question/{id}")
