@@ -1,9 +1,8 @@
 package core.backend.question.dto;
 
 import core.backend.choice.dto.ChoiceResponseDto;
-import core.backend.commentary.domain.Commentary;
-import core.backend.commentary.dto.CommentaryResponseDto;
 import core.backend.question.domain.Category;
+import core.backend.question.domain.Commentary;
 import core.backend.question.domain.Question;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +18,7 @@ public class QuestionResponseDto {
     private String content;
     private Category category;
 
-    private CommentaryResponseDto commentary;
+    private Commentary commentary;
     private List<ChoiceResponseDto> choiceList;
 
     private LocalDateTime updatedAt;
@@ -31,8 +30,8 @@ public class QuestionResponseDto {
         title = entity.getTitle();
         content = entity.getContent();
         category = entity.getCategory();
+        commentary = entity.getCommentary();
 
-        commentary = new CommentaryResponseDto(entity.getCommentary());
         choiceList = entity.getChoiceList()
                 .stream()
                 .map(ChoiceResponseDto::new)

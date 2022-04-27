@@ -2,11 +2,10 @@ package core.backend;
 
 import core.backend.choice.domain.Choice;
 import core.backend.choice.domain.State;
-import core.backend.commentary.domain.Commentary;
-import core.backend.commentary.service.CommentaryService;
 import core.backend.member.domain.Member;
 import core.backend.member.domain.Role;
 import core.backend.question.domain.Category;
+import core.backend.question.domain.Commentary;
 import core.backend.question.domain.Question;
 import core.backend.question.service.QuestionService;
 import core.backend.workbook.domain.Workbook;
@@ -38,7 +37,6 @@ public class initDataBase {
     @RequiredArgsConstructor
     static class InitService {
         private final WorkbookService workbookService;
-        private final CommentaryService commentaryService;
         private final QuestionService questionService;
 
         private final EntityManager em;
@@ -46,12 +44,10 @@ public class initDataBase {
         private List<Long> memberIdList = new ArrayList<>();
         private List<Long> workbookIdList = new ArrayList<>();
         private List<Long> questionIdList = new ArrayList<>();
-        private List<Long> commentaryIdList = new ArrayList<>();
 
         public void dbInit(int count) {
             for (int i = 0; i < count; i++) {
                 generateMemberBy(i);
-                generateCommentaryBy(i);
                 generateWorkbookBy(i);
 
                 generateQuestionBy(i);
@@ -82,22 +78,13 @@ public class initDataBase {
             workbookIdList.add(workbook.getId());
         }
 
-        private void generateCommentaryBy(int i) {
-            Commentary commentary = Commentary.builder()
-                    .content("content" + i)
-                    .build();
-            em.persist(commentary);
-            commentaryIdList.add(commentary.getId());
-        }
-
         private void generateQuestionBy(int i) {
             Workbook workbook = workbookService.findByIdOrThrow(workbookIdList.get(i));
-            Commentary commentary = commentaryService.findByIdOrThrow(commentaryIdList.get(i));
             Category category = categoryFactory(i);
 
             Question question = Question.builder()
                     .workbook(workbook)
-                    .commentary(commentary)
+                    .commentary(Commentary.builder().comment("commentary" + i).build())
                     .title("title" + i)
                     .content("content" + i)
                     .category(category)

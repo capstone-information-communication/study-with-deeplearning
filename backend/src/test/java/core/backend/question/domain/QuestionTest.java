@@ -1,6 +1,5 @@
 package core.backend.question.domain;
 
-import core.backend.commentary.domain.Commentary;
 import core.backend.workbook.domain.Workbook;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +19,7 @@ class QuestionTest {
                 .build();
 
         Commentary commentary = Commentary.builder()
-                .content("문제에 대한 해설 저장")
+                .comment("문제에 대한 해설 저장")
                 .build();
 
         //when
@@ -38,7 +37,7 @@ class QuestionTest {
         assertThat(question.getContent()).isEqualTo("보기로 주어질 상황이나 대화가 들어갈 자리");
         assertThat(question.getCategory()).isEqualTo(Category.SHORT);
 
-        assertThat(question.getCommentary().getContent()).isEqualTo(commentary.getContent());
+        assertThat(question.getCommentary().getComment()).isEqualTo(commentary.getComment());
         assertThat(question.getWorkbook().getTitle()).isEqualTo(workbook.getTitle());
     }
 

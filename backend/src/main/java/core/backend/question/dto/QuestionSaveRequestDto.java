@@ -1,7 +1,7 @@
 package core.backend.question.dto;
 
-import core.backend.commentary.domain.Commentary;
 import core.backend.question.domain.Category;
+import core.backend.question.domain.Commentary;
 import core.backend.question.domain.Question;
 import core.backend.workbook.domain.Workbook;
 import lombok.AccessLevel;
@@ -16,16 +16,18 @@ public class QuestionSaveRequestDto {
     private String title;
     private String content;
     private Category category;
+    private Commentary commentary;
 
-    public QuestionSaveRequestDto(Long commentaryId, Long workbookId, String title, String content, Category category) {
+    public QuestionSaveRequestDto(Long commentaryId, Long workbookId, String title, String content, Category category, Commentary commentary) {
         this.commentaryId = commentaryId;
         this.workbookId = workbookId;
         this.title = title;
         this.content = content;
         this.category = category;
+        this.commentary = commentary;
     }
 
-    public Question toEntity(Commentary commentary, Workbook workbook) {
+    public Question toEntity(Workbook workbook) {
         return Question.builder()
                 .title(title)
                 .category(category)

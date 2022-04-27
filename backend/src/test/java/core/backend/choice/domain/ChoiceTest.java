@@ -1,7 +1,7 @@
 package core.backend.choice.domain;
 
-import core.backend.commentary.domain.Commentary;
 import core.backend.question.domain.Category;
+import core.backend.question.domain.Commentary;
 import core.backend.question.domain.Question;
 import core.backend.workbook.domain.Workbook;
 import org.junit.jupiter.api.DisplayName;
@@ -22,7 +22,7 @@ class ChoiceTest {
                 .build();
 
         Commentary commentary = Commentary.builder()
-                .content("문제에 대한 해설 저장")
+                .comment("문제에 대한 해설 저장")
                 .build();
 
         Question question = Question.builder()

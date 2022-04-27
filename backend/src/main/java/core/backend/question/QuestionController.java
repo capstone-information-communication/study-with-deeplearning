@@ -1,6 +1,5 @@
 package core.backend.question;
 
-import core.backend.commentary.service.CommentaryService;
 import core.backend.global.dto.DataResponse;
 import core.backend.question.domain.Category;
 import core.backend.question.dto.QuestionResponseDto;
@@ -25,7 +24,6 @@ public class QuestionController {
 
     private final QuestionService questionService;
     private final WorkbookService workbookService;
-    private final CommentaryService commentaryService;
 
     @GetMapping("/question/{id}")
     public ResponseEntity<QuestionResponseDto> findByIdV1(
@@ -85,7 +83,6 @@ public class QuestionController {
     private Long saveAndGetQuestionId(QuestionSaveRequestDto dto) {
         return questionService.save(
                 dto.toEntity(
-                        commentaryService.findByIdOrThrow(dto.getCommentaryId()),
                         workbookService.findByIdOrThrow(dto.getWorkbookId())));
     }
 
