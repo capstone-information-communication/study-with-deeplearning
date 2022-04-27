@@ -35,7 +35,9 @@ public class WrongAnswerController {
         List<WrongAnswerInfoResponseDto> result = getWrongAnswerMap(member.getId(), pageable)
                 .entrySet().stream()
                 .map(entry ->
-                        new WrongAnswerInfoResponseDto(workbookService.findByIdOrThrow(entry.getKey()), entry.getValue()))
+                        new WrongAnswerInfoResponseDto(
+                                workbookService.findByIdOrThrow(entry.getKey()),
+                                entry.getValue()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(
                 DataResponse.builder().data(result).count(result.size()).build());
@@ -45,15 +47,16 @@ public class WrongAnswerController {
         HashMap<Long, List<Long>> wrongAnswerMap = new HashMap<>();
         wrongAnswerService.findByMemberId(memberId, pageable)
                 .stream()
-                .map(wrongAnswer -> setKeyAndValue(wrongAnswerMap, wrongAnswer.getWorkbookId(), wrongAnswer.getQuestionId()));
+                .map(wrongAnswer -> setKeyAndValue(
+                        wrongAnswerMap,
+                        wrongAnswer.getWorkbookId(),
+                        wrongAnswer.getQuestionId()));
         return wrongAnswerMap;
     }
 
     private int setKeyAndValue(HashMap<Long, List<Long>> wrongAnswerMap, Long workbookId, Long questionId) {
         if (wrongAnswerMap.containsKey(workbookId)) {
-            wrongAnswerMap
-                    .get(workbookId)
-                    .add(questionId);
+            wrongAnswerMap.get(workbookId).add(questionId);
         } else {
             wrongAnswerMap.put(workbookId, new ArrayList<>());
             wrongAnswerMap.get(workbookId).add(questionId);
