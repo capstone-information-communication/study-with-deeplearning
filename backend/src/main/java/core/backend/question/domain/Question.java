@@ -1,7 +1,6 @@
 package core.backend.question.domain;
 
 import core.backend.choice.domain.Choice;
-import core.backend.commentary.domain.Commentary;
 import core.backend.global.domain.BaseTimeEntity;
 import core.backend.question.dto.QuestionUpdateRequestDto;
 import core.backend.workbook.domain.Workbook;
@@ -18,7 +17,6 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Question extends BaseTimeEntity {
-
     @Id
     @GeneratedValue
     private Long id;
@@ -33,6 +31,9 @@ public class Question extends BaseTimeEntity {
     @Column(nullable = false)
     private Category category;
 
+    @Embedded
+    private Commentary commentary;
+
     //- 연관관계 코드 -//
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "question",
             cascade = CascadeType.PERSIST,
@@ -42,10 +43,6 @@ public class Question extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "workbook_id")
     private Workbook workbook;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "commentary_id")
-    private Commentary commentary;
 
     //-- 연관관계 메서드 --//
     public void setWorkbook(Workbook workbook) {
@@ -67,8 +64,9 @@ public class Question extends BaseTimeEntity {
     }
 
     public void update(QuestionUpdateRequestDto dto) {
-        this.title = dto.getTitle();
-        this.content = dto.getContent();
-        this.category = dto.getCategory();
+        title = dto.getTitle();
+        content = dto.getContent();
+        category = dto.getCategory();
+        commentary = dto.getCommentary();
     }
 }

@@ -1,7 +1,6 @@
 package core.backend.global.error.exception;
 
 import core.backend.choice.exception.ChoiceNotFoundException;
-import core.backend.commentary.exception.CommentaryNotFoundException;
 import core.backend.likeWorkbook.exception.LikeWorkbookNotFoundException;
 import core.backend.member.exception.*;
 import core.backend.question.exception.QuestionNotFoundException;
@@ -36,7 +35,6 @@ public enum ErrorCode {
     CLASS_NOT_FOUND(NOT_FOUND, "에러 클래스를 찾을 수 없습니다", NotFoundClassException.class),
     QUESTION_NOT_FOUND(NOT_FOUND, "문제를 찾을 수 없습니다", QuestionNotFoundException.class),
     CHOICE_NOT_FOUND(NOT_FOUND, "선택지를 찾을 수 없습니다", ChoiceNotFoundException.class),
-    COMMENTARY_NOT_FOUND(NOT_FOUND, "문제 해설을 찾을 수 없습니다", CommentaryNotFoundException.class),
     LIKE_WORKBOOK_NOT_FOUND(NOT_FOUND, "좋아요 문제집을 찾을 수 없습니다", LikeWorkbookNotFoundException.class),
     ;
 
