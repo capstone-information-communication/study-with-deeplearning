@@ -6,7 +6,6 @@ import core.backend.wrongAnswer.exception.WrongAnswerNotFoundException;
 import core.backend.wrongAnswer.repository.WrongAnswerConditionRepositoryImpl;
 import core.backend.wrongAnswer.repository.WrongAnswerRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.AbstractPageRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,9 +20,9 @@ public class WrongAnswerService {
     private final WrongAnswerConditionRepositoryImpl wrongAnswerConditionRepository;
 
     @Transactional
-    public Long save(WrongAnswer wrongAnswer) {
+    public WrongAnswer save(WrongAnswer wrongAnswer) {
         wrongAnswerRepository.save(wrongAnswer);
-        return wrongAnswer.getId();
+        return wrongAnswer;
     }
 
     @Transactional
@@ -31,7 +30,7 @@ public class WrongAnswerService {
         wrongAnswerRepository.deleteById(id);
     }
 
-    public Page<WrongAnswer> findByMember(Long memberId, Pageable pageable) {
+    public Page<WrongAnswer> findByMemberId(Long memberId, Pageable pageable) {
         return wrongAnswerRepository.findByMemberId(memberId, pageable);
     }
 
