@@ -77,7 +77,7 @@ public class WorkbookController {
     }
 
     private void isValidTitle(String title) {
-        workbookService.findByTitleOrThrow(title)
+        workbookService.findByTitle(title)
                 .ifPresent(e -> {
                     throw new WorkbookExistTitleException();
                 });
