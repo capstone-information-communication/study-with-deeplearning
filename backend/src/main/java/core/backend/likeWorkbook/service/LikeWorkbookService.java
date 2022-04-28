@@ -19,9 +19,9 @@ public class LikeWorkbookService {
     private final WorkbookRepository workbookRepository;
 
     @Transactional
-    public Long save(LikeWorkbook likeWorkbook) {
+    public LikeWorkbook save(LikeWorkbook likeWorkbook) {
         likeWorkbookRepository.save(likeWorkbook);
-        return likeWorkbook.getId();
+        return likeWorkbook;
     }
 
     @Transactional
