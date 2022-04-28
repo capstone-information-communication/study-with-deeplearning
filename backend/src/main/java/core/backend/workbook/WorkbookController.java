@@ -1,6 +1,8 @@
 package core.backend.workbook;
 
 import core.backend.global.dto.DataResponse;
+import core.backend.member.domain.Member;
+import core.backend.workbook.domain.Workbook;
 import core.backend.workbook.dto.WorkbookCondition;
 import core.backend.workbook.dto.WorkbookResponseDto;
 import core.backend.workbook.dto.WorkbookSaveRequestDto;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,9 +55,8 @@ public class WorkbookController {
             @RequestParam String description,
             @PageableDefault Pageable pageable) {
         WorkbookCondition condition = new WorkbookCondition(title, description);
-        Page<Workbook> search = workbookService.search(condition, pageable);
-
-        List<WorkbookResponseDto> result = search.stream()
+        List<WorkbookResponseDto> result = workbookService.search(condition, pageable)
+                .stream()
                 .map(WorkbookResponseDto::new)
                 .collect(Collectors.toList());
 
@@ -62,14 +64,12 @@ public class WorkbookController {
                 DataResponse.builder().count(result.size()).data(result).build());
     }
 
-    @PostMapping("/workbook/{id}")
+    @PostMapping("/workbook")
     public ResponseEntity<WorkbookResponseDto> saveV1(
-            //TODO: spring security를 사용하여 auth를 사용하여 회원 id 가져오기
-            @PathVariable Long memberId,
+            @AuthenticationPrincipal Member member,
             @RequestBody WorkbookSaveRequestDto dto) {
         isValidTitle(dto.getTitle());
-
-        Long id = workbookService.save(dto.toEntity(memberId));
+        Long id = workbookService.save(dto.toEntity(member.getId()));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 WorkbookResponseDto.builder()
@@ -85,12 +85,11 @@ public class WorkbookController {
 
     @PutMapping("/workbook/{id}/{memberId}")
     public ResponseEntity<WorkbookResponseDto> updateV1(
-            //TODO: spring security를 사용하여 auth를 사용하여 회원 id 가져오기 AuthenticatationPrincipal
+            @AuthenticationPrincipal Member member,
             @PathVariable Long id,
-            @PathVariable Long memberId,
             @RequestBody WorkbookUpdateRequestDto dto) {
-        isAuthor(id, memberId);
-        Long updatedId = workbookService.update(id, dto);
+        isAuthor(id, member.getId());
+        Long updatedId = workbookService.update(member.getId(), dto);
 
         return ResponseEntity.ok(
                 WorkbookResponseDto.builder()
@@ -106,8 +105,9 @@ public class WorkbookController {
 
     @DeleteMapping("/workbook/{id}")
     public ResponseEntity<WorkbookResponseDto> deleteV1(
+            @AuthenticationPrincipal Member member,
             @PathVariable Long id) {
-        //TODO: 문제집을 저장한 회원만 문제집을 삭제할 수 있는 코드 추가
+        isAuthor(id, member.getId());
         Workbook deletedWorkbook = workbookService.findByIdOrThrow(id);
         workbookService.deleteById(id);
         return ResponseEntity.ok(
