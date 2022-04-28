@@ -2,12 +2,11 @@ package core.backend.global.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import core.backend.global.error.exception.ErrorCode;
-import core.backend.member.repository.MemberRepository;
+import core.backend.member.service.MemberService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContext;
@@ -29,7 +28,7 @@ import java.io.PrintWriter;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final TokenProvider tokenProvider;
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -38,7 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (token != null & !token.equalsIgnoreCase("null")) {
                 Long memberId = tokenProvider.validateAndGetMember(token);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        memberRepository.findById(memberId),
+                        memberService.findByIdOrThrow(memberId),
                         null,
                         AuthorityUtils.NO_AUTHORITIES);
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
