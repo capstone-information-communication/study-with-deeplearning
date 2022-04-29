@@ -11,15 +11,13 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class QuestionSaveRequestDto {
-    private Long commentaryId;
     private Long workbookId;
     private String title;
     private String content;
     private Category category;
     private Commentary commentary;
 
-    public QuestionSaveRequestDto(Long commentaryId, Long workbookId, String title, String content, Category category, Commentary commentary) {
-        this.commentaryId = commentaryId;
+    public QuestionSaveRequestDto(Long workbookId, String title, String content, Category category, Commentary commentary) {
         this.workbookId = workbookId;
         this.title = title;
         this.content = content;

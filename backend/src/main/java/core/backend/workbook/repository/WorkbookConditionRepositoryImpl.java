@@ -26,18 +26,6 @@ public class WorkbookConditionRepositoryImpl implements WorkbookConditionReposit
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Optional<Workbook> findByTitle(String title) {
-        return Optional.of(
-                queryFactory
-                        .selectFrom(workbook)
-                        .where(
-                                titleEq(title)
-                        )
-                        .fetchFirst()
-        );
-    }
-
-    @Override
     public Page<Workbook> findAllWithOrderBy(String title, Pageable pageable) {
         List<Workbook> result = Optional.of(
                 queryFactory

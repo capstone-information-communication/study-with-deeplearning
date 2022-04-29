@@ -40,6 +40,10 @@ public class WorkbookService {
                 .orElseThrow(WorkbookNotFoundException::new);
     }
 
+    public Optional<Workbook> findByTitle(String title) {
+        return workbookRepository.findByTitle(title);
+    }
+
     public Page<Workbook> findAll(Pageable pageable) {
         return workbookRepository.findAll(pageable);
     }
@@ -50,10 +54,6 @@ public class WorkbookService {
 
     public Page<Workbook> search(WorkbookCondition condition, Pageable pageable) {
         return workbookConditionRepository.searchOrThrow(condition, pageable);
-    }
-
-    public Optional<Workbook> findByTitleOrThrow(String title) {
-        return workbookConditionRepository.findByTitle(title);
     }
 
     @Transactional
