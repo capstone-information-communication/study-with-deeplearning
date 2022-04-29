@@ -7,6 +7,7 @@ import core.backend.workbook.dto.WorkbookCondition;
 import core.backend.workbook.dto.WorkbookResponseDto;
 import core.backend.workbook.dto.WorkbookSaveRequestDto;
 import core.backend.workbook.dto.WorkbookUpdateRequestDto;
+import core.backend.workbook.dto.*;
 import core.backend.workbook.exception.WorkbookExistTitleException;
 import core.backend.workbook.exception.WorkbookNotAuthorException;
 import core.backend.workbook.service.WorkbookService;
@@ -33,6 +34,14 @@ public class WorkbookController {
             @PathVariable Long id) {
         return ResponseEntity.ok(
                 new WorkbookResponseDto(workbookService.findByIdOrThrow(id)));
+    }
+
+    @GetMapping("/workbook/{id}/category")
+    public ResponseEntity<WorkbookCategoryResponseDto> findByIdAndSortByCategoryV1(
+            @PathVariable Long id) {
+        return ResponseEntity.ok(
+                new WorkbookCategoryResponseDto(workbookService.findByIdOrThrow(id))
+        );
     }
 
     @GetMapping("/workbooks")
