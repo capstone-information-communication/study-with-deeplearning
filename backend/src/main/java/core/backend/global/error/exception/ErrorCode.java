@@ -6,6 +6,7 @@ import core.backend.member.exception.*;
 import core.backend.question.exception.QuestionNotFoundException;
 import core.backend.workbook.exception.WorkbookExistTitleException;
 import core.backend.workbook.exception.WorkbookNotAuthorException;
+import core.backend.workbook.exception.WorkbookNotFoundException;
 import core.backend.wrongAnswer.exception.WrongAnswerNotFoundException;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ public enum ErrorCode {
 
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     MEMBER_NOT_FOUND(NOT_FOUND, "회원을 찾을 수 없습니다", MemberNotFoundException.class),
-    WORKBOOK_NOT_FOUND(NOT_FOUND, "문제집을 찾을 수 없습니다", WorkbookNotAuthorException.class),
+    WORKBOOK_NOT_FOUND(NOT_FOUND, "문제집을 찾을 수 없습니다", WorkbookNotFoundException.class),
     WRONG_ANSWER_NOT_FOUND(NOT_FOUND, "오답 문제를 찾을 수 없습니다", WrongAnswerNotFoundException.class),
     TOTAL_NOT_FOUND(NOT_FOUND, "합계 퀴리 결과를 가져올 수 없습니다", TotalNotFound.class),
     CLASS_NOT_FOUND(NOT_FOUND, "에러 클래스를 찾을 수 없습니다", NotFoundClassException.class),

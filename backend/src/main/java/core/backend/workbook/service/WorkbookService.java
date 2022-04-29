@@ -4,6 +4,7 @@ import core.backend.workbook.domain.Workbook;
 import core.backend.workbook.dto.WorkbookCondition;
 import core.backend.workbook.dto.WorkbookUpdateRequestDto;
 import core.backend.workbook.exception.WorkbookNotAuthorException;
+import core.backend.workbook.exception.WorkbookNotFoundException;
 import core.backend.workbook.repository.WorkbookConditionRepository;
 import core.backend.workbook.repository.WorkbookRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,7 @@ public class WorkbookService {
 
     public Workbook findByIdOrThrow(Long id) {
         return workbookRepository.findById(id)
-                .orElseThrow(WorkbookNotAuthorException::new);
+                .orElseThrow(WorkbookNotFoundException::new);
     }
 
     public Page<Workbook> findAll(Pageable pageable) {
