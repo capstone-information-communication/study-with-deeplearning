@@ -3,16 +3,11 @@ package core.backend.workbook;
 import core.backend.global.dto.DataResponse;
 import core.backend.member.domain.Member;
 import core.backend.workbook.domain.Workbook;
-import core.backend.workbook.dto.WorkbookCondition;
-import core.backend.workbook.dto.WorkbookResponseDto;
-import core.backend.workbook.dto.WorkbookSaveRequestDto;
+import core.backend.workbook.dto.*;
 import core.backend.workbook.exception.WorkbookExistTitleException;
 import core.backend.workbook.exception.WorkbookNotAuthorException;
-import core.backend.workbook.domain.Workbook;
-import core.backend.workbook.dto.WorkbookUpdateRequestDto;
 import core.backend.workbook.service.WorkbookService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -35,6 +30,14 @@ public class WorkbookController {
             @PathVariable Long id) {
         return ResponseEntity.ok(
                 new WorkbookResponseDto(workbookService.findByIdOrThrow(id)));
+    }
+
+    @GetMapping("/workbook/{id}/category")
+    public ResponseEntity<WorkbookCategoryResponseDto> findByIdAndSortByCategoryV1(
+            @PathVariable Long id) {
+        return ResponseEntity.ok(
+                new WorkbookCategoryResponseDto(workbookService.findByIdOrThrow(id))
+        );
     }
 
     @GetMapping("/workbooks")

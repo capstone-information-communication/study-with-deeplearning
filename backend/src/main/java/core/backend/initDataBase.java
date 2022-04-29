@@ -51,6 +51,9 @@ public class initDataBase {
                 generateWorkbookBy(i);
 
                 generateQuestionBy(i);
+                generateQuestionBy(i);
+                generateQuestionBy(i);
+
                 generateChoiceBy(i);
                 generateChoiceBy(i);
             }
@@ -80,7 +83,7 @@ public class initDataBase {
 
         private void generateQuestionBy(int i) {
             Workbook workbook = workbookService.findByIdOrThrow(workbookIdList.get(i));
-            Category category = categoryFactory(i);
+            Category category = categoryFactory();
 
             Question question = Question.builder()
                     .workbook(workbook)
@@ -93,8 +96,8 @@ public class initDataBase {
             questionIdList.add(question.getId());
         }
 
-        private Category categoryFactory(int index) {
-            switch (index % 4) {
+        private Category categoryFactory() {
+            switch ((int) (Math.random() * 100) % 4) {
                 case 0:
                     return Category.BLANK;
                 case 1:
