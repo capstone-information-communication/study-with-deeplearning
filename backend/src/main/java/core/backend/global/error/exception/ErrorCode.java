@@ -26,6 +26,7 @@ public enum ErrorCode {
     EXIST_EMAIL(BAD_REQUEST, "이미 존재하는 이메일입니다", EmailExistException.class),
     EXIST_NICKNAME(BAD_REQUEST, "이미 존재하는 닉네임입니다", NickNameExistException.class),
     SIGN_IN_FAILED(BAD_REQUEST, "이메일 혹은 비밀번호를 확인해주시기 바랍니다", SignInFailedException.class),
+    NOT_ADMIN(BAD_REQUEST, "어드민만 접속할 수 있습니다", NotAdminException.class),
 
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     MEMBER_NOT_FOUND(NOT_FOUND, "회원을 찾을 수 없습니다", MemberNotFoundException.class),

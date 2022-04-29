@@ -5,6 +5,7 @@ import core.backend.global.error.exception.ErrorCode;
 import core.backend.member.service.MemberService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 
 @Component
 @RequiredArgsConstructor
@@ -34,7 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             String token = parseBearerToken(request);
-            if (token != null & !token.equalsIgnoreCase("null")) {
+            if (token != null && !token.equalsIgnoreCase("null")) {
                 Long memberId = tokenProvider.validateAndGetMember(token);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         memberService.findByIdOrThrow(memberId),
@@ -50,7 +52,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             setErrorResponse(response, ErrorCode.EXPIRED_TOKEN);
         } catch (UnsupportedJwtException | IllegalArgumentException e) {
             setErrorResponse(response, ErrorCode.INVALID_TOKEN);
-        } catch (SecurityException | MalformedJwtException e) {
+        } catch (SecurityException | MalformedJwtException | SignatureException e) {
             setErrorResponse(response, ErrorCode.WRONG_TOKEN);
         } catch (Exception e) {
             e.printStackTrace();
@@ -59,17 +61,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private void setErrorResponse(HttpServletResponse response, ErrorCode errorCode) {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            response.setStatus(errorCode.getHttpStatus().value());
+        response.setStatus(errorCode.getHttpStatus().value());
+        response.setContentType("application/json; charset=UTF-8");
 
+        try {
             PrintWriter writer = response.getWriter();
-            writer.write(objectMapper.writeValueAsString(errorCode));
+            writer.write(new ObjectMapper()
+                    .writeValueAsString(
+                            getMapWithResponseMsg(new HashMap(), errorCode)));
             writer.flush();
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private HashMap getMapWithResponseMsg(HashMap map, ErrorCode errorCode) {
+        map.put("status", errorCode.getHttpStatus().value());
+        map.put("error", errorCode.getHttpStatus().name());
+        map.put("code", errorCode.name());
+        map.put("message", errorCode.getMessage());
+        return map;
     }
 
     private String parseBearerToken(HttpServletRequest request) {

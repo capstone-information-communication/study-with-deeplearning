@@ -39,7 +39,9 @@ public class MemberController {
 
     @GetMapping("/members")
     public ResponseEntity<DataResponse> findAllV1(
+            @AuthenticationPrincipal Member member,
             @PageableDefault Pageable pageable) {
+        memberService.isAdminMemberOrThrow(member);
         List<MemberResponseDto> result = memberService.findAll(pageable)
                 .stream()
                 .map(MemberResponseDto::new)
@@ -65,7 +67,7 @@ public class MemberController {
     @PostMapping("/sign-up")
     public ResponseEntity<MemberResponseDto> signUpV1(
             @RequestBody MemberSignUpRequestDto dto) {
-        memberService.isValidEmailAndNickname(dto.getEmail(), dto.getNickname());
+        memberService.isValidEmailAndNicknameOrThrow(dto.getEmail(), dto.getNickname());
         Long id = memberService.save(dto.toEntity(encoder.encode(dto.getPassword())));
         return ResponseEntity.ok(
                 new MemberResponseDto(memberService.findByIdOrThrow(id)));

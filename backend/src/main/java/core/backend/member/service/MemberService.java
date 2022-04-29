@@ -1,13 +1,11 @@
 package core.backend.member.service;
 
 import core.backend.member.domain.Member;
+import core.backend.member.domain.Role;
 import core.backend.member.dto.MemberCondition;
 import core.backend.member.dto.MemberPasswordUpdateRequestDto;
 import core.backend.member.dto.MemberUpdateRequestDto;
-import core.backend.member.exception.EmailExistException;
-import core.backend.member.exception.MemberNotFoundException;
-import core.backend.member.exception.NickNameExistException;
-import core.backend.member.exception.SignInFailedException;
+import core.backend.member.exception.*;
 import core.backend.member.repository.MemberConditionRepositoryImpl;
 import core.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -52,11 +50,21 @@ public class MemberService {
         memberRepository.deleteById(id);
     }
 
-    public void isValidEmailAndNickname(String email, String nickname) {
+    public void isAdminMemberOrThrow(Member member) {
+        if (member.getRole() != Role.ADMIN) {
+            throw new NotAdminException();
+        }
+    }
+
+    public void isValidEmailAndNicknameOrThrow(String email, String nickname) {
         memberRepository.findByEmail(email)
-                .ifPresent(e -> new EmailExistException());
+                .ifPresent(e -> {
+                    throw new EmailExistException();
+                });
         memberRepository.findByNickname(nickname)
-                .ifPresent(e -> new NickNameExistException());
+                .ifPresent(e -> {
+                    throw new NickNameExistException();
+                });
     }
 
     public Member findByCredentialOrThrow(String email, String password, PasswordEncoder encoder) {
