@@ -10,18 +10,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class LikeWorkbookService {
 
     private final LikeWorkbookRepository likeWorkbookRepository;
-    private final WorkbookRepository workbookRepository;
 
     @Transactional
-    public LikeWorkbook save(LikeWorkbook likeWorkbook) {
+    public Long save(LikeWorkbook likeWorkbook) {
         likeWorkbookRepository.save(likeWorkbook);
-        return likeWorkbook;
+        return likeWorkbook.getId();
     }
 
     @Transactional
@@ -31,6 +32,10 @@ public class LikeWorkbookService {
 
     public Page<LikeWorkbook> findByMemberId(Long memberId, Pageable pageable) {
         return likeWorkbookRepository.findByMemberId(memberId, pageable);
+    }
+
+    public List<LikeWorkbook> findByMemberId(Long memberId) {
+        return likeWorkbookRepository.findByMemberId(memberId);
     }
 
     public LikeWorkbook findByIdOrThrow(Long id) {
