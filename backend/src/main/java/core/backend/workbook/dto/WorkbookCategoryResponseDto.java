@@ -25,32 +25,15 @@ public class WorkbookCategoryResponseDto {
     private LocalDateTime updatedAt;
     private LocalDateTime createdAt;
 
-    public WorkbookCategoryResponseDto(Workbook entity) {
+    public WorkbookCategoryResponseDto(Workbook entity, List<QuestionCategoryResponseDto> questionCategoryResponseDtoList) {
         id = entity.getId();
         title = entity.getTitle();
         description = entity.getDescription();
         likeCount = entity.getLikeCount();
 
-        questionList = getCategoricalMap(new HashMap<Category, List<Question>>(), entity.getQuestionList())
-                .entrySet().stream()
-                .map(item -> new QuestionCategoryResponseDto(item.getKey(), item.getValue()))
-                .collect(Collectors.toList());
+        questionList = questionCategoryResponseDtoList;
 
         updatedAt = entity.getUpdatedAt();
         createdAt = entity.getCreatedAt();
-    }
-
-    private HashMap<Category, List<Question>> getCategoricalMap(HashMap<Category, List<Question>> map, List<Question> questionList) {
-        initMap(map);
-        for (Question question : questionList) {
-            map.get(question.getCategory()).add(question);
-        }
-        return map;
-    }
-
-    private void initMap(HashMap map) {
-        for (Category value : Category.values()) {
-            map.put(value, new ArrayList<>());
-        }
     }
 }
