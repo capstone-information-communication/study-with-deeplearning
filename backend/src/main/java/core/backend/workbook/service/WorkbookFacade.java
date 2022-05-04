@@ -1,15 +1,17 @@
 package core.backend.workbook.service;
 
+import core.backend.choice.domain.Choice;
+import core.backend.choice.domain.State;
 import core.backend.question.domain.Category;
 import core.backend.question.domain.Question;
 import core.backend.question.dto.QuestionCategoryResponseDto;
+import core.backend.question.service.QuestionService;
 import core.backend.workbook.domain.Workbook;
-import core.backend.workbook.dto.WorkbookCategoryResponseDto;
-import core.backend.workbook.dto.WorkbookCondition;
-import core.backend.workbook.dto.WorkbookResponseDto;
-import core.backend.workbook.dto.WorkbookUpdateRequestDto;
+import core.backend.workbook.dto.*;
 import core.backend.workbook.exception.WorkbookExistTitleException;
 import core.backend.workbook.exception.WorkbookNotAuthorException;
+import core.backend.wrongAnswer.domain.WrongAnswer;
+import core.backend.wrongAnswer.service.WrongAnswerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,8 @@ import java.util.stream.Collectors;
 public class WorkbookFacade {
 
     private final WorkbookService workbookService;
+    private final QuestionService questionService;
+    private final WrongAnswerService wrongAnswerService;
 
     public WorkbookCategoryResponseDto findByIdAndSortByCategory(Long id) {
         Workbook workbook = workbookService.findByIdOrThrow(id);
@@ -86,5 +90,50 @@ public class WorkbookFacade {
         if (!workbook.getMemberId().equals(memberId)) {
             throw new WorkbookNotAuthorException();
         }
+    }
+
+    public List<Integer> checkOrThrow(Long workbookId, Long memberId, List<WorkbookCheckRequestDto> dtoList) {
+        int answer = getAnswerCountAndSaveWrongAnswer(workbookId, memberId, dtoList);
+        Workbook workbook = workbookService.findByIdOrThrow(workbookId);
+        return getResultList(answer, workbook);
+    }
+
+    private List<Integer> getResultList(int answer, Workbook workbook) {
+        List<Integer> result = new ArrayList<>();
+        result.add(answer);
+        result.add(workbook.getQuestionList().size() - answer);
+        return result;
+    }
+
+    private int getAnswerCountAndSaveWrongAnswer(Long workbookId, Long memberId, List<WorkbookCheckRequestDto> dtoList) {
+        int answer = 0;
+        for (WorkbookCheckRequestDto dto : dtoList) {
+            if (check(dto.getQuestionId(), dto.getChoiceId()) == 0) {
+                saveWrongAnswer(workbookId, memberId, dto);
+            } else {
+                answer += 1;
+            }
+        }
+        return answer;
+    }
+
+    private void saveWrongAnswer(Long workbookId, Long memberId, WorkbookCheckRequestDto dto) {
+        wrongAnswerService.save(WrongAnswer.builder()
+                .workbookId(workbookId)
+                .memberId(memberId)
+                .questionId(dto.getQuestionId())
+                .build());
+    }
+
+    private int check(Long questionId, Long choiceId) {
+        Question question = questionService.findByIdOrThrow(questionId);
+        for (Choice choice : question.getChoiceList()) {
+            if (choice.getState().equals(State.ANSWER)) {
+                if (choice.getId().equals(choiceId)) {
+                    return 1;
+                }
+            }
+        }
+        return 0;
     }
 }

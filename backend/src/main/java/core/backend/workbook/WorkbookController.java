@@ -78,6 +78,16 @@ public class WorkbookController {
                         .entity(workbookFacade.saveOrThrow(dto.toEntity(member.getId()))).build());
     }
 
+    @PostMapping("/workbook/{id}/check")
+    public ResponseEntity<WorkbookCheckResponseDto> checkV1(
+            @AuthenticationPrincipal Member member,
+            @PathVariable Long id,
+            @RequestBody List<WorkbookCheckRequestDto> dtoList) {
+        List<Integer> result = workbookFacade.checkOrThrow(id, member.getId(), dtoList);
+        return ResponseEntity.ok(
+                new WorkbookCheckResponseDto(result.get(0), result.get(1)));
+    }
+
     @PutMapping("/workbook/{id}")
     public ResponseEntity<WorkbookResponseDto> updateV1(
             @AuthenticationPrincipal Member member,
