@@ -1,66 +1,79 @@
 package com.smp.frontend.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+
+import com.google.gson.Gson;
 import com.smp.frontend.R;
+import com.smp.frontend.restAPi.RestApi;
+import com.smp.frontend.restAPi.singletonGson;
+import com.smp.frontend.restAPi.TestApi;
+import com.smp.frontend.restAPi.TestDataApi;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link WorkBookFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+
 public class WorkBookFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public WorkBookFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment WorkBookFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static WorkBookFragment newInstance(String param1, String param2) {
-        WorkBookFragment fragment = new WorkBookFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
+
+    private TextView test1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://d272-121-185-119-51.jp.ngrok.io/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        RestApi testApi = retrofit.create(RestApi.class);
+        Call<TestDataApi> test = testApi.getChoiceList();
+
+        test.enqueue(new Callback<TestDataApi>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onResponse(Call<TestDataApi> call, Response<TestDataApi> response) {
+                singletonGson instance = singletonGson.getInstance();
+
+                TestDataApi body = response.body();
+                System.out.println("body.getCount() = " + body.getCount());
+                System.out.println("body.getData() = " + body.getData());
+                List<?> data = body.getData();
+
+                Gson gson = new Gson();
+
+                for (int i = 0; i < body.getCount(); i++) {
+                    TestApi parsing = (TestApi) instance.parsing(
+                            instance.toJson(data.get(i)),
+                            TestApi.class);
+                    System.out.println("parsing.getContent() = " + parsing.getContent());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TestDataApi> call, Throwable t) {
+
+            }
+        });
+
         return inflater.inflate(R.layout.fragment_work_book, container, false);
+
     }
 }
