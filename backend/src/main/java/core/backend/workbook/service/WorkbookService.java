@@ -30,8 +30,8 @@ public class WorkbookService {
     }
 
     @Transactional
-    public Long update(Long id, WorkbookUpdateRequestDto dto) {
-        return findByIdOrThrow(id)
+    public Long update(Workbook workbook, WorkbookUpdateRequestDto dto) {
+        return workbook
                 .update(dto.getTitle(), dto.getDescription());
     }
 

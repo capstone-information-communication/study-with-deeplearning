@@ -10,6 +10,7 @@ import core.backend.workbook.dto.WorkbookUpdateRequestDto;
 import core.backend.workbook.dto.*;
 import core.backend.workbook.exception.WorkbookExistTitleException;
 import core.backend.workbook.exception.WorkbookNotAuthorException;
+import core.backend.workbook.service.WorkbookFacade;
 import core.backend.workbook.service.WorkbookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 public class WorkbookController {
 
     private final WorkbookService workbookService;
+    private final WorkbookFacade workbookFacade;
 
     @GetMapping("/workbook/{id}")
     public ResponseEntity<WorkbookResponseDto> findByIdV1(
@@ -39,9 +41,7 @@ public class WorkbookController {
     @GetMapping("/workbook/{id}/category")
     public ResponseEntity<WorkbookCategoryResponseDto> findByIdAndSortByCategoryV1(
             @PathVariable Long id) {
-        return ResponseEntity.ok(
-                new WorkbookCategoryResponseDto(workbookService.findByIdOrThrow(id))
-        );
+        return ResponseEntity.ok(workbookFacade.findByIdAndSortByCategory(id));
     }
 
     @GetMapping("/workbooks")
@@ -61,11 +61,9 @@ public class WorkbookController {
             @RequestParam(defaultValue = "") String title,
             @RequestParam(defaultValue = "") String description,
             @PageableDefault Pageable pageable) {
-        WorkbookCondition condition = new WorkbookCondition(title, description);
-        List<WorkbookResponseDto> result = workbookService.search(condition, pageable)
-                .stream()
-                .map(WorkbookResponseDto::new)
-                .collect(Collectors.toList());
+        List<WorkbookResponseDto> result = workbookFacade.search(
+                new WorkbookCondition(title, description),
+                pageable);
 
         return ResponseEntity.ok(
                 DataResponse.builder().count(result.size()).data(result).build());
@@ -75,19 +73,9 @@ public class WorkbookController {
     public ResponseEntity<WorkbookResponseDto> saveV1(
             @AuthenticationPrincipal Member member,
             @RequestBody WorkbookSaveRequestDto dto) {
-        isValidTitle(dto.getTitle());
-        Long id = workbookService.save(dto.toEntity(member.getId()));
-
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 WorkbookResponseDto.builder()
-                        .entity(workbookService.findByIdOrThrow(id)).build());
-    }
-
-    private void isValidTitle(String title) {
-        workbookService.findByTitle(title)
-                .ifPresent(e -> {
-                    throw new WorkbookExistTitleException();
-                });
+                        .entity(workbookFacade.saveOrThrow(dto.toEntity(member.getId()))).build());
     }
 
     @PutMapping("/workbook/{id}")
@@ -95,27 +83,16 @@ public class WorkbookController {
             @AuthenticationPrincipal Member member,
             @PathVariable Long id,
             @RequestBody WorkbookUpdateRequestDto dto) {
-        isAuthorOrThrow(id, member.getId());
-        Long updatedId = workbookService.update(id, dto);
-
         return ResponseEntity.ok(
                 WorkbookResponseDto.builder()
-                        .entity(workbookService.findByIdOrThrow(updatedId)).build());
+                        .entity(workbookFacade.updateOrThrow(id, member.getId(), dto)).build());
     }
 
     @DeleteMapping("/workbook/{id}")
     public HttpStatus deleteV1(
             @AuthenticationPrincipal Member member,
             @PathVariable Long id) {
-        isAuthorOrThrow(id, member.getId());
-        workbookService.deleteById(id);
+        workbookFacade.deleteById(id, member.getId());
         return HttpStatus.OK;
-    }
-
-    private void isAuthorOrThrow(Long id, Long memberId) {
-        Workbook workbook = workbookService.findByIdOrThrow(id);
-        if (!workbook.getMemberId().equals(memberId)) {
-            throw new WorkbookNotAuthorException();
-        }
     }
 }
