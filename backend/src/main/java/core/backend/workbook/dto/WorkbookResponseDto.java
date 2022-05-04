@@ -15,6 +15,7 @@ public class WorkbookResponseDto {
     private String title;
     private String description;
     private Long likeCount;
+    private Integer questionCount;
 
     private List<QuestionResponseDto> questionList;
 
@@ -27,6 +28,7 @@ public class WorkbookResponseDto {
         title = entity.getTitle();
         description = entity.getDescription();
         likeCount = entity.getLikeCount();
+        questionCount = entity.getQuestionList().size();
 
         questionList = entity.getQuestionList()
                 .stream()
