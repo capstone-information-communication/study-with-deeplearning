@@ -25,7 +25,6 @@ public class WorkbookCategoryResponseDto {
     private LocalDateTime updatedAt;
     private LocalDateTime createdAt;
 
-    @Builder
     public WorkbookCategoryResponseDto(Workbook entity) {
         id = entity.getId();
         title = entity.getTitle();
