@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+
+    <TextView
+        android:id="@+id/txt_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="register"
+        android:textColor="@color/black"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/join_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="100dp"/>
+
+    <EditText
+        android:id="@+id/join_email"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="32dp"
+        android:hint="email"
+        android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toTopOf="@+id/join_name"
+        app:layout_constraintEnd_toStartOf="@+id/email_check"
+        app:layout_constraintStart_toStartOf="@+id/join_name" />
+
+    <EditText
+        android:id="@+id/join_name"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="32dp"
+        android:hint="name"
+        android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toTopOf="@+id/join_nickName"
+        app:layout_constraintEnd_toStartOf="@+id/email_check"
+        app:layout_constraintStart_toStartOf="@+id/join_nickName" />
+
+    <EditText
+        android:id="@+id/join_nickName"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="32dp"
+        android:hint="nickname"
+        android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toTopOf="@+id/join_password"
+        app:layout_constraintEnd_toStartOf="@+id/nickName_check"
+        app:layout_constraintStart_toStartOf="@+id/join_password" />
+
+
+    <EditText
+        android:id="@+id/join_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:ems="10"
+        android:hint="password"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toTopOf="@+id/join_passChk"
+        app:layout_constraintStart_toStartOf="@+id/join_passChk" />
+
+
+    <EditText
+        android:id="@+id/join_passChk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="296dp"
+        android:ems="10"
+        android:hint="passcheck"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.512"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBaseline_toBottomOf="@+id/join_password"/>
+
+
+    <Button
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="80dp"
+        android:background="#03A9F4"
+        android:text="취소"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toEndOf="@+id/join_button"
+        app:layout_constraintTop_toBottomOf="@+id/join_passChk"
+        android:layout_marginLeft="36dp" />
+
+    <Button
+        android:id="@+id/join_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#03A9F4"
+        android:text="가입"
+        android:textColor="@color/black"
+        app:layout_constraintBaseline_toBaselineOf="@+id/delete"
+        app:layout_constraintStart_toStartOf="@+id/join_passChk" />
+
+    <ImageButton
+        android:id="@+id/email_check"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:background="#03A9F4"
+        android:scaleType="centerInside"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/join_email"
+        app:srcCompat="@drawable/ic_launcher_background"
+        tools:ignore="VectorDrawableCompat" />
+
+    <ImageButton
+        android:id="@+id/nickName_check"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:background="#03A9F4"
+        android:scaleType="centerInside"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/join_nickName"
+        app:srcCompat="@drawable/ic_launcher_background"
+        tools:ignore="VectorDrawableCompat" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
