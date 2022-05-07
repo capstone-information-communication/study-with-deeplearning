@@ -8,6 +8,16 @@ public class SginInResponse {
 
     private  Object token;
     private  String message;
+    private  String email;
+    private  String nickname;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
 
     public String getMessage() {
         return message;

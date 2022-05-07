@@ -21,6 +21,12 @@ public class PreferencesManager { // 값 저장
         editor.putString(key, value.toString());
         editor.apply();
     }
+    public static void setData(Context context, String key, String value) {
+        SharedPreferences prefs = getPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(key, value.toString());
+        editor.apply();
+    }
 
     public static String getString(Context context, String key) {
         SharedPreferences prefs = getPreferences(context);
