@@ -4,7 +4,7 @@ enum State {
     ANSWER, WRONG;
 }
 
-public class TestApi {
+public class WorkBookTestResponse {
     private long id;
     private State state;
     private String content;

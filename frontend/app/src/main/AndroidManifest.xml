@@ -15,7 +15,7 @@
         android:theme="@style/Theme.Frontend">
         <activity
             android:name=".Activity.RegisterActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Activity.MainActivity"
             android:exported="true" />

@@ -2,11 +2,11 @@ package com.smp.frontend.restAPi;
 
 import java.util.List;
 
-public class TestDataApi {
+public class WorkBookResponse {
     private int count;
     private List<?> data;
 
-    public TestDataApi(int count, List<?> data) {
+    public WorkBookResponse(int count, List<?> data) {
         this.count = count;
         this.data = data;
     }

@@ -11,11 +11,13 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.google.gson.Gson;
+import com.smp.frontend.BuildConfig;
 import com.smp.frontend.R;
 import com.smp.frontend.restAPi.RestApi;
-import com.smp.frontend.restAPi.singletonGson;
-import com.smp.frontend.restAPi.TestApi;
-import com.smp.frontend.restAPi.TestDataApi;
+import com.smp.frontend.restAPi.RetrofitClient;
+import com.smp.frontend.restAPi.SingletonGson;
+import com.smp.frontend.restAPi.WorkBookTestResponse;
+import com.smp.frontend.restAPi.WorkBookResponse;
 
 import java.util.List;
 
@@ -38,21 +40,18 @@ public class WorkBookFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://d272-121-185-119-51.jp.ngrok.io/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        RestApi testApi = retrofit.create(RestApi.class);
-        Call<TestDataApi> test = testApi.getChoiceList();
 
-        test.enqueue(new Callback<TestDataApi>() {
+        RetrofitClient retrofitClient = RetrofitClient.getInstance();
+        RestApi restApi = RetrofitClient.getRetrofitInterface();
+        Call<WorkBookResponse> test = restApi.getChoiceList();
+
+        test.enqueue(new Callback<WorkBookResponse>() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
-            public void onResponse(Call<TestDataApi> call, Response<TestDataApi> response) {
-                singletonGson instance = singletonGson.getInstance();
+            public void onResponse(Call<WorkBookResponse> call, Response<WorkBookResponse> response) {
+                SingletonGson instance = SingletonGson.getInstance();
 
-                TestDataApi body = response.body();
+                WorkBookResponse body = response.body();
                 System.out.println("body.getCount() = " + body.getCount());
                 System.out.println("body.getData() = " + body.getData());
                 List<?> data = body.getData();
@@ -60,15 +59,15 @@ public class WorkBookFragment extends Fragment {
                 Gson gson = new Gson();
 
                 for (int i = 0; i < body.getCount(); i++) {
-                    TestApi parsing = (TestApi) instance.parsing(
+                    WorkBookTestResponse parsing = (WorkBookTestResponse) instance.parsing(
                             instance.toJson(data.get(i)),
-                            TestApi.class);
+                            WorkBookTestResponse.class);
                     System.out.println("parsing.getContent() = " + parsing.getContent());
                 }
             }
 
             @Override
-            public void onFailure(Call<TestDataApi> call, Throwable t) {
+            public void onFailure(Call<WorkBookResponse> call, Throwable t) {
 
             }
         });

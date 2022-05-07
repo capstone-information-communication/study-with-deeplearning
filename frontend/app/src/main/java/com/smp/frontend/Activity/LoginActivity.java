@@ -1,25 +1,34 @@
 package com.smp.frontend.Activity;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.se.omapi.Session;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.androidgamesdk.gametextinput.Listener;
+import com.google.gson.JsonParser;
 import com.smp.frontend.R;
+import com.smp.frontend.PreferencesManager;
+import com.smp.frontend.restAPi.RestApi;
+import com.smp.frontend.restAPi.RetrofitClient;
+import com.smp.frontend.restAPi.SginInResponse;
+import com.smp.frontend.restAPi.SingletonGson;
+import com.smp.frontend.restAPi.WorkBookTestResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.concurrent.ExecutionException;
+import java.io.IOException;
+import java.util.HashMap;
 
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
@@ -27,15 +36,17 @@ public class LoginActivity extends AppCompatActivity {
     private AlertDialog dialog;
     private Button btn_login, btn_register;
     private EditText et_id, et_pass;
-    private String kakaoId;
 
-    private static final String TAG = "logError"; //에러 확인
+    private  RetrofitClient retrofitClient;
+
+    Toast toast;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
 
         btn_login = (Button)findViewById(R.id.btn_login); //로그인 버튼
         btn_register = (Button)findViewById(R.id.btn_register); //회원가입 버튼
@@ -57,6 +68,48 @@ public class LoginActivity extends AppCompatActivity {
                 // 현재 입력값 아이디 비밀번호 가져옴
                 String userID = et_id.getText().toString();
                 String userPass = et_pass.getText().toString();
+
+                HashMap<String,Object> LoginForm = new HashMap<String,Object>();
+                LoginForm.put("email", userID);
+                LoginForm.put("password", userPass);
+
+                retrofitClient = RetrofitClient.getInstance();
+                RestApi restApi =  RetrofitClient.getRetrofitInterface();
+                try { // 서버 종료되어있으면 catch 예외처리
+                    Call<SginInResponse> signrequest =  restApi.SignIn(LoginForm);
+                    signrequest.enqueue(new Callback<SginInResponse>() {
+                        @RequiresApi(api = Build.VERSION_CODES.N)
+                        @Override
+                        public void onResponse(Call<SginInResponse> call, Response<SginInResponse> response) {
+                            //응답으로 토큰값이 와야되는데
+                            if(response.code() == 200){
+                                Object responToken =response.body().Gettoken();
+                                PreferencesManager.setToken(getApplication(),"token",responToken);
+                                toast.makeText(getBaseContext(), PreferencesManager.getString(getApplication(),"token"),Toast.LENGTH_LONG).show();
+                            }else {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(response.errorBody().string());
+                                    String message = jsonObject.get("message").toString();
+                                    Toast.makeText(getBaseContext(),message,Toast.LENGTH_LONG).show();
+                                } catch (IOException | JSONException e) {
+                                    e.printStackTrace();
+                                    System.out.println("JSON 메세지 오류");
+                                }
+                            }
+
+                        }
+                        @Override
+                        public void onFailure(Call<SginInResponse> call, Throwable t) {
+                            toast.makeText(getBaseContext(),"서버 통신에러",Toast.LENGTH_LONG).show();
+                            t.printStackTrace();
+                        }
+                    });
+                }catch (Exception e){
+                    toast.makeText(getBaseContext(),"서버 확인",Toast.LENGTH_LONG).show();
+                }
+          
+
+
             }
         });
     }
