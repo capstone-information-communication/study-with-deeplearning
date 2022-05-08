@@ -113,7 +113,7 @@ public class LoginActivity extends AppCompatActivity {
         if(!(PreferencesManager.getString(getApplication(),"token").equals(null))){
             retrofitClient = RetrofitClient.getInstance();
             RestApi restApi =  RetrofitClient.getRetrofitInterface();
-            Call<SginInResponse> UserInfo = restApi.GetUser(PreferencesManager.getString(getBaseContext(),"token"));
+            Call<SginInResponse> UserInfo = restApi.GetUser(PreferencesManager.getString(getApplication(),"token"));
             UserInfo.enqueue(new Callback<SginInResponse>() {
                 @Override
                 public void onResponse(Call<SginInResponse> call, Response<SginInResponse> response) {

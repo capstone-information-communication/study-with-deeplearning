@@ -23,7 +23,6 @@ public class SginInResponse {
         return message;
     }
 
-
     public Object Gettoken() {
         return token;
     }

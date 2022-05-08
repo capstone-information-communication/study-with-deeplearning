@@ -35,9 +35,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     private EditText join_email, join_password, join_pwck, join_name, join_nickName;
     private Button join_button,Btn_delete;
-    private ImageButton email_check, nickName_check;
     private AlertDialog dialog;
-    private boolean emailChk =true, nicknameChk = true ,firstemailChk =false,firstnickChk = false;
+
     private  RetrofitClient retrofitClient;
     private  HashMap<String,Object> SignForm = new HashMap<String,Object>();
     Toast toast;
@@ -94,103 +93,34 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        //이메일 중복 체크
-        email_check = findViewById(R.id.email_check);
-        email_check.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                String UserEmail = join_email.getText().toString();
-/*                if (emailChk) {
-                    SignForm.put("email", UserEmail);
-                    join_email.setEnabled(firstemailChk);
-                    email_check.setEnabled(firstemailChk);
-                    setSginUp(SignForm);
-                }*/
-                System.out.println("UserEmail = " + UserEmail);
-                if (UserEmail.equals("")) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                    dialog = builder.setMessage("이메일을 입력하세요.").setPositiveButton("확인", null).create();
-                    dialog.show();
-                    return;
-                }
-            }
-        });
-
-        nickName_check = findViewById(R.id.nickName_check);
-        nickName_check.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String UserNickname = join_nickName.getText().toString();
-/*                if(nicknameChk){
-                    SignForm.put("nickname", UserNickname);
-                    setSginUp(SignForm);
-                    return; //검증완료
-                }*/
-
-                if(UserNickname.equals("")){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                    dialog = builder.setMessage("닉네임을 입력하세요.").setPositiveButton("확인", null).create();
-                    dialog.show();
-                    return;
-                }
-            }
-        });
-
-
-
-
-
-
-
         //회원가입 버튼 클릭 시 수행
         join_button = findViewById( R.id.join_button );
         join_button.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final String UserEmail = join_email.getText().toString();
-                System.out.println("UserEmail = " + UserEmail);
                 final String UserPwd = join_password.getText().toString();
-                System.out.println("UserPwd = " + UserPwd);
                 final String PassCk = join_pwck.getText().toString();
-                System.out.println("PassCk = " + PassCk);
                 final String UserName = join_name.getText().toString();
-                System.out.println("UserName = " + UserName);
                 final String UserNickName = join_nickName.getText().toString();
-                System.out.println("UserNickName = " + UserNickName);
-               
 
 
-/*                //아이디 중복체크 했는지 확인
-                if (emailChk) {
+                //빈칸 확인
+                if (UserEmail.equals("") || UserName.equals("") || UserNickName.equals("") || UserPwd.equals("")) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                    dialog = builder.setMessage("중복된 아이디가 있는지 확인하세요.").setNegativeButton("확인", null).create();
-                    dialog.show();
-                    return;
-                }
-                //닉네임 중복체크 확인
-                if (nicknameChk) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                    dialog = builder.setMessage("중복된 닉네임이 있는지 확인하세요.").setNegativeButton("확인", null).create();
+                    dialog = builder.setMessage("빈칸이 존재합니다..").setNegativeButton("확인", null).create();
                     dialog.show();
                     return;
                 }
 
-                //한 칸이라도 입력 안했을 경우
-                if (UserEmail.equals("") || UserPwd.equals("")) {
+                if (!UserPwd.equals(PassCk)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                    dialog = builder.setMessage("모두 입력해주세요.").setNegativeButton("확인", null).create();
+                    dialog = builder.setMessage("비밀번호를 확인해주세요.").setNegativeButton("확인", null).create();
                     dialog.show();
                     return;
                 }
 
                 //비밀번호와 비밀번호 중복이 같지 않다면
-                if (!(UserPwd.equals(PassCk)) ) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                    dialog = builder.setMessage("비밀번호를 확인해주세요").setNegativeButton("확인", null).create();
-                    dialog.show();
-                    return;
-                }*/
 
                 SignForm.put("email", UserEmail);
                 SignForm.put("password", UserPwd);
