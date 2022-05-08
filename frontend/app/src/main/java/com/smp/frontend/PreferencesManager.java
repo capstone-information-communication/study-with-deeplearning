@@ -34,5 +34,11 @@ public class PreferencesManager { // 값 저장
         return value;
 
     }
+    public static void removeValue(Context context){
+        SharedPreferences prefs = getPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.clear();
+        editor.apply();
+    }
 
 }

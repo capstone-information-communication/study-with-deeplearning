@@ -28,7 +28,7 @@
         android:hint="email"
         android:inputType="textEmailAddress"
         app:layout_constraintBottom_toTopOf="@+id/join_name"
-        app:layout_constraintEnd_toStartOf="@+id/email_check"
+        app:layout_constraintEnd_toEndOf="@+id/join_name"
         app:layout_constraintStart_toStartOf="@+id/join_name" />
 
     <EditText
@@ -39,7 +39,7 @@
         android:hint="name"
         android:inputType="textEmailAddress"
         app:layout_constraintBottom_toTopOf="@+id/join_nickName"
-        app:layout_constraintEnd_toStartOf="@+id/email_check"
+        app:layout_constraintEnd_toEndOf="@+id/join_nickName"
         app:layout_constraintStart_toStartOf="@+id/join_nickName" />
 
     <EditText
@@ -50,7 +50,7 @@
         android:hint="nickname"
         android:inputType="textEmailAddress"
         app:layout_constraintBottom_toTopOf="@+id/join_password"
-        app:layout_constraintEnd_toStartOf="@+id/nickName_check"
+        app:layout_constraintEnd_toEndOf="@+id/join_password"
         app:layout_constraintStart_toStartOf="@+id/join_password" />
 
 
@@ -103,28 +103,5 @@
         android:textColor="@color/black"
         app:layout_constraintBaseline_toBaselineOf="@+id/delete"
         app:layout_constraintStart_toStartOf="@+id/join_passChk" />
-
-    <ImageButton
-        android:id="@+id/email_check"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:background="#03A9F4"
-        android:scaleType="centerInside"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/join_email"
-        app:srcCompat="@drawable/home"
-        tools:ignore="VectorDrawableCompat" />
-
-    <ImageButton
-        android:id="@+id/nickName_check"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:background="#03A9F4"
-        android:scaleType="centerInside"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/join_nickName"
-        app:srcCompat="@drawable/wrong_answer_book"
-        tools:ignore="VectorDrawableCompat" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

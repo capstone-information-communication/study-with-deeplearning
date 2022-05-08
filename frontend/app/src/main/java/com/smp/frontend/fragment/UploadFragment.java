@@ -1,66 +1,99 @@
 package com.smp.frontend.fragment;
 
+import android.annotation.SuppressLint;
+import android.app.DownloadManager;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.provider.OpenableColumns;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.ValueCallback;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.smp.frontend.R;
+import com.tom_roush.pdfbox.pdmodel.PDDocument;
+import com.tom_roush.pdfbox.text.PDFTextStripper;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link UploadFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.io.File;
+import java.io.IOException;
+
+
+import static android.app.Activity.RESULT_OK;
+import static android.content.Context.STORAGE_SERVICE;
+
 public class UploadFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public UploadFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment UploadFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static UploadFragment newInstance(String param1, String param2) {
-        UploadFragment fragment = new UploadFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private  View view;
+    private  static  final  int REQ_CODE =123;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+         view =inflater.inflate(R.layout.fragment_upload, container, false);
+         ImageButton Upload_btn = view.findViewById(R.id.btn_upload);
+         TextView filename = view.findViewById(R.id.file_name);
+
+
+
+         Upload_btn.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("application/pdf");
+                startReuslt.launch(intent);
+
+             }
+         });
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_upload, container, false);
+        return view;
     }
+    ActivityResultLauncher<Intent> startReuslt =registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if(result.getResultCode() == RESULT_OK){
+                    System.out.println("result = " + result);
+                    System.out.println("result.getData().getClipData() = " + result.getData().getData().getPath());
+
+                    String  SelectData = result.getData().getData().getPath();
+                    System.out.println("SelectData = " + SelectData);
+                    String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+                    System.out.println("rootPath = " + rootPath);
+                    File f= new File(SelectData);
+                    File b = f.getAbsoluteFile();
+                    String fn = f.getName();
+                    String fpn = rootPath + "/" + fn;
+                    System.out.println("fpn = " + fpn);
+                
+                }
+                else {
+                    System.out.println("result.toString() = " + result.toString());
+                }
+            }
+    );
+
+
 }
