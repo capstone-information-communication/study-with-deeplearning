@@ -2,6 +2,7 @@ package com.smp.frontend.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.DownloadManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -36,6 +37,7 @@ import com.smp.frontend.R;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -48,14 +50,14 @@ import static android.content.Context.STORAGE_STATS_SERVICE;
 
 public class UploadFragment extends Fragment {
     private  View view;
-    private void extractPDF(String Filename) {
+    private void extractPDF(InputStream Filename) {
         try {
             String extractedText = "";
             PdfReader reader = new PdfReader(Filename);
 
             int n = reader.getNumberOfPages();
             for (int i = 0; i < n; i++) {
-                extractedText = extractedText + PdfTextExtractor.getTextFromPage(reader, i + 1).trim() + "\n";
+                extractedText = extractedText + PdfTextExtractor.getTextFromPage(reader, i + 1) ;
             }
 
             System.out.println("extractedText = " + extractedText);
@@ -100,27 +102,17 @@ public class UploadFragment extends Fragment {
     ActivityResultLauncher<Intent> startReuslt =registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-
                 if(result.getResultCode() == RESULT_OK){
                     Intent Getresponse = result.getData();
                     Uri path = Getresponse.getData();
-                    String fileName ,filePath;
-                    Cursor cursor = getActivity().getContentResolver().query(path,new String[] {
-                            DocumentsContract.Document.COLUMN_DOCUMENT_ID,
-                                    OpenableColumns.DISPLAY_NAME
-                            },null,null,null);
 
-                    cursor.moveToFirst();
-                    int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-                    fileName = cursor.getString(nameIndex);
-                    filePath = path.getPath().replaceAll("/document/raw:","");
-                    cursor.close();
-
-                    System.out.println("fileName = " + fileName);
-                    extractPDF(filePath);
-                    System.out.println("filePath +fileName  = " + filePath +fileName );
-
-
+                    ContentResolver res = getActivity().getContentResolver();
+                    try {
+                        InputStream in = res.openInputStream(path);
+                        extractPDF(in);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
 
                 }
                 else {
