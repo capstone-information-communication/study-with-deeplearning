@@ -5,6 +5,7 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Log;
@@ -26,21 +28,42 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import com.smp.frontend.R;
-import com.tom_roush.pdfbox.pdmodel.PDDocument;
-import com.tom_roush.pdfbox.text.PDFTextStripper;
+
 
 import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.STORAGE_SERVICE;
+import static android.content.Context.STORAGE_STATS_SERVICE;
+
 
 public class UploadFragment extends Fragment {
     private  View view;
-    private  static  final  int REQ_CODE =123;
+    private void extractPDF(String Filename) {
+        try {
+            String extractedText = "";
+            PdfReader reader = new PdfReader(Filename);
 
+            int n = reader.getNumberOfPages();
+            for (int i = 0; i < n; i++) {
+                extractedText = extractedText + PdfTextExtractor.getTextFromPage(reader, i + 1).trim() + "\n";
+            }
+
+            System.out.println("extractedText = " + extractedText);
+            reader.close();
+        } catch (Exception e) {
+            System.out.println("Error found is : \n" + e);
+        }
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +86,10 @@ public class UploadFragment extends Fragment {
                 Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 intent.setType("application/pdf");
+                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
                 startReuslt.launch(intent);
+
+
 
              }
          });
@@ -74,20 +100,28 @@ public class UploadFragment extends Fragment {
     ActivityResultLauncher<Intent> startReuslt =registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if(result.getResultCode() == RESULT_OK){
-                    System.out.println("result = " + result);
-                    System.out.println("result.getData().getClipData() = " + result.getData().getData().getPath());
 
-                    String  SelectData = result.getData().getData().getPath();
-                    System.out.println("SelectData = " + SelectData);
-                    String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath();
-                    System.out.println("rootPath = " + rootPath);
-                    File f= new File(SelectData);
-                    File b = f.getAbsoluteFile();
-                    String fn = f.getName();
-                    String fpn = rootPath + "/" + fn;
-                    System.out.println("fpn = " + fpn);
-                
+                if(result.getResultCode() == RESULT_OK){
+                    Intent Getresponse = result.getData();
+                    Uri path = Getresponse.getData();
+                    String fileName ,filePath;
+                    Cursor cursor = getActivity().getContentResolver().query(path,new String[] {
+                            DocumentsContract.Document.COLUMN_DOCUMENT_ID,
+                                    OpenableColumns.DISPLAY_NAME
+                            },null,null,null);
+
+                    cursor.moveToFirst();
+                    int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    fileName = cursor.getString(nameIndex);
+                    filePath = path.getPath().replaceAll("/document/raw:","");
+                    cursor.close();
+
+                    System.out.println("fileName = " + fileName);
+                    extractPDF(filePath);
+                    System.out.println("filePath +fileName  = " + filePath +fileName );
+
+
+
                 }
                 else {
                     System.out.println("result.toString() = " + result.toString());
