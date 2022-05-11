@@ -88,6 +88,15 @@ public class WorkbookController {
                 new WorkbookCheckResponseDto(result.get(0), result.get(1)));
     }
 
+    @PostMapping("/workbook-with-text")
+    public ResponseEntity<WorkbookResponseDto> saveWithTextV1(
+            @RequestBody WorkbookWithTextRequestDto dto) {
+        Workbook workbook = workbookFacade.saveOrThrow(dto.toEntity(1L));
+        System.out.println("dto.getText() = " + dto.getText());
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new WorkbookResponseDto(workbook));
+    }
+
     @PutMapping("/workbook/{id}")
     public ResponseEntity<WorkbookResponseDto> updateV1(
             @AuthenticationPrincipal Member member,
