@@ -3,10 +3,10 @@ package core.backend.question.dto;
 import lombok.Getter;
 
 @Getter
-public class QuestionSaveFlaskRequestDto {
+public class QuestionAIRequestDto {
     private String text;
 
-    public QuestionSaveFlaskRequestDto(String text) {
+    public QuestionAIRequestDto(String text) {
         this.text = text;
     }
 }
