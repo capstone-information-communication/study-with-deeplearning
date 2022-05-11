@@ -2,22 +2,21 @@ package com.smp.frontend.restAPi;
 
 import com.google.gson.Gson;
 
-public class SingletonGson {
+public class gsonParsing {
 
-    private static SingletonGson instance = new SingletonGson();
+    private static gsonParsing instance = new gsonParsing();
     private final Gson gson = new Gson();
 
-    private SingletonGson() {
+    private gsonParsing() {
     }
 
-    public static SingletonGson getInstance() {
+    public static gsonParsing getInstance() {
         return instance;
     }
 
     public String toJson(Object data) {
         return gson.toJson(data);
     }
-
 
     public Object parsing(String toJson, Class klass) {
         return gson.fromJson(toJson, klass);

@@ -1,12 +1,12 @@
-package com.smp.frontend.restAPi;
+package com.smp.frontend.workbook.dto;
 
 import java.util.List;
 
-public class WorkBookResponse {
+public class WorkBookResponseDto {
     private int count;
     private List<?> data;
 
-    public WorkBookResponse(int count, List<?> data) {
+    public WorkBookResponseDto(int count, List<?> data) {
         this.count = count;
         this.data = data;
     }

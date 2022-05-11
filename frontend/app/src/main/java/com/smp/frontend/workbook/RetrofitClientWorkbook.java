@@ -1,8 +1,7 @@
-package com.smp.frontend.restAPi;
+package com.smp.frontend.workbook;
 
 import com.smp.frontend.BuildConfig;
 import com.smp.frontend.member.MemberController;
-
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -10,21 +9,20 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class RetrofitClient {
+public class RetrofitClientWorkbook {
 
-    private static RetrofitClient instance = null;
-    private static RestApi RestApi;
-    //사용하고 있는 서버 BASE 주소
+    private static RetrofitClientWorkbook instance = null;
+    private  static WorkbookController WorkbookController;
     private static String baseUrl = BuildConfig.BASEURL;
 
-    private RetrofitClient() {
+    private RetrofitClientWorkbook() {
         //로그를 보기 위한 Interceptor
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(interceptor)
                 .build();
-   
+
         //retrofit 설정
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
@@ -33,18 +31,16 @@ public class RetrofitClient {
                 .client(client) //로그 기능 추가
                 .build();
 
-        RestApi = retrofit.create(RestApi.class);
-    }
+        WorkbookController = retrofit.create(WorkbookController.class);
 
-    public static RetrofitClient getInstance() {
-        if (instance == null) {
-            instance = new RetrofitClient();
+    }
+    public static  RetrofitClientWorkbook getInstance(){
+        if(instance == null){
+            instance = new RetrofitClientWorkbook();
         }
         return instance;
     }
-
-    public static RestApi getRetrofitInterface() {
-        return RestApi;
+    public  static  WorkbookController getRetrofitInterface(){
+        return WorkbookController;
     }
-
 }

@@ -1,4 +1,4 @@
-package com.smp.frontend.fragment;
+package com.smp.frontend.workbook.fragment;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -11,21 +11,18 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.google.gson.Gson;
-import com.smp.frontend.BuildConfig;
 import com.smp.frontend.R;
-import com.smp.frontend.restAPi.RestApi;
-import com.smp.frontend.restAPi.RetrofitClient;
-import com.smp.frontend.restAPi.SingletonGson;
-import com.smp.frontend.restAPi.WorkBookTestResponse;
-import com.smp.frontend.restAPi.WorkBookResponse;
+import com.smp.frontend.restAPi.gsonParsing;
+import com.smp.frontend.workbook.RetrofitClientWorkbook;
+import com.smp.frontend.workbook.WorkbookController;
+import com.smp.frontend.workbook.dto.WorkBookTestResponse;
+import com.smp.frontend.workbook.dto.WorkBookResponseDto;
 
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class WorkBookFragment extends Fragment {
@@ -41,17 +38,17 @@ public class WorkBookFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        RetrofitClient retrofitClient = RetrofitClient.getInstance();
-        RestApi restApi = RetrofitClient.getRetrofitInterface();
-        Call<WorkBookResponse> test = restApi.getChoiceList();
+        RetrofitClientWorkbook retrofitClient = RetrofitClientWorkbook.getInstance();
+        WorkbookController workbookController = RetrofitClientWorkbook.getRetrofitInterface();
+        Call<WorkBookResponseDto> test = workbookController.getChoiceList();
 
-        test.enqueue(new Callback<WorkBookResponse>() {
+        test.enqueue(new Callback<WorkBookResponseDto>() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
-            public void onResponse(Call<WorkBookResponse> call, Response<WorkBookResponse> response) {
-                SingletonGson instance = SingletonGson.getInstance();
+            public void onResponse(Call<WorkBookResponseDto> call, Response<WorkBookResponseDto> response) {
+                gsonParsing instance = gsonParsing.getInstance();
 
-                WorkBookResponse body = response.body();
+                WorkBookResponseDto body = response.body();
                 System.out.println("body.getCount() = " + body.getCount());
                 System.out.println("body.getData() = " + body.getData());
                 List<?> data = body.getData();
@@ -63,11 +60,12 @@ public class WorkBookFragment extends Fragment {
                             instance.toJson(data.get(i)),
                             WorkBookTestResponse.class);
                     System.out.println("parsing.getContent() = " + parsing.getContent());
+
                 }
             }
 
             @Override
-            public void onFailure(Call<WorkBookResponse> call, Throwable t) {
+            public void onFailure(Call<WorkBookResponseDto> call, Throwable t) {
 
             }
         });

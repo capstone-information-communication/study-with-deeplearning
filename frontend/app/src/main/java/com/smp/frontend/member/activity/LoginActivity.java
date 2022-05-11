@@ -1,11 +1,10 @@
-package com.smp.frontend.Activity;
+package com.smp.frontend.member.activity;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -13,20 +12,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.gson.JsonParser;
 import com.smp.frontend.R;
 import com.smp.frontend.PreferencesManager;
-import com.smp.frontend.restAPi.RestApi;
-import com.smp.frontend.restAPi.RetrofitClient;
-import com.smp.frontend.restAPi.SginInResponse;
-import com.smp.frontend.restAPi.SingletonGson;
-import com.smp.frontend.restAPi.WorkBookTestResponse;
+import com.smp.frontend.member.MemberController;
+import com.smp.frontend.member.RetrofitClientMember;
+import com.smp.frontend.member.dto.MemberSignInRequestDto;
+import com.smp.frontend.member.dto.MemberSginInResponseDto;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,28 +34,28 @@ public class LoginActivity extends AppCompatActivity {
     private Button btn_login, btn_register;
     private EditText et_id, et_pass;
 
-    private  RetrofitClient retrofitClient;
+    private RetrofitClientMember retrofitClient;
 
     Toast toast;
-    private void SginInConnection(HashMap<String,Object> LoginForm){
-        retrofitClient = RetrofitClient.getInstance();
-        RestApi restApi =  RetrofitClient.getRetrofitInterface();
+    private void SginInConnection(MemberSignInRequestDto request){
+        retrofitClient = RetrofitClientMember.getInstance();
+        MemberController memberController =  RetrofitClientMember.getRetrofitInterface();
         try { // 서버 종료되어있으면 catch 예외처리
-            Call<SginInResponse> signrequest =  restApi.SignIn(LoginForm);
-            signrequest.enqueue(new Callback<SginInResponse>() {
+            Call<MemberSginInResponseDto> signrequest =  memberController.SignIn(request);
+            signrequest.enqueue(new Callback<MemberSginInResponseDto>() {
                 @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
-                public void onResponse(Call<SginInResponse> call, Response<SginInResponse> response) {
+                public void onResponse(Call<MemberSginInResponseDto> call, Response<MemberSginInResponseDto> response) {
                     //응답으로 토큰값이 와야되는데
                     if(response.code() == 200){
                         Object responToken =response.body().Gettoken();
                         PreferencesManager.setToken(getApplication(),"token","Bearer "+responToken);
                         toast.makeText(getBaseContext(), PreferencesManager.getString(getApplication(),"token"),Toast.LENGTH_LONG).show();
 
-                        Call<SginInResponse> UserInfo = restApi.GetUser(PreferencesManager.getString(getBaseContext(),"token"));
-                        UserInfo.enqueue(new Callback<SginInResponse>() {
+                        Call<MemberSginInResponseDto> UserInfo = memberController.GetUser(PreferencesManager.getString(getBaseContext(),"token"));
+                        UserInfo.enqueue(new Callback<MemberSginInResponseDto>() {
                             @Override
-                            public void onResponse(Call<SginInResponse> call, Response<SginInResponse> response2) {
+                            public void onResponse(Call<MemberSginInResponseDto> call, Response<MemberSginInResponseDto> response2) {
                                 if(response2.code() == 200) {
                                     System.out.println("response = " + response2.body().getNickname());
                                     PreferencesManager.setData(getApplication(),"nickname",response2.body().getNickname());
@@ -78,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             }
                             @Override
-                            public void onFailure(Call<SginInResponse> call, Throwable t) {
+                            public void onFailure(Call<MemberSginInResponseDto> call, Throwable t) {
                             }
                         });
                     }else {
@@ -94,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 }
                 @Override
-                public void onFailure(Call<SginInResponse> call, Throwable t) {
+                public void onFailure(Call<MemberSginInResponseDto> call, Throwable t) {
                     toast.makeText(getBaseContext(),"서버 통신에러",Toast.LENGTH_LONG).show();
                     t.printStackTrace();
                 }
@@ -111,12 +107,12 @@ public class LoginActivity extends AppCompatActivity {
 
         //loginAutoTokenCheck
         if(!(PreferencesManager.getString(getApplication(),"token").equals(null))){
-            retrofitClient = RetrofitClient.getInstance();
-            RestApi restApi =  RetrofitClient.getRetrofitInterface();
-            Call<SginInResponse> UserInfo = restApi.GetUser(PreferencesManager.getString(getApplication(),"token"));
-            UserInfo.enqueue(new Callback<SginInResponse>() {
+            retrofitClient = RetrofitClientMember.getInstance();
+            MemberController memberController =  RetrofitClientMember.getRetrofitInterface();
+            Call<MemberSginInResponseDto> UserInfo = memberController.GetUser(PreferencesManager.getString(getApplication(),"token"));
+            UserInfo.enqueue(new Callback<MemberSginInResponseDto>() {
                 @Override
-                public void onResponse(Call<SginInResponse> call, Response<SginInResponse> response) {
+                public void onResponse(Call<MemberSginInResponseDto> call, Response<MemberSginInResponseDto> response) {
                     if(response.code() == 200) {
                         System.out.println("response2 = " + response.body().getEmail());
                         PreferencesManager.setData(getApplication(),"nickname",response.body().getNickname());
@@ -137,7 +133,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
                 @Override
-                public void onFailure(Call<SginInResponse> call, Throwable t) {
+                public void onFailure(Call<MemberSginInResponseDto> call, Throwable t) {
                     Toast.makeText(getBaseContext(),"서버에러",Toast.LENGTH_LONG).show();
                 }
             });
@@ -166,11 +162,8 @@ public class LoginActivity extends AppCompatActivity {
                 String userID = et_id.getText().toString();
                 String userPass = et_pass.getText().toString();
 
-                HashMap<String,Object> LoginForm = new HashMap<String,Object>();
-                LoginForm.put("email", userID);
-                LoginForm.put("password", userPass);
-
-                SginInConnection(LoginForm);
+                MemberSignInRequestDto request = new MemberSignInRequestDto(userID, userPass);
+                SginInConnection(request);
             }
         });
     }
