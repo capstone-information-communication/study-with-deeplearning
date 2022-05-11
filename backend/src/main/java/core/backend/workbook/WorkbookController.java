@@ -2,24 +2,27 @@ package core.backend.workbook;
 
 import core.backend.global.dto.DataResponse;
 import core.backend.member.domain.Member;
+import core.backend.question.domain.Question;
+import core.backend.question.dto.QuestionSaveFlaskRequestDto;
+import core.backend.question.service.QuestionFacade;
 import core.backend.workbook.domain.Workbook;
-import core.backend.workbook.dto.WorkbookCondition;
-import core.backend.workbook.dto.WorkbookResponseDto;
-import core.backend.workbook.dto.WorkbookSaveRequestDto;
-import core.backend.workbook.dto.WorkbookUpdateRequestDto;
 import core.backend.workbook.dto.*;
-import core.backend.workbook.exception.WorkbookExistTitleException;
-import core.backend.workbook.exception.WorkbookNotAuthorException;
 import core.backend.workbook.service.WorkbookFacade;
 import core.backend.workbook.service.WorkbookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
+import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,6 +33,7 @@ public class WorkbookController {
 
     private final WorkbookService workbookService;
     private final WorkbookFacade workbookFacade;
+    private final QuestionFacade questionFacade;
 
     @GetMapping("/workbook/{id}")
     public ResponseEntity<WorkbookResponseDto> findByIdV1(
@@ -92,7 +96,8 @@ public class WorkbookController {
     public ResponseEntity<WorkbookResponseDto> saveWithTextV1(
             @RequestBody WorkbookWithTextRequestDto dto) {
         Workbook workbook = workbookFacade.saveOrThrow(dto.toEntity(1L));
-        System.out.println("dto.getText() = " + dto.getText());
+        List<Question> result = questionFacade.getQuestionListUsingNER(workbook.getId(), dto.getText());
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new WorkbookResponseDto(workbook));
     }
