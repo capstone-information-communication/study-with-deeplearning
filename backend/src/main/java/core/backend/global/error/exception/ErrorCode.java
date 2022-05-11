@@ -5,6 +5,7 @@ import core.backend.likeWorkbook.exception.ExistLikeWorkbookException;
 import core.backend.likeWorkbook.exception.LikeWorkbookNotFoundException;
 import core.backend.likeWorkbook.exception.LikeWorkbookNotRegisterException;
 import core.backend.member.exception.*;
+import core.backend.question.exception.QuestionFlaskResponseException;
 import core.backend.question.exception.QuestionNotFoundException;
 import core.backend.workbook.exception.WorkbookExistTitleException;
 import core.backend.workbook.exception.WorkbookNotAuthorException;
@@ -34,6 +35,7 @@ public enum ErrorCode {
     LIKE_WORKBOOK_NOT_REGISTER(BAD_REQUEST, "자신의 좋아요 문제집만 삭제할 수 있습니다", LikeWorkbookNotRegisterException.class),
     EXIST_LIKE_WORKBOOK(BAD_REQUEST, "이미 등록한 좋아요 문제집입니다", ExistLikeWorkbookException.class),
     WRONG_ANSWER_NOT_REGISTER(BAD_REQUEST, "자신의 오답 문제집만 삭제할 수 있습니다", WrongAnswerNotRegisterException.class),
+    FLASK_RESPONSE_EXCEPTION(BAD_REQUEST, "플라스크 서버의 응답이 null 입니다", QuestionFlaskResponseException.class),
 
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     MEMBER_NOT_FOUND(NOT_FOUND, "회원을 찾을 수 없습니다", MemberNotFoundException.class),

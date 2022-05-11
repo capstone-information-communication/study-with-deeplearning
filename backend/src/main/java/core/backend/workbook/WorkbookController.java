@@ -2,14 +2,9 @@ package core.backend.workbook;
 
 import core.backend.global.dto.DataResponse;
 import core.backend.member.domain.Member;
+import core.backend.question.service.QuestionAIService;
 import core.backend.workbook.domain.Workbook;
-import core.backend.workbook.dto.WorkbookCondition;
-import core.backend.workbook.dto.WorkbookResponseDto;
-import core.backend.workbook.dto.WorkbookSaveRequestDto;
-import core.backend.workbook.dto.WorkbookUpdateRequestDto;
 import core.backend.workbook.dto.*;
-import core.backend.workbook.exception.WorkbookExistTitleException;
-import core.backend.workbook.exception.WorkbookNotAuthorException;
 import core.backend.workbook.service.WorkbookFacade;
 import core.backend.workbook.service.WorkbookService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +25,7 @@ public class WorkbookController {
 
     private final WorkbookService workbookService;
     private final WorkbookFacade workbookFacade;
+    private final QuestionAIService questionAIService;
 
     @GetMapping("/workbook/{id}")
     public ResponseEntity<WorkbookResponseDto> findByIdV1(
@@ -90,9 +86,11 @@ public class WorkbookController {
 
     @PostMapping("/workbook-with-text")
     public ResponseEntity<WorkbookResponseDto> saveWithTextV1(
+            @AuthenticationPrincipal Member member,
             @RequestBody WorkbookWithTextRequestDto dto) {
-        Workbook workbook = workbookFacade.saveOrThrow(dto.toEntity(1L));
-        System.out.println("dto.getText() = " + dto.getText());
+        Workbook workbook = workbookFacade.saveOrThrow(dto.toEntity(member.getId()));
+        questionAIService.requestTextAndSaveResponse(workbook.getId(), dto.getText());
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new WorkbookResponseDto(workbook));
     }

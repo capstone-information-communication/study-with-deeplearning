@@ -19,6 +19,9 @@ spring:
   jwt:
     secret: "y=6uh6#!^$_z0ih@to&c5_wpnf?7lw+k9b)rca!ief2iu2v(0"
 
+flask:
+  url: "http://a79c-34-125-197-197.ngrok.io/workbook-with-text"
+
 logging:
   level:
     org.hibernate.SQL: debug
