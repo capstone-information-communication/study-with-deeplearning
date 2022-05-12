@@ -1,4 +1,4 @@
-package com.smp.frontend.restAPi;
+package com.smp.frontend.workbook.dto;
 
 enum State {
     ANSWER, WRONG;

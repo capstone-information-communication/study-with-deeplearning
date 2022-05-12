@@ -1,6 +1,6 @@
-package com.smp.frontend.restAPi;
+package com.smp.frontend.member.dto;
 
-public class SginUpResponse {
+public class MemberSginUpResponseDto {
     private  String email;
     private  String password;
     private  String nickname;

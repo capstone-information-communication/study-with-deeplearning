@@ -16,6 +16,8 @@ import core.backend.wrongAnswer.domain.WrongAnswer;
 import core.backend.wrongAnswer.service.WrongAnswerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +49,8 @@ public class initDataBase {
         private final WrongAnswerService wrongAnswerService;
         private final LikeWorkbookService likeWorkbookService;
 
+        private final PasswordEncoder encoder = new BCryptPasswordEncoder();
+
         private final EntityManager em;
 
         private final List<Long> memberIdList = new ArrayList<>();
@@ -73,7 +77,7 @@ public class initDataBase {
         private void generateMemberBy(int i) {
             Member member = Member.builder()
                     .role(Role.USER)
-                    .password(String.valueOf(i))
+                    .password(encoder.encode(String.valueOf(i)))
                     .nickname("nickname" + i)
                     .email("test" + i + "@gmail.com")
                     .name("member" + i)

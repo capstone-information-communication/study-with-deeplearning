@@ -15,13 +15,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Frontend">
         <activity
-            android:name=".Activity.RegisterActivity"
+            android:name=".member.activity.RegisterActivity"
             android:exported="true" />
         <activity
-            android:name=".Activity.MainActivity"
+            android:name=".member.activity.MainActivity"
             android:exported="true" />
         <activity
-            android:name=".Activity.LoginActivity"
+            android:name=".member.activity.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

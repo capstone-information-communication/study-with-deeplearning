@@ -1,10 +1,10 @@
-package com.smp.frontend.restAPi;
+package com.smp.frontend.member.dto;
 
 import java.util.List;
 
 import retrofit2.Call;
 
-public class SginInResponse {
+public class MemberSginInResponseDto {
 
     private  Object token;
     private  String message;

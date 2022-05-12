@@ -1,18 +1,16 @@
-package com.smp.frontend.fragment;
+package com.smp.frontend.member.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.os.PerformanceHintManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.smp.frontend.Activity.LoginActivity;
-import com.smp.frontend.Activity.MainActivity;
+import com.smp.frontend.member.activity.LoginActivity;
 import com.smp.frontend.PreferencesManager;
 import com.smp.frontend.R;
 

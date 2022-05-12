@@ -1,4 +1,4 @@
-package com.smp.frontend.Activity;
+package com.smp.frontend.member.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,10 +16,10 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.smp.frontend.R;
-import com.smp.frontend.fragment.HomeFragment;
-import com.smp.frontend.fragment.UploadFragment;
-import com.smp.frontend.fragment.WorkBookFragment;
-import com.smp.frontend.fragment.WrongAnswerFragment;
+import com.smp.frontend.member.fragment.HomeFragment;
+import com.smp.frontend.workbook.fragment.UploadFragment;
+import com.smp.frontend.workbook.fragment.WorkBookFragment;
+import com.smp.frontend.wrongAnswer.fragment.WrongAnswerFragment;
 
 public class MainActivity extends AppCompatActivity {
     private Toast toast;

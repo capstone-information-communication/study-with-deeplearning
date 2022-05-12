@@ -1,7 +1,6 @@
-package com.smp.frontend.restAPi;
+package com.smp.frontend.member;
 
 import com.smp.frontend.BuildConfig;
-import com.smp.frontend.member.MemberController;
 
 
 import okhttp3.OkHttpClient;
@@ -10,21 +9,21 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class RetrofitClient {
+public class RetrofitClientMember {
 
-    private static RetrofitClient instance = null;
-    private static RestApi RestApi;
+    private static RetrofitClientMember instance = null;
+    private static MemberController MemberController;
     //사용하고 있는 서버 BASE 주소
     private static String baseUrl = BuildConfig.BASEURL;
 
-    private RetrofitClient() {
+    private RetrofitClientMember() {
         //로그를 보기 위한 Interceptor
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(interceptor)
                 .build();
-   
+
         //retrofit 설정
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
@@ -33,18 +32,18 @@ public class RetrofitClient {
                 .client(client) //로그 기능 추가
                 .build();
 
-        RestApi = retrofit.create(RestApi.class);
+        MemberController = retrofit.create(MemberController.class);
     }
 
-    public static RetrofitClient getInstance() {
+    public static RetrofitClientMember getInstance() {
         if (instance == null) {
-            instance = new RetrofitClient();
+            instance = new RetrofitClientMember();
         }
         return instance;
     }
 
-    public static RestApi getRetrofitInterface() {
-        return RestApi;
+    public static MemberController getRetrofitInterface() {
+        return MemberController;
     }
 
 }

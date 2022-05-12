@@ -1,4 +1,4 @@
-package com.smp.frontend.Activity;
+package com.smp.frontend.member.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,16 +8,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 
-import com.smp.frontend.BuildConfig;
-import com.smp.frontend.PreferencesManager;
 import com.smp.frontend.R;
-import com.smp.frontend.restAPi.RestApi;
-import com.smp.frontend.restAPi.RetrofitClient;
-import com.smp.frontend.restAPi.SginUpResponse;
+import com.smp.frontend.member.MemberController;
+import com.smp.frontend.member.RetrofitClientMember;
+import com.smp.frontend.member.dto.MemberSignUpRequestDto;
+import com.smp.frontend.member.dto.MemberSginUpResponseDto;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,8 +26,6 @@ import java.util.HashMap;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -37,17 +33,17 @@ public class RegisterActivity extends AppCompatActivity {
     private Button join_button,Btn_delete;
     private AlertDialog dialog;
 
-    private  RetrofitClient retrofitClient;
+    private RetrofitClientMember retrofitClient;
     private  HashMap<String,Object> SignForm = new HashMap<String,Object>();
     Toast toast;
 
-    protected  void setSginUp(HashMap<String,Object> SginUp){
-        RetrofitClient retrofitClient = RetrofitClient.getInstance();
-        RestApi restApi =  RetrofitClient.getRetrofitInterface();
-        Call<SginUpResponse> signrequest =  restApi.SignUp(SginUp);
-        signrequest.enqueue(new Callback<SginUpResponse>() {
+    protected  void setSginUp(MemberSignUpRequestDto request){
+        RetrofitClientMember retrofitClient = RetrofitClientMember.getInstance();
+        MemberController memberController =  RetrofitClientMember.getRetrofitInterface();
+        Call<MemberSginUpResponseDto> signrequest =  memberController.SignUp(request);
+        signrequest.enqueue(new Callback<MemberSginUpResponseDto>() {
             @Override
-            public void onResponse(Call<SginUpResponse> call, Response<SginUpResponse> response) {
+            public void onResponse(Call<MemberSginUpResponseDto> call, Response<MemberSginUpResponseDto> response) {
                 //응답으로 토큰값이 와야되는데
                 if(response.code() == 200){
                     toast.makeText(getApplication(),"회원가입 완료" + response.body().getNickname() + "님 환영해요",Toast.LENGTH_LONG).show();
@@ -68,7 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             }
             @Override
-            public void onFailure(Call<SginUpResponse> call, Throwable t) {
+            public void onFailure(Call<MemberSginUpResponseDto> call, Throwable t) {
                 System.out.println("call = " + call + "둘");
             }
         });
@@ -121,13 +117,9 @@ public class RegisterActivity extends AppCompatActivity {
                 }
 
                 //비밀번호와 비밀번호 중복이 같지 않다면
+                MemberSignUpRequestDto request = new MemberSignUpRequestDto(UserEmail,UserPwd,UserNickName,UserName,"USER");
+                setSginUp(request);
 
-                SignForm.put("email", UserEmail);
-                SignForm.put("password", UserPwd);
-                SignForm.put("nickname", UserNickName);
-                SignForm.put("name", UserName);
-                SignForm.put("role","USER");
-                setSginUp(SignForm);
 
 
             }
