@@ -7,6 +7,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 
 public interface WrongAnswerController {
-    @GET("/wrong-answer/workbook")
+    @GET("api/v1/wrong-answer/workbook")
     Call<WrongAnswerResponseDto> WrongAnswerBook(@Header("Authorization") String token);
 }

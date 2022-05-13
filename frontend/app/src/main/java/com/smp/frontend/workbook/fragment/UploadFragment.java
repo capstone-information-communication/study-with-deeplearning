@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
+import com.smp.frontend.PreferencesManager;
 import com.smp.frontend.R;
 import com.smp.frontend.workbook.dto.UploadWorkBookResponseDto;
 import com.smp.frontend.workbook.RetrofitClientWorkbook;
@@ -90,7 +91,7 @@ public class UploadFragment extends Fragment {
                      UploadWorkBookRequestDto request = new UploadWorkBookRequestDto(title_text, description_text, extractedText);
                      retrofitClient = RetrofitClientWorkbook.getInstance();
                      WorkbookController workbookController = RetrofitClientWorkbook.getRetrofitInterface();
-                     Call<UploadWorkBookResponseDto> sendData = workbookController.SendWorkBook(request);
+                     Call<UploadWorkBookResponseDto> sendData = workbookController.SendWorkBook(PreferencesManager.getString(getActivity().getApplicationContext(),"token"),request);
                      sendData.enqueue(new Callback<UploadWorkBookResponseDto>() {
                          @Override
                          public void onResponse(Call<UploadWorkBookResponseDto> call, Response<UploadWorkBookResponseDto> response) {

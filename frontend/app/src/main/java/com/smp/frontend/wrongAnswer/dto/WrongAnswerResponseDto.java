@@ -5,6 +5,7 @@ import java.util.List;
 public class WrongAnswerResponseDto {
     int count;
 
+
     public int getCount() {
         return count;
     }
@@ -14,5 +15,6 @@ public class WrongAnswerResponseDto {
     }
 
     List<?> data;
+
 
 }

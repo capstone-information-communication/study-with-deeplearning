@@ -52,9 +52,7 @@ public class WorkBookFragment extends Fragment {
                 System.out.println("body.getCount() = " + body.getCount());
                 System.out.println("body.getData() = " + body.getData());
                 List<?> data = body.getData();
-
-                Gson gson = new Gson();
-
+                System.out.println("data = " + data);
                 for (int i = 0; i < body.getCount(); i++) {
                     WorkBookTestResponse parsing = (WorkBookTestResponse) instance.parsing(
                             instance.toJson(data.get(i)),
