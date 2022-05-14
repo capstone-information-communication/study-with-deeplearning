@@ -13,13 +13,18 @@ import com.smp.frontend.R;
 import com.smp.frontend.wrongAnswer.activity.WrongAnswersActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class WrongAnswerBookAdapter extends RecyclerView.Adapter<WrongAnswerBookAdapter.Holder> {
 
     private Context context;
     private List<WrongAnswerBookItemData> list = new ArrayList<>();
-    private static String  id;
+    private int id;
+    Map<Integer, Integer> a = new HashMap<>();
+
+    Intent intent;
     public WrongAnswerBookAdapter(Context context, List<WrongAnswerBookItemData> list) {
         this.context = context;
         this.list = list;
@@ -44,7 +49,9 @@ public class WrongAnswerBookAdapter extends RecyclerView.Adapter<WrongAnswerBook
         int itemposition = position;
         holder.wordText.setText(list.get(itemposition).getTitle());
         holder.meaningText.setText(list.get(itemposition).getDescription());
-        id = list.get(itemposition).getId();
+        id =  list.get(itemposition).getId();
+        a.put(itemposition,id);
+
     }
 
     // 몇개의 데이터를 리스트로 뿌려줘야하는지 반드시 정의해줘야한다
@@ -68,8 +75,9 @@ public class WrongAnswerBookAdapter extends RecyclerView.Adapter<WrongAnswerBook
                     int pos = getBindingAdapterPosition();
 
                     if(pos != RecyclerView.NO_POSITION) {
-                        Intent intent = new Intent(context, WrongAnswersActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra("ID",id);
+                        intent = new Intent(context, WrongAnswersActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra("ID",a.get(pos));
+                        System.out.println("a.get(pos) = " + a.get(pos));
                         context.startActivity(intent);
                     }
                 }

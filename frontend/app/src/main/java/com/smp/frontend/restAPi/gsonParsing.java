@@ -60,21 +60,21 @@ public class gsonParsing {
         return questionList.length();
     }
     
-    public String jsonArrayThree(List<?> data, int i,String firstObj, String secondObj,String thirdObj,int k) throws JSONException {
+    public String jsonArrayThree(List<?> data, int i,int j,int k,String firstObj, String secondObj,String thirdObj) throws JSONException {
         JSONArray a = new JSONArray(gson.toJson(data));
         String Firstobj = a.getJSONObject(i).getString(firstObj);
         JSONArray questionList = new JSONArray(Firstobj);
-        String Secobj = questionList.getJSONObject(i).getString(secondObj);
+        String Secobj = questionList.getJSONObject(j).getString(secondObj);
         JSONArray Throbj = new JSONArray(Secobj);
         String tobj = Throbj.getJSONObject(k).getString(thirdObj);
 
         return tobj;
     }
-    public int jsonSizeThree(List<?> data, int i,String firstObj,String secondObj)throws JSONException {
+    public int jsonSizeThree(List<?> data, int i,String firstObj,String secondObj,int j)throws JSONException {
         JSONArray a = new JSONArray(gson.toJson(data));
         String fobj = a.getJSONObject(i).getString(firstObj);
         JSONArray questionList = new JSONArray(fobj);
-        String sobj = questionList.getJSONObject(i).getString(secondObj);
+        String sobj = questionList.getJSONObject(j).getString(secondObj);
         JSONArray three = new JSONArray(sobj);
         return three.length();
     }

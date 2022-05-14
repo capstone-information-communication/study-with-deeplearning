@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.smp.frontend.PreferencesManager;
 import com.smp.frontend.R;
@@ -22,6 +23,7 @@ import com.smp.frontend.wrongAnswer.list.WrongAnswersItemData;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
@@ -34,18 +36,21 @@ public class WrongAnswersActivity extends AppCompatActivity {
     private WrongAnswerController wrongAnswerController;
     private WrongAnswersAdapter adapter;
 
-    private String ID;
+    private int ID;
     private int find=0;
-    private boolean stop= true;
     private ArrayList<WrongAnswersItemData> list = new ArrayList<>();
-    private String choiceList;
+    private List<String> choiceList = new ArrayList<>();
+
+    private long backKeyPressedTime;
+    Toast toast;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wrong_answers);
 
         Intent intent = getIntent();
-        ID = intent.getStringExtra("ID");
+        ID = intent.getIntExtra("ID",0);
+
 
 
         recyclerView = findViewById(R.id.rv_WrongAnswers);
@@ -60,26 +65,27 @@ public class WrongAnswersActivity extends AppCompatActivity {
                     int count = body.getCount();
                     List<?> data = body.getData();
                     gsonParsing instance = gsonParsing.getInstance();
-                    while(stop) {
+                    for(int i=0; i<count;i++) {
                         try {
-                            String id = instance.jsonArray(data, find, "workbook", "id");
-                            if(id.equals(ID)){
-                                stop =false;
+                            int id = Integer.parseInt(instance.jsonArray(data, i, "workbook", "id"));
+                            if(id == ID){
                                 //qeustionList
-                                for(int j =0; j<instance.jsonSizeTwo(data,find,"questionList");j++) {
-                                    String qid = instance.jsonArrayTwo(data, find, "questionList", "id",j);
-                                    String qtitle = instance.jsonArrayTwo(data, find, "questionList", "title",j);
-                                    String qcontent = instance.jsonArrayTwo(data, find, "questionList", "content",j);
+                                for(int j =0; j<instance.jsonSizeTwo(data,i,"questionList");j++) {
+                                    int qid = Integer.parseInt(instance.jsonArrayTwo(data, i, "questionList", "id",j));
+                                    String qtitle = instance.jsonArrayTwo(data, i, "questionList", "title",j);
+                                    String qcontent = instance.jsonArrayTwo(data, i, "questionList", "content",j);
                                     System.out.println("questionList = " + qid + qtitle + qcontent);
+                    
+                                    for(int k=0;k<instance.jsonSizeThree(data,i,"questionList","choiceList",j);k++){
+                                        System.out.println("j123123 = " +i+ " "+ j +" " + k);
+                                        String cid = instance.jsonArrayThree(data,i,j,k,"questionList","choiceList","id");
+                                        String cstate = instance.jsonArrayThree(data,i,j,k,"questionList","choiceList","state");
+                                        String ccontent = instance.jsonArrayThree(data,i,j,k,"questionList","choiceList","content");
+                                        System.out.println("ccontent = " + ccontent);
+                                        choiceList.add(ccontent);
 
-                                    for(int k=0;k<instance.jsonSizeThree(data,find,"questionList","choiceList");k++){
-                                        String cid = instance.jsonArrayThree(data,find,"questionList","choiceList","id",k);
-                                        String cstate = instance.jsonArrayThree(data,find,"questionList","choiceList","state",k);
-                                        String ccontent = instance.jsonArrayThree(data,find,"questionList","choiceList","content",k);
-                                        System.out.println("chocieList = " + cid+ cstate + ccontent);
-                                        choiceList += ccontent;
                                     }
-                                    list= WrongAnswersItemData.createContactsList(instance.jsonSizeTwo(data,find,"questionList"),qid,qtitle,qcontent,choiceList);
+                                    list.add(new WrongAnswersItemData(qid,qtitle,qcontent,choiceList));
                                     recyclerView.setHasFixedSize(true);
                                     adapter = new WrongAnswersAdapter(getApplicationContext(), list);
                                     recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
@@ -87,9 +93,7 @@ public class WrongAnswersActivity extends AppCompatActivity {
                                     recyclerView.setHasFixedSize(true);
                                 }
                             }
-                            else {
-                                find++;
-                            }
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -102,8 +106,18 @@ public class WrongAnswersActivity extends AppCompatActivity {
 
             }
         });
-
-
-
+    }
+    @Override
+    public void onBackPressed() {
+        if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
+            backKeyPressedTime = System.currentTimeMillis();
+            toast = Toast.makeText(this, "\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
+        if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+            finish();
+            toast.cancel();
+        }
     }
 }

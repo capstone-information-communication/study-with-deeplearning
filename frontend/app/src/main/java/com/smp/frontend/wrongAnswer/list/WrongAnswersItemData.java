@@ -1,11 +1,12 @@
 package com.smp.frontend.wrongAnswer.list;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class WrongAnswersItemData {
-    private String id;
+    private int id;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -20,26 +21,18 @@ public class WrongAnswersItemData {
     private String title;
     private String content;
 
-    public String getChoiceList() {
+    public List<String> getChoiceList() {
         return choiceList;
     }
 
-    private String choiceList;
+    private List<String> choiceList;
 
-    public WrongAnswersItemData(String id, String title, String content, String choiceList) {
+    public WrongAnswersItemData(int id, String title, String content, List<String> choiceList) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.choiceList = choiceList;
     }
 
-    // 입력받은 숫자의 리스트생성
-    public static ArrayList<WrongAnswersItemData> createContactsList(int count, String id, String title, String description,String choiceList) {
-        ArrayList<WrongAnswersItemData> contacts = new ArrayList<WrongAnswersItemData>();
 
-        for (int i = 1; i <= count; i++) {
-            contacts.add(new WrongAnswersItemData(id,title,description,choiceList));
-        }
-        return contacts;
-    }
 }

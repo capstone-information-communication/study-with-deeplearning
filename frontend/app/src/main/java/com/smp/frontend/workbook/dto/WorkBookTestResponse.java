@@ -9,6 +9,11 @@ public class WorkBookTestResponse {
     private State state;
     private String content;
 
+    public String getTitle() {
+        return title;
+    }
+
+    private String title;
     private String updatedAt;
     private String createdAt;
 

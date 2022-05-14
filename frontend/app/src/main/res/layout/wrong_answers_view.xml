@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -18,15 +19,6 @@
         app:layout_constraintVertical_bias="0.026" />
 
     <TextView
-        android:id="@+id/tv_choiceList"
-        android:layout_width="82dp"
-        android:layout_height="69dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="@+id/tv_content"
-        app:layout_constraintStart_toStartOf="@+id/tv_content"
-        app:layout_constraintTop_toBottomOf="@+id/tv_content" />
-
-    <TextView
         android:id="@+id/tv_content"
         android:layout_width="89dp"
         android:layout_height="55dp"
@@ -34,4 +26,34 @@
         app:layout_constraintEnd_toEndOf="@+id/tv_title_wronganswers"
         app:layout_constraintStart_toStartOf="@+id/tv_title_wronganswers"
         app:layout_constraintTop_toBottomOf="@+id/tv_title_wronganswers" />
+
+    <RadioGroup
+        android:id="@+id/RadioGroup_answers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/tv_content"
+        app:layout_constraintStart_toStartOf="@+id/tv_content"
+        app:layout_constraintTop_toBottomOf="@+id/tv_content">
+
+        <RadioButton
+            android:id="@+id/radio_btn1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <RadioButton
+            android:id="@+id/radio_btn2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <RadioButton
+            android:id="@+id/radio_btn3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <RadioButton
+            android:id="@+id/radio_btn4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RadioGroup>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +21,7 @@ public class WrongAnswersAdapter extends RecyclerView.Adapter<WrongAnswersAdapte
 
     private Context context;
     private List<WrongAnswersItemData> list = new ArrayList<>();
-    private static String  id;
+    private static int  id;
     public WrongAnswersAdapter(Context context, List<WrongAnswersItemData> list) {
         this.context = context;
         this.list = list;
@@ -42,9 +44,12 @@ public class WrongAnswersAdapter extends RecyclerView.Adapter<WrongAnswersAdapte
     public void onBindViewHolder(Holder holder, int position) {
         // 각 위치에 문자열 세팅
         int itemposition = position;
+        
         holder.title.setText(list.get(itemposition).getTitle());
         holder.content.setText(list.get(itemposition).getContent());
-        holder.choice.setText(list.get(itemposition).getChoiceList());
+        holder.Rd_btn1.setText(list.get(itemposition).getChoiceList().get(0));
+        holder.Rd_btn2.setText(list.get(itemposition).getChoiceList().get(1));
+
         id = list.get(itemposition).getId();
     }
 
@@ -56,14 +61,20 @@ public class WrongAnswersAdapter extends RecyclerView.Adapter<WrongAnswersAdapte
 
     // ViewHolder는 하나의 View를 보존하는 역할을 한다
     public class Holder extends RecyclerView.ViewHolder{
-        public TextView title;
-        public TextView content;
-        public TextView choice;
-        public Holder(View view){
+        private TextView title;
+        private TextView content;
+        private RadioGroup radioGroup;
+        private RadioButton Rd_btn1,Rd_btn2,Rd_btn3,Rd_btn4;
+
+        private Holder(View view){
             super(view);
             title = (TextView) view.findViewById(R.id.tv_title_wronganswers);
             content = (TextView) view.findViewById(R.id.tv_content);
-            choice = (TextView) view.findViewById(R.id.tv_choiceList);
+            radioGroup = (RadioGroup)view.findViewById(R.id.RadioGroup_answers);
+            Rd_btn1 = (RadioButton)view.findViewById(R.id.radio_btn1);
+            Rd_btn2 = (RadioButton)view.findViewById(R.id.radio_btn2);
+            Rd_btn3 = (RadioButton)view.findViewById(R.id.radio_btn3);
+            Rd_btn4 = (RadioButton)view.findViewById(R.id.radio_btn4);
 
             }
         }

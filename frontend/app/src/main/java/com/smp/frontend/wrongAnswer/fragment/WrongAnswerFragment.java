@@ -63,11 +63,11 @@ public class WrongAnswerFragment extends Fragment {
                     for (int i = 0; i < count; i++) {
                         try {
                             //workbook JSON
-                            String id = instance.jsonArray(data,i,"workbook","id");
+                            int id = Integer.parseInt(instance.jsonArray(data,i,"workbook","id"));
                             String title = instance.jsonArray(data,i,"workbook","title");
                             String description = instance.jsonArray(data,i,"workbook","description");
-                            System.out.println("workbook = " + id + title + description);
-                            list= WrongAnswerBookItemData.createContactsList(i+1,id,title,description);
+
+                            list.add(new WrongAnswerBookItemData(id,title,description));
                             recyclerView.setHasFixedSize(true);
                             adapter = new WrongAnswerBookAdapter(getActivity(), list);
                             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
