@@ -1,4 +1,4 @@
-package com.smp.frontend.wrongAnswer.fragment;
+    package com.smp.frontend.wrongAnswer.fragment;
 
 import android.os.Bundle;
 
@@ -16,9 +16,11 @@ import com.smp.frontend.restAPi.gsonParsing;
 import com.smp.frontend.wrongAnswer.RetrofitClientWrongAnswer;
 import com.smp.frontend.wrongAnswer.WrongAnswerController;
 import com.smp.frontend.wrongAnswer.dto.WrongAnswerResponseDto;
+import com.smp.frontend.wrongAnswer.dto.WrongAnswerTestResponse;
 import com.smp.frontend.wrongAnswer.list.WrongAnswerBookAdapter;
 import com.smp.frontend.wrongAnswer.list.WrongAnswerBookItemData;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
@@ -63,9 +65,14 @@ public class WrongAnswerFragment extends Fragment {
                     for (int i = 0; i < count; i++) {
                         try {
                             //workbook JSON
-                            int id = Integer.parseInt(instance.jsonArray(data,i,"workbook","id"));
-                            String title = instance.jsonArray(data,i,"workbook","title");
-                            String description = instance.jsonArray(data,i,"workbook","description");
+                            System.out.println("data = " + data);
+                            WrongAnswerTestResponse parsingDto = (WrongAnswerTestResponse)instance.parsing(
+                              instance.GetStringJSON(instance.toJsonArr(data),i,"workbook"),
+                                    WrongAnswerTestResponse.class
+                            );
+                            long id = (parsingDto.getId());
+                            String title = parsingDto.getTitle();
+                            String description = parsingDto.getDescription();
 
                             list.add(new WrongAnswerBookItemData(id,title,description));
                             recyclerView.setHasFixedSize(true);
@@ -92,5 +99,10 @@ public class WrongAnswerFragment extends Fragment {
 
         // Inflate the layout for this fragment
         return view;
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        list = new ArrayList<>();
     }
 }

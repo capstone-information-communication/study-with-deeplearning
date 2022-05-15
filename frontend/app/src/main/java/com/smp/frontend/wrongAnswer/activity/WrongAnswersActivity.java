@@ -15,6 +15,7 @@ import com.smp.frontend.restAPi.gsonParsing;
 import com.smp.frontend.wrongAnswer.RetrofitClientWrongAnswer;
 import com.smp.frontend.wrongAnswer.WrongAnswerController;
 import com.smp.frontend.wrongAnswer.dto.WrongAnswerResponseDto;
+import com.smp.frontend.wrongAnswer.dto.WrongAnswerTestResponse;
 import com.smp.frontend.wrongAnswer.list.WrongAnswerBookAdapter;
 import com.smp.frontend.wrongAnswer.list.WrongAnswerBookItemData;
 import com.smp.frontend.wrongAnswer.list.WrongAnswersAdapter;
@@ -36,7 +37,7 @@ public class WrongAnswersActivity extends AppCompatActivity {
     private WrongAnswerController wrongAnswerController;
     private WrongAnswersAdapter adapter;
 
-    private int ID;
+    private long ID;
     private int find=0;
     private ArrayList<WrongAnswersItemData> list = new ArrayList<>();
     private List<String> choiceList = new ArrayList<>();
@@ -49,9 +50,7 @@ public class WrongAnswersActivity extends AppCompatActivity {
         setContentView(R.layout.activity_wrong_answers);
 
         Intent intent = getIntent();
-        ID = intent.getIntExtra("ID",0);
-
-
+        ID = intent.getLongExtra("ID",0);
 
         recyclerView = findViewById(R.id.rv_WrongAnswers);
         retrofitClientWrongAnswer = RetrofitClientWrongAnswer.getInstance();
@@ -67,6 +66,11 @@ public class WrongAnswersActivity extends AppCompatActivity {
                     gsonParsing instance = gsonParsing.getInstance();
                     for(int i=0; i<count;i++) {
                         try {
+                            WrongAnswerTestResponse parsing = (WrongAnswerTestResponse)instance.parsing(
+                                    instance.GetStringJSON(instance.toJsonArr(data),i,"workbook"),
+                                    WrongAnswerTestResponse.class
+                            );
+                            System.out.println("parsing = " + parsing.getTitle());
                             int id = Integer.parseInt(instance.jsonArray(data, i, "workbook", "id"));
                             if(id == ID){
                                 //qeustionList
@@ -85,6 +89,7 @@ public class WrongAnswersActivity extends AppCompatActivity {
                                         choiceList.add(ccontent);
 
                                     }
+
                                     list.add(new WrongAnswersItemData(qid,qtitle,qcontent,choiceList));
                                     recyclerView.setHasFixedSize(true);
                                     adapter = new WrongAnswersAdapter(getApplicationContext(), list);

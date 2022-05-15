@@ -1,4 +1,4 @@
-package com.smp.frontend.workbook.dto;
+package com.smp.frontend.wrongAnswer.dto;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ enum State {
     ANSWER, WRONG;
 }
 
-public class WorkBookTestResponse {
+public class WrongAnswerTestResponse {
     private long id;
     private State state;
     private String content;
@@ -14,6 +14,12 @@ public class WorkBookTestResponse {
     private String updatedAt;
     private String createdAt;
     private String description;
+
+    public List<?> getWorkbook() {
+        return workbook;
+    }
+
+    private List<?> workbook;
 
     public List<?> getChoiceList() {
         return choiceList;

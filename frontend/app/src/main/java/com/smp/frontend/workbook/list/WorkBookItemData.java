@@ -1,11 +1,9 @@
-package com.smp.frontend.wrongAnswer.list;
+package com.smp.frontend.workbook.list;
 
-import java.util.ArrayList;
+public class WorkBookItemData {
+    private int id;
 
-public class WrongAnswerBookItemData {
-    private long id;
-
-    public long getId() {
+    public int getId() {
         return id;
     }
 
@@ -13,15 +11,14 @@ public class WrongAnswerBookItemData {
         return title;
     }
 
-    public String getDescription() {
+    public String getdescription() {
         return description;
     }
 
     private String title;
     private String description;
-    private String likecount;
 
-    public WrongAnswerBookItemData(long id, String title, String description) {
+    public WorkBookItemData(int id, String title, String description) {
         this.id = id;
         this.title = title;
         this.description = description;

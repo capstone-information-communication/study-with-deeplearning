@@ -1,7 +1,6 @@
-package com.smp.frontend.wrongAnswer.list;
+package com.smp.frontend.workbook.list;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,17 +11,16 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.smp.frontend.R;
-import com.smp.frontend.wrongAnswer.activity.WrongAnswersActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class WrongAnswersAdapter extends RecyclerView.Adapter<WrongAnswersAdapter.Holder> {
+public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuestionAdapter.Holder> {
 
     private Context context;
-    private List<WrongAnswersItemData> list = new ArrayList<>();
+    private List<WorkBookQuestionItemData> list = new ArrayList<>();
     private static long  id;
-    public WrongAnswersAdapter(Context context, List<WrongAnswersItemData> list) {
+    public WorkBookQuestionAdapter(Context context, List<WorkBookQuestionItemData> list) {
         this.context = context;
         this.list = list;
     }

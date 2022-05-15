@@ -91,7 +91,10 @@ public class UploadFragment extends Fragment {
                      UploadWorkBookRequestDto request = new UploadWorkBookRequestDto(title_text, description_text, extractedText);
                      retrofitClient = RetrofitClientWorkbook.getInstance();
                      WorkbookController workbookController = RetrofitClientWorkbook.getRetrofitInterface();
-                     Call<UploadWorkBookResponseDto> sendData = workbookController.SendWorkBook(PreferencesManager.getString(getActivity().getApplicationContext(),"token"),request);
+
+                     Call<UploadWorkBookResponseDto> sendData = workbookController.SendWorkBook(
+                             PreferencesManager.getString(getActivity().getApplicationContext(),"token"),request);
+
                      sendData.enqueue(new Callback<UploadWorkBookResponseDto>() {
                          @Override
                          public void onResponse(Call<UploadWorkBookResponseDto> call, Response<UploadWorkBookResponseDto> response) {
@@ -119,7 +122,6 @@ public class UploadFragment extends Fragment {
                  }
              }
          });
-
 
          ImageButton Upload_btn = view.findViewById(R.id.btn_upload);
          Upload_btn.setOnClickListener(new View.OnClickListener() {

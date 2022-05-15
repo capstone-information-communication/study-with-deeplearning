@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Frontend">
-        <activity android:name=".wrongAnswer.activity.WrongAnswersActivity"></activity>
+        <activity android:name=".workbook.activity.WorkBookQeustion"></activity>
+        <activity android:name=".wrongAnswer.activity.WrongAnswersActivity" />
         <activity
             android:name=".member.activity.RegisterActivity"
             android:exported="true" />

@@ -1,9 +1,8 @@
-package com.smp.frontend.wrongAnswer.list;
+package com.smp.frontend.workbook.list;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class WrongAnswersItemData {
+public class WorkBookQuestionItemData {
     private long id;
 
     public long getId() {
@@ -27,7 +26,7 @@ public class WrongAnswersItemData {
 
     private List<String> choiceList;
 
-    public WrongAnswersItemData(long id, String title, String content, List<String> choiceList) {
+    public WorkBookQuestionItemData(long id, String title, String content, List<String> choiceList) {
         this.id = id;
         this.title = title;
         this.content = content;

@@ -1,6 +1,7 @@
 package com.smp.frontend.restAPi;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,14 +25,18 @@ public class gsonParsing {
         return gson.toJson(data);
     }
 
-/*    public JSONArray toJsonArr(Object data) throws JSONException {
+    public JSONArray toJsonArr(Object data) throws JSONException {
         JSONArray a = new JSONArray(gson.toJson(data));
         return  a;
     }
     public String ArrToString(JSONArray jsonArray,int i) throws JSONException {
-        String a = jsonArray.getJSONObject(i).toString();
-        return a;
-    }*/
+        String b = jsonArray.getJSONObject(i).toString();
+        return b;
+    }
+    public  String GetStringJSON(JSONArray jsonArray, int i,String j) throws  JSONException{
+        String c = jsonArray.getJSONObject(i).getString(j);
+        return c;
+    }
 
     public Object parsing(String toJson, Class klass) {
         return gson.fromJson(toJson, klass);

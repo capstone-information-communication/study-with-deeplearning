@@ -1,4 +1,4 @@
-package com.smp.frontend.wrongAnswer.list;
+package com.smp.frontend.workbook.list;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.smp.frontend.R;
+import com.smp.frontend.workbook.activity.WorkBookQeustion;
 import com.smp.frontend.wrongAnswer.activity.WrongAnswersActivity;
 
 import java.util.ArrayList;
@@ -17,15 +18,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class WrongAnswerBookAdapter extends RecyclerView.Adapter<WrongAnswerBookAdapter.Holder> {
+public class WorkBookAdapter extends RecyclerView.Adapter<WorkBookAdapter.Holder> {
 
     private Context context;
-    private List<WrongAnswerBookItemData> list = new ArrayList<>();
-    private long id;
-    Map<Integer, Long> a = new HashMap<>();
+    private List<WorkBookItemData> list = new ArrayList<>();
+    private int id;
+    Map<Integer, Integer> a = new HashMap<>();
 
     Intent intent;
-    public WrongAnswerBookAdapter(Context context, List<WrongAnswerBookItemData> list) {
+    public WorkBookAdapter(Context context, List<WorkBookItemData> list) {
         this.context = context;
         this.list = list;
     }
@@ -34,7 +35,7 @@ public class WrongAnswerBookAdapter extends RecyclerView.Adapter<WrongAnswerBook
     // row layout을 화면에 뿌려주고 holder에 연결
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.wrong_answer_workbook_view, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.workbook_view, parent, false);
         Holder holder = new Holder(view);
         return holder;
     }
@@ -47,8 +48,8 @@ public class WrongAnswerBookAdapter extends RecyclerView.Adapter<WrongAnswerBook
     public void onBindViewHolder(Holder holder, int position) {
         // 각 위치에 문자열 세팅
         int itemposition = position;
-        holder.wordText.setText(list.get(itemposition).getTitle());
-        holder.meaningText.setText(list.get(itemposition).getDescription());
+        holder.tv_title_workbook.setText(list.get(itemposition).getTitle());
+        holder.tv_description_workbook.setText(list.get(itemposition).getdescription());
         id =  list.get(itemposition).getId();
         a.put(itemposition,id);
 
@@ -62,20 +63,20 @@ public class WrongAnswerBookAdapter extends RecyclerView.Adapter<WrongAnswerBook
 
     // ViewHolder는 하나의 View를 보존하는 역할을 한다
     public class Holder extends RecyclerView.ViewHolder{
-        public TextView wordText;
-        public TextView meaningText;
+        private TextView tv_title_workbook;
+        private TextView tv_description_workbook;
 
         public Holder(View view){
             super(view);
-            wordText = (TextView) view.findViewById(R.id.tv_title_wrongAnswerbook);
-            meaningText = (TextView) view.findViewById(R.id.tv_description_WrongAnswers);
+            tv_title_workbook = (TextView) view.findViewById(R.id.tv_title_workbook);
+            tv_description_workbook = (TextView) view.findViewById(R.id.tv_description_workbook);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int pos = getBindingAdapterPosition();
 
                     if(pos != RecyclerView.NO_POSITION) {
-                        intent = new Intent(context, WrongAnswersActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent = new Intent(context, WorkBookQeustion.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent.putExtra("ID",a.get(pos));
                         System.out.println("a.get(pos) = " + a.get(pos));
                         context.startActivity(intent);

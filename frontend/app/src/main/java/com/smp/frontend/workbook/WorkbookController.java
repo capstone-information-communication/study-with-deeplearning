@@ -23,4 +23,7 @@ public interface WorkbookController {
     Call<WorkBookResponseDto> getChoiceList();
 
 
+    @GET("api/v1/workbooks")
+    Call<WorkBookResponseDto> getWorkbook(@Header("Authorization") String token);
+
 }
