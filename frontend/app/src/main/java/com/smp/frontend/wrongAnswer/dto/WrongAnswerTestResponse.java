@@ -1,19 +1,41 @@
 package com.smp.frontend.wrongAnswer.dto;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
-enum State {
-    ANSWER, WRONG;
-}
 
 public class WrongAnswerTestResponse {
     private long id;
-    private State state;
+    private String state;
     private String content;
     private String title;
     private String updatedAt;
     private String createdAt;
     private String description;
+    private Object commentary;
+    private String questionId;
+
+    public String getQuestionId() {
+        return questionId;
+    }
+
+    public String getWrongAnswerId() {
+        return wrongAnswerId;
+    }
+
+    private String wrongAnswerId;
+
+    public String getComment() {
+        return comment;
+    }
+
+    private String comment;
+
+
+    public Object getCommentary() {
+        return commentary;
+    }
 
     public List<?> getWorkbook() {
         return workbook;
@@ -27,11 +49,11 @@ public class WrongAnswerTestResponse {
 
     private List<?> choiceList;
 
-    public List<?> getQuestionList() {
-        return questionList;
+    public List<?> getWrongAnswerQuestionList() {
+        return wrongAnswerQuestionList;
     }
 
-    private List<?> questionList;
+    private List<?> wrongAnswerQuestionList;
 
     public String getTitle() { return title; }
 
@@ -41,7 +63,7 @@ public class WrongAnswerTestResponse {
         return id;
     }
 
-    public State getState() {
+    public String getState() {
         return state;
     }
 

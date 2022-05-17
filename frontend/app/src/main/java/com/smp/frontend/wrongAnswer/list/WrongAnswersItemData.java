@@ -1,10 +1,10 @@
 package com.smp.frontend.wrongAnswer.list;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.smp.frontend.common.choiceListDto;
+import com.smp.frontend.common.questionListDto;
 
 public class WrongAnswersItemData {
-    private long id;
+/*    private long id;
 
     public long getId() {
         return id;
@@ -25,14 +25,21 @@ public class WrongAnswersItemData {
         return choiceList;
     }
 
-    private List<String> choiceList;
+    private List<String> choiceList;*/
+    private choiceListDto choice;
+    private questionListDto question;
 
-    public WrongAnswersItemData(long id, String title, String content, List<String> choiceList) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.choiceList = choiceList;
+    public WrongAnswersItemData(questionListDto qeustionClass, choiceListDto ChoiceClass) {
+        this.choice = ChoiceClass;
+        this.question = qeustionClass;
     }
 
 
+    public choiceListDto getChoice() {
+        return choice;
+    }
+
+    public questionListDto getQuestion() {
+        return question;
+    }
 }

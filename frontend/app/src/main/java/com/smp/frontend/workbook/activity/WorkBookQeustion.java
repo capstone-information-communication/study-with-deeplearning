@@ -9,17 +9,13 @@ import android.os.Bundle;
 
 import com.smp.frontend.PreferencesManager;
 import com.smp.frontend.R;
-import com.smp.frontend.restAPi.gsonParsing;
+import com.smp.frontend.common.gsonParsing;
 import com.smp.frontend.workbook.RetrofitClientWorkbook;
 import com.smp.frontend.workbook.WorkbookController;
 import com.smp.frontend.workbook.dto.WorkBookResponseDto;
 import com.smp.frontend.workbook.dto.WorkBookTestResponse;
-import com.smp.frontend.workbook.list.WorkBookAdapter;
-import com.smp.frontend.workbook.list.WorkBookItemData;
 import com.smp.frontend.workbook.list.WorkBookQuestionAdapter;
 import com.smp.frontend.workbook.list.WorkBookQuestionItemData;
-import com.smp.frontend.wrongAnswer.list.WrongAnswersAdapter;
-import com.smp.frontend.wrongAnswer.list.WrongAnswersItemData;
 
 import org.json.JSONException;
 

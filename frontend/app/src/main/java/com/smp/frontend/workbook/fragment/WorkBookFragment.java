@@ -1,22 +1,18 @@
 package com.smp.frontend.workbook.fragment;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.os.PerformanceHintManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.smp.frontend.PreferencesManager;
 import com.smp.frontend.R;
-import com.smp.frontend.restAPi.gsonParsing;
+import com.smp.frontend.common.gsonParsing;
 import com.smp.frontend.workbook.RetrofitClientWorkbook;
 import com.smp.frontend.workbook.WorkbookController;
 import com.smp.frontend.workbook.dto.WorkBookResponseDto;

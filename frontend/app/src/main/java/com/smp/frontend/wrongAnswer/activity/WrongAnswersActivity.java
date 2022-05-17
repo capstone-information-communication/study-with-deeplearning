@@ -6,25 +6,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.smp.frontend.PreferencesManager;
 import com.smp.frontend.R;
-import com.smp.frontend.restAPi.gsonParsing;
+import com.smp.frontend.common.choiceListDto;
+import com.smp.frontend.common.gsonParsing;
+import com.smp.frontend.common.questionListDto;
 import com.smp.frontend.wrongAnswer.RetrofitClientWrongAnswer;
 import com.smp.frontend.wrongAnswer.WrongAnswerController;
 import com.smp.frontend.wrongAnswer.dto.WrongAnswerResponseDto;
 import com.smp.frontend.wrongAnswer.dto.WrongAnswerTestResponse;
-import com.smp.frontend.wrongAnswer.list.WrongAnswerBookAdapter;
-import com.smp.frontend.wrongAnswer.list.WrongAnswerBookItemData;
 import com.smp.frontend.wrongAnswer.list.WrongAnswersAdapter;
 import com.smp.frontend.wrongAnswer.list.WrongAnswersItemData;
 
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
@@ -38,9 +36,7 @@ public class WrongAnswersActivity extends AppCompatActivity {
     private WrongAnswersAdapter adapter;
 
     private long ID;
-    private int find=0;
     private ArrayList<WrongAnswersItemData> list = new ArrayList<>();
-    private List<String> choiceList = new ArrayList<>();
 
     private long backKeyPressedTime;
     Toast toast;
@@ -66,37 +62,50 @@ public class WrongAnswersActivity extends AppCompatActivity {
                     gsonParsing instance = gsonParsing.getInstance();
                     for(int i=0; i<count;i++) {
                         try {
+                            //workbook 파싱
                             WrongAnswerTestResponse parsing = (WrongAnswerTestResponse)instance.parsing(
-                                    instance.GetStringJSON(instance.toJsonArr(data),i,"workbook"),
+                                    instance.toJson(data.get(i)),
                                     WrongAnswerTestResponse.class
                             );
                             System.out.println("parsing = " + parsing.getTitle());
-                            int id = Integer.parseInt(instance.jsonArray(data, i, "workbook", "id"));
+                            long id = parsing.getId();
                             if(id == ID){
                                 //qeustionList
-                                for(int j =0; j<instance.jsonSizeTwo(data,i,"questionList");j++) {
-                                    int qid = Integer.parseInt(instance.jsonArrayTwo(data, i, "questionList", "id",j));
-                                    String qtitle = instance.jsonArrayTwo(data, i, "questionList", "title",j);
-                                    String qcontent = instance.jsonArrayTwo(data, i, "questionList", "content",j);
-                                    System.out.println("questionList = " + qid + qtitle + qcontent);
-                    
-                                    for(int k=0;k<instance.jsonSizeThree(data,i,"questionList","choiceList",j);k++){
-                                        System.out.println("j123123 = " +i+ " "+ j +" " + k);
-                                        String cid = instance.jsonArrayThree(data,i,j,k,"questionList","choiceList","id");
-                                        String cstate = instance.jsonArrayThree(data,i,j,k,"questionList","choiceList","state");
-                                        String ccontent = instance.jsonArrayThree(data,i,j,k,"questionList","choiceList","content");
-                                        System.out.println("ccontent = " + ccontent);
-                                        choiceList.add(ccontent);
+                                for(int j=0;j<parsing.getWrongAnswerQuestionList().size();j++) {
+                                    WrongAnswerTestResponse parsing2 = (WrongAnswerTestResponse) instance.parsing(
+                                            instance.ArrToString(instance.toJsonArr(parsing.getWrongAnswerQuestionList()), j),
+                                            WrongAnswerTestResponse.class
+                                    );
+                                    long qid = parsing2.getId();
+                                    String qtitle = parsing2.getTitle();
+                                    String qcontent = parsing2.getContent();
 
+                                    //코멘트 가져오기 나중에 수정 필요해보임
+                                    WrongAnswerTestResponse commentry = (WrongAnswerTestResponse) instance.parsing(
+                                            instance.toJson(parsing2.getCommentary()), WrongAnswerTestResponse.class);
+                                    String qComment = commentry.getComment();
+                                    questionListDto QeustionListClass = new questionListDto(qid, qtitle, qcontent, qComment);
+                                    //choiceList
+                                    choiceListDto ChoiceListClass = null;
+                                    for (int k = 0; k < parsing2.getChoiceList().size(); k++) {
+                                        WrongAnswerTestResponse parsing3 = (WrongAnswerTestResponse) instance.parsing(
+                                                instance.ArrToString(instance.toJsonArr(parsing2.getChoiceList()), k),
+                                                WrongAnswerTestResponse.class
+                                        );
+                                        long ChoiceId = parsing3.getId();
+                                        String ChoiceState = parsing3.getState();
+                                        String ChoiceContent = parsing3.getContent();
+                                        ChoiceListClass = new choiceListDto(ChoiceId, ChoiceState, ChoiceContent);
                                     }
 
-                                    list.add(new WrongAnswersItemData(qid,qtitle,qcontent,choiceList));
+                                    list.add(new WrongAnswersItemData(QeustionListClass, ChoiceListClass));
                                     recyclerView.setHasFixedSize(true);
                                     adapter = new WrongAnswersAdapter(getApplicationContext(), list);
                                     recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                                     recyclerView.setAdapter(adapter);
                                     recyclerView.setHasFixedSize(true);
                                 }
+
                             }
 
                         } catch (JSONException e) {
@@ -111,18 +120,5 @@ public class WrongAnswersActivity extends AppCompatActivity {
 
             }
         });
-    }
-    @Override
-    public void onBackPressed() {
-        if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
-            backKeyPressedTime = System.currentTimeMillis();
-            toast = Toast.makeText(this, "\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT);
-            toast.show();
-            return;
-        }
-        if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
-            finish();
-            toast.cancel();
-        }
     }
 }

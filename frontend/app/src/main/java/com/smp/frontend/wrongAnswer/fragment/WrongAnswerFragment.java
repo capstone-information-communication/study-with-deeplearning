@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.smp.frontend.PreferencesManager;
 import com.smp.frontend.R;
-import com.smp.frontend.restAPi.gsonParsing;
+import com.smp.frontend.common.gsonParsing;
 import com.smp.frontend.wrongAnswer.RetrofitClientWrongAnswer;
 import com.smp.frontend.wrongAnswer.WrongAnswerController;
 import com.smp.frontend.wrongAnswer.dto.WrongAnswerResponseDto;
@@ -20,7 +20,6 @@ import com.smp.frontend.wrongAnswer.dto.WrongAnswerTestResponse;
 import com.smp.frontend.wrongAnswer.list.WrongAnswerBookAdapter;
 import com.smp.frontend.wrongAnswer.list.WrongAnswerBookItemData;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
@@ -67,7 +66,7 @@ public class WrongAnswerFragment extends Fragment {
                             //workbook JSON
                             System.out.println("data = " + data);
                             WrongAnswerTestResponse parsingDto = (WrongAnswerTestResponse)instance.parsing(
-                              instance.GetStringJSON(instance.toJsonArr(data),i,"workbook"),
+                              instance.toJson(data.get(i)),
                                     WrongAnswerTestResponse.class
                             );
                             long id = (parsingDto.getId());
@@ -81,7 +80,7 @@ public class WrongAnswerFragment extends Fragment {
                             recyclerView.setAdapter(adapter);
                             recyclerView.setHasFixedSize(true);
 
-                        } catch (JSONException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
 
