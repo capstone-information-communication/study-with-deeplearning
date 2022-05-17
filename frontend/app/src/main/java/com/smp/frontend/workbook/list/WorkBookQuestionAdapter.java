@@ -29,7 +29,7 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
     // row layout을 화면에 뿌려주고 holder에 연결
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.wrong_answers_view, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.workbook_qeustion_view, parent, false);
         Holder holder = new Holder(view);
         return holder;
     }
