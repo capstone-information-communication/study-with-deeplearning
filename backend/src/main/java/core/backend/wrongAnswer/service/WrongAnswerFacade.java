@@ -1,17 +1,20 @@
 package core.backend.wrongAnswer.service;
 
 import core.backend.likeWorkbook.exception.LikeWorkbookNotRegisterException;
-import core.backend.question.domain.Question;
 import core.backend.question.service.QuestionService;
 import core.backend.workbook.service.WorkbookService;
 import core.backend.wrongAnswer.domain.WrongAnswer;
 import core.backend.wrongAnswer.dto.WrongAnswerInfoResponseDto;
+import core.backend.wrongAnswer.dto.WrongAnswerItem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,8 +38,7 @@ public class WrongAnswerFacade {
     }
 
     public List<WrongAnswerInfoResponseDto> findMyWrongAnswer(Long memberId, Pageable pageable) {
-        HashMap<Long, List<Long>> wrongAnswerMap = getWrongAnswerMap(
-                new HashMap<Long, List<Long>>(),
+        HashMap<Long, List<WrongAnswerItem>> wrongAnswerMap = getWrongAnswerMap(
                 wrongAnswerService.findByMemberId(memberId, pageable));
 
         return wrongAnswerMap.entrySet()
@@ -45,29 +47,24 @@ public class WrongAnswerFacade {
                 .collect(Collectors.toList());
     }
 
-    private HashMap<Long, List<Long>> getWrongAnswerMap(HashMap<Long, List<Long>> wrongAnswerMap, Page<WrongAnswer> wrongAnswerPageList) {
+    private HashMap<Long, List<WrongAnswerItem>> getWrongAnswerMap(Page<WrongAnswer> wrongAnswerPageList) {
+        HashMap<Long, List<WrongAnswerItem>> wrongAnswerMap = new HashMap<>();
         for (WrongAnswer wrongAnswer : wrongAnswerPageList) {
             setWrongAnswerMap(wrongAnswerMap,
                     wrongAnswer.getWorkbookId(),
-                    wrongAnswer.getQuestionId());
+                    new WrongAnswerItem(wrongAnswer.getId(), questionService.findByIdOrThrow(wrongAnswer.getQuestionId())));
         }
         return wrongAnswerMap;
     }
 
-    private WrongAnswerInfoResponseDto getWrongAnswerInfoResponseDto(Long key, List<Long> value) {
-        List<Question> questionList = value
-                .stream()
-                .map(questionService::findByIdOrThrow)
-                .collect(Collectors.toList());
-
+    private WrongAnswerInfoResponseDto getWrongAnswerInfoResponseDto(Long key, List<WrongAnswerItem> value) {
         return new WrongAnswerInfoResponseDto(
-                workbookService.findByIdOrThrow(key),
-                questionList);
+                workbookService.findByIdOrThrow(key), value);
     }
 
-    private void setWrongAnswerMap(HashMap<Long, List<Long>> map, Long key, Long value) {
+    private void setWrongAnswerMap(HashMap<Long, List<WrongAnswerItem>> map, Long key, WrongAnswerItem value) {
         if (!map.containsKey(key)) {
-            map.put(key, new ArrayList<>());
+            map.put(key, new ArrayList<WrongAnswerItem>());
         }
         map.get(key).add(value);
     }
