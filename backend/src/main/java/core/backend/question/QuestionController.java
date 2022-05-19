@@ -1,6 +1,7 @@
 package core.backend.question;
 
 import core.backend.global.dto.DataResponse;
+import core.backend.global.dto.DefaultDeleteResponseDto;
 import core.backend.question.domain.Category;
 import core.backend.question.dto.QuestionResponseDto;
 import core.backend.question.dto.QuestionSaveRequestDto;
@@ -10,7 +11,6 @@ import core.backend.workbook.service.WorkbookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -95,9 +95,11 @@ public class QuestionController {
     }
 
     @DeleteMapping("/question/{id}")
-    public HttpStatus deleteByIdV1(
+    public ResponseEntity<DefaultDeleteResponseDto> deleteByIdV1(
             @PathVariable Long id) {
+        questionService.findByIdOrThrow(id);
         questionService.deleteById(id);
-        return HttpStatus.OK;
+        return ResponseEntity.ok(
+                new DefaultDeleteResponseDto("질문이 성공적으로 삭제되었습니다"));
     }
 }
