@@ -14,17 +14,17 @@ public class WrongAnswerTestResponse {
     private String createdAt;
     private String description;
     private Object commentary;
-    private String questionId;
+    private long questionId;
 
-    public String getQuestionId() {
+    public long getQuestionId() {
         return questionId;
     }
 
-    public String getWrongAnswerId() {
+    public long getWrongAnswerId() {
         return wrongAnswerId;
     }
 
-    private String wrongAnswerId;
+    private long wrongAnswerId;
 
     public String getComment() {
         return comment;

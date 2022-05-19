@@ -23,6 +23,7 @@ import com.smp.frontend.wrongAnswer.list.WrongAnswersItemData;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -35,6 +36,8 @@ public class WrongAnswersActivity extends AppCompatActivity {
     private WrongAnswerController wrongAnswerController;
     private WrongAnswersAdapter adapter;
 
+    private List<choiceListDto> choiceListDtoList1 = new ArrayList<>();
+    private List<choiceListDto> choiceListDtoList2 = new ArrayList<>();
     private long ID;
     private ArrayList<WrongAnswersItemData> list = new ArrayList<>();
 
@@ -76,7 +79,8 @@ public class WrongAnswersActivity extends AppCompatActivity {
                                             instance.ArrToString(instance.toJsonArr(parsing.getWrongAnswerQuestionList()), j),
                                             WrongAnswerTestResponse.class
                                     );
-                                    long qid = parsing2.getId();
+                                    long qid = parsing2.getQuestionId();
+                                    long wrongid = parsing2.getWrongAnswerId();
                                     String qtitle = parsing2.getTitle();
                                     String qcontent = parsing2.getContent();
 
@@ -84,9 +88,8 @@ public class WrongAnswersActivity extends AppCompatActivity {
                                     WrongAnswerTestResponse commentry = (WrongAnswerTestResponse) instance.parsing(
                                             instance.toJson(parsing2.getCommentary()), WrongAnswerTestResponse.class);
                                     String qComment = commentry.getComment();
-                                    questionListDto QeustionListClass = new questionListDto(qid, qtitle, qcontent, qComment);
+                                    questionListDto QeustionListClass = new questionListDto(qid,wrongid,qtitle, qcontent, qComment);
                                     //choiceList
-                                    choiceListDto ChoiceListClass = null;
                                     for (int k = 0; k < parsing2.getChoiceList().size(); k++) {
                                         WrongAnswerTestResponse parsing3 = (WrongAnswerTestResponse) instance.parsing(
                                                 instance.ArrToString(instance.toJsonArr(parsing2.getChoiceList()), k),
@@ -95,10 +98,16 @@ public class WrongAnswersActivity extends AppCompatActivity {
                                         long ChoiceId = parsing3.getId();
                                         String ChoiceState = parsing3.getState();
                                         String ChoiceContent = parsing3.getContent();
-                                        ChoiceListClass = new choiceListDto(ChoiceId, ChoiceState, ChoiceContent);
+                                        if(k ==0) {
+                                            choiceListDtoList1.add(new choiceListDto(ChoiceId, ChoiceState, ChoiceContent));
+
+                                        }
+                                        else if(k==1){
+                                            choiceListDtoList2.add(new choiceListDto(ChoiceId, ChoiceState, ChoiceContent));
+                                        }
                                     }
 
-                                    list.add(new WrongAnswersItemData(QeustionListClass, ChoiceListClass));
+                                    list.add(new WrongAnswersItemData(id,QeustionListClass, choiceListDtoList1,choiceListDtoList2));
                                     recyclerView.setHasFixedSize(true);
                                     adapter = new WrongAnswersAdapter(getApplicationContext(), list);
                                     recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
