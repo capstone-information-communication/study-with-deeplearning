@@ -6,12 +6,12 @@ import core.backend.choice.dto.ChoiceSaveRequestDto;
 import core.backend.choice.dto.ChoiceUpdateRequestDto;
 import core.backend.choice.service.ChoiceService;
 import core.backend.global.dto.DataResponse;
+import core.backend.global.dto.DefaultDeleteResponseDto;
 import core.backend.question.domain.Question;
 import core.backend.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -84,9 +84,10 @@ public class ChoiceController {
     }
 
     @DeleteMapping("/choice/{id}")
-    public HttpStatus deleteByIdV1(
+    public ResponseEntity<DefaultDeleteResponseDto> deleteByIdV1(
             @PathVariable Long id) {
         choiceService.deleteById(id);
-        return HttpStatus.OK;
+        return ResponseEntity.ok(
+                new DefaultDeleteResponseDto("질문이 성공적으로 삭제되었습니다"));
     }
 }

@@ -1,6 +1,7 @@
 package core.backend.likeWorkbook;
 
 import core.backend.global.dto.DataResponse;
+import core.backend.global.dto.DefaultDeleteResponseDto;
 import core.backend.likeWorkbook.dto.LikeWorkbookSaveRequestDto;
 import core.backend.likeWorkbook.service.LikeWorkbookFacade;
 import core.backend.member.domain.Member;
@@ -8,7 +9,6 @@ import core.backend.workbook.dto.WorkbookResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -40,10 +40,11 @@ public class LikeWorkbookController {
     }
 
     @DeleteMapping("/like-workbook/{id}")
-    public HttpStatus deleteV1(
+    public ResponseEntity<DefaultDeleteResponseDto> deleteV1(
             @AuthenticationPrincipal Member member,
             @PathVariable Long id) {
         likeWorkbookFacade.deleteOrThrow(id, member.getId());
-        return HttpStatus.OK;
+        return ResponseEntity.ok(
+                new DefaultDeleteResponseDto("좋아요한 문제집이 성공적으로 삭제되었습니다"));
     }
 }

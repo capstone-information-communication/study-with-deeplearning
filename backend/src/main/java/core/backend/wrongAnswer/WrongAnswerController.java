@@ -1,6 +1,7 @@
 package core.backend.wrongAnswer;
 
 import core.backend.global.dto.DataResponse;
+import core.backend.global.dto.DefaultDeleteResponseDto;
 import core.backend.member.domain.Member;
 import core.backend.wrongAnswer.dto.WrongAnswerInfoResponseDto;
 import core.backend.wrongAnswer.dto.WrongAnswerResponseDto;
@@ -10,7 +11,6 @@ import core.backend.wrongAnswer.service.WrongAnswerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -55,10 +55,12 @@ public class WrongAnswerController {
     }
 
     @DeleteMapping("/wrong-answer/{id}")
-    public HttpStatus deleteByIdV1(
+    public ResponseEntity<DefaultDeleteResponseDto> deleteByIdV1(
             @AuthenticationPrincipal Member member,
             @PathVariable Long id) {
         wrongAnswerFacade.deleteByIdOrThrow(member.getId(), id);
-        return HttpStatus.OK;
+        return ResponseEntity.ok(
+                new DefaultDeleteResponseDto("오답노트가 성공적으로 삭제되었습니다")
+        );
     }
 }

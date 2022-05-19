@@ -1,6 +1,7 @@
 package core.backend.workbook;
 
 import core.backend.global.dto.DataResponse;
+import core.backend.global.dto.DefaultDeleteResponseDto;
 import core.backend.member.domain.Member;
 import core.backend.question.service.QuestionAIService;
 import core.backend.workbook.domain.Workbook;
@@ -106,10 +107,11 @@ public class WorkbookController {
     }
 
     @DeleteMapping("/workbook/{id}")
-    public HttpStatus deleteV1(
+    public ResponseEntity<DefaultDeleteResponseDto> deleteV1(
             @AuthenticationPrincipal Member member,
             @PathVariable Long id) {
         workbookFacade.deleteById(id, member.getId());
-        return HttpStatus.OK;
+        return ResponseEntity.ok(
+                new DefaultDeleteResponseDto("문제집이 성공적으로 삭제되었습니다"));
     }
 }
