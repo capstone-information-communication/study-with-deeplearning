@@ -82,6 +82,7 @@ public class WrongAnswerBookAdapter extends RecyclerView.Adapter<WrongAnswerBook
                     }
                 }
             });
+
             }
         }
     }

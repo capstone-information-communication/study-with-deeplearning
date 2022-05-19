@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/wrong_answers_view_id"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    >
 
     <TextView
         android:id="@+id/tv_title_wronganswers"
-        android:layout_width="88dp"
-        android:layout_height="48dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.053"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,40 +21,64 @@
 
     <TextView
         android:id="@+id/tv_content"
-        android:layout_width="89dp"
-        android:layout_height="55dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="@+id/tv_title_wronganswers"
         app:layout_constraintStart_toStartOf="@+id/tv_title_wronganswers"
         app:layout_constraintTop_toBottomOf="@+id/tv_title_wronganswers" />
 
-    <RadioGroup
-        android:id="@+id/RadioGroup_answers"
+
+    <TextView
+        android:id="@+id/tv_choice_title1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="@+id/tv_choice_title2"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tv_choice_title2"
+        app:layout_constraintTop_toBottomOf="@+id/tv_choice_title2" />
+
+    <TextView
+        android:id="@+id/tv_choice_title2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
         app:layout_constraintEnd_toEndOf="@+id/tv_content"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/tv_content"
-        app:layout_constraintTop_toBottomOf="@+id/tv_content">
+        app:layout_constraintTop_toBottomOf="@+id/tv_content" />
 
-        <RadioButton
-            android:id="@+id/radio_btn1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tv_hideTest1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="rq"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tv_show"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tv_choice_title1"
+        app:layout_constraintTop_toBottomOf="@+id/tv_show" />
 
-        <RadioButton
-            android:id="@+id/radio_btn2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tv_show"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="정답 및 해설 보기"
+        android:textSize="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_choice_title1" />
 
-        <RadioButton
-            android:id="@+id/radio_btn3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/btn_wrongAnswerCheck"
+        android:layout_width="70dp"
+        android:layout_height="28dp"
+        android:textSize="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_hideTest1"
+        tools:text="복습 완료" />
 
-        <RadioButton
-            android:id="@+id/radio_btn4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </RadioGroup>
 </androidx.constraintlayout.widget.ConstraintLayout>

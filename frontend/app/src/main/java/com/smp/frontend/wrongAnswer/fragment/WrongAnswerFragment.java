@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.smp.frontend.PreferencesManager;
 import com.smp.frontend.R;
-import com.smp.frontend.restAPi.gsonParsing;
+import com.smp.frontend.common.gsonParsing;
 import com.smp.frontend.wrongAnswer.RetrofitClientWrongAnswer;
 import com.smp.frontend.wrongAnswer.WrongAnswerController;
 import com.smp.frontend.wrongAnswer.dto.WrongAnswerResponseDto;
@@ -20,7 +20,6 @@ import com.smp.frontend.wrongAnswer.dto.WrongAnswerTestResponse;
 import com.smp.frontend.wrongAnswer.list.WrongAnswerBookAdapter;
 import com.smp.frontend.wrongAnswer.list.WrongAnswerBookItemData;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
@@ -36,7 +35,7 @@ public class WrongAnswerFragment extends Fragment {
     private ArrayList<WrongAnswerBookItemData> list = new ArrayList<>();
     RetrofitClientWrongAnswer retrofitClient;
     WrongAnswerController wrongAnswerController;
-
+    private boolean first =true;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +48,24 @@ public class WrongAnswerFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_wrong_answer, container, false);
 
         recyclerView = (RecyclerView)view.findViewById(R.id.rv_WrongAnswerBook);
-        
+
+
+        // Inflate the layout for this fragment
+        return view;
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        list = new ArrayList<>();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        RetrofitStart();
+    }
+
+    public void RetrofitStart(){
         retrofitClient = RetrofitClientWrongAnswer.getInstance();
         wrongAnswerController = RetrofitClientWrongAnswer.getRetrofitInterface();
         Call<WrongAnswerResponseDto> request = wrongAnswerController.WrongAnswerBook(PreferencesManager.getString(getActivity().getApplicationContext(),"token"));
@@ -61,33 +77,34 @@ public class WrongAnswerFragment extends Fragment {
                     int count = body.getCount();
                     List<?> data = body.getData();
                     gsonParsing instance = gsonParsing.getInstance();
-
-                    for (int i = 0; i < count; i++) {
-                        try {
-                            //workbook JSON
-                            System.out.println("data = " + data);
-                            WrongAnswerTestResponse parsingDto = (WrongAnswerTestResponse)instance.parsing(
-                              instance.GetStringJSON(instance.toJsonArr(data),i,"workbook"),
-                                    WrongAnswerTestResponse.class
-                            );
-                            long id = (parsingDto.getId());
-                            String title = parsingDto.getTitle();
-                            String description = parsingDto.getDescription();
-
-                            list.add(new WrongAnswerBookItemData(id,title,description));
-                            recyclerView.setHasFixedSize(true);
-                            adapter = new WrongAnswerBookAdapter(getActivity(), list);
-                            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                            recyclerView.setAdapter(adapter);
-                            recyclerView.setHasFixedSize(true);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
+                    if(data.size() == 0){
+                        list = new ArrayList<>();
+                        adapter = new WrongAnswerBookAdapter(getActivity(), list);
+                        recyclerView.setAdapter(adapter);
                     }
+                        for (int i = 0; i < count; i++) {
+                            try {
+                                //workbook JSON
+                                System.out.println("data = " + data);
+                                WrongAnswerTestResponse parsingDto = (WrongAnswerTestResponse) instance.parsing(
+                                        instance.toJson(data.get(i)),
+                                        WrongAnswerTestResponse.class
+                                );
+                                long id = (parsingDto.getId());
+                                String title = parsingDto.getTitle();
+                                String description = parsingDto.getDescription();
 
+                                list.add(new WrongAnswerBookItemData(id, title, description));
+                                recyclerView.setHasFixedSize(true);
+                                adapter = new WrongAnswerBookAdapter(getActivity(), list);
+                                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                                recyclerView.setAdapter(adapter);
+                                recyclerView.setHasFixedSize(true);
 
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
                 }
             }
 
@@ -96,13 +113,5 @@ public class WrongAnswerFragment extends Fragment {
 
             }
         });
-
-        // Inflate the layout for this fragment
-        return view;
-    }
-    @Override
-    public void onStop() {
-        super.onStop();
-        list = new ArrayList<>();
     }
 }

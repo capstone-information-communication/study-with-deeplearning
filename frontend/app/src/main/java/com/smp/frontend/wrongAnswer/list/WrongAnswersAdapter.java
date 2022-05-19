@@ -1,27 +1,44 @@
 package com.smp.frontend.wrongAnswer.list;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
-import android.content.Intent;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.smp.frontend.PreferencesManager;
 import com.smp.frontend.R;
-import com.smp.frontend.wrongAnswer.activity.WrongAnswersActivity;
+import com.smp.frontend.workbook.dto.WorkBookResponseDto;
+import com.smp.frontend.wrongAnswer.RetrofitClientWrongAnswer;
+import com.smp.frontend.wrongAnswer.WrongAnswerController;
+import com.smp.frontend.wrongAnswer.dto.DeleteWrongAnswerRequestDto;
+import com.smp.frontend.wrongAnswer.dto.DeleteWrongAnswerResponseDto;
+import com.smp.frontend.wrongAnswer.dto.WrongAnswerResponseDto;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class WrongAnswersAdapter extends RecyclerView.Adapter<WrongAnswersAdapter.Holder> {
 
     private Context context;
     private List<WrongAnswersItemData> list = new ArrayList<>();
-    private static long  id;
+    private SparseBooleanArray selectedItems = new SparseBooleanArray(); //item클릭 저장 객체
+    private int prePosition = -1;    // 직전에 클릭됐던 Item의 position
+    private int itemposition;
+    RetrofitClientWrongAnswer retrofitClientWrongAnswer = RetrofitClientWrongAnswer.getInstance();
+    WrongAnswerController WrongAnswerController = RetrofitClientWrongAnswer.getRetrofitInterface();
     public WrongAnswersAdapter(Context context, List<WrongAnswersItemData> list) {
         this.context = context;
         this.list = list;
@@ -43,14 +60,9 @@ public class WrongAnswersAdapter extends RecyclerView.Adapter<WrongAnswersAdapte
     @Override
     public void onBindViewHolder(Holder holder, int position) {
         // 각 위치에 문자열 세팅
-        int itemposition = position;
-        
-        holder.title.setText(list.get(itemposition).getTitle());
-        holder.content.setText(list.get(itemposition).getContent());
-        holder.Rd_btn1.setText(list.get(itemposition).getChoiceList().get(0));
-        holder.Rd_btn2.setText(list.get(itemposition).getChoiceList().get(1));
+        itemposition = position;
+        holder.onBind(list, position);
 
-        id = list.get(itemposition).getId();
     }
 
     // 몇개의 데이터를 리스트로 뿌려줘야하는지 반드시 정의해줘야한다
@@ -60,25 +72,133 @@ public class WrongAnswersAdapter extends RecyclerView.Adapter<WrongAnswersAdapte
     }
 
     // ViewHolder는 하나의 View를 보존하는 역할을 한다
-    public class Holder extends RecyclerView.ViewHolder{
+    public class Holder extends RecyclerView.ViewHolder {
         private TextView title;
         private TextView content;
-        private RadioGroup radioGroup;
-        private RadioButton Rd_btn1,Rd_btn2,Rd_btn3,Rd_btn4;
-
-        private Holder(View view){
+        private TextView choice_title1, choice_title2, test1, show;
+        private Button checkBtn;
+        private List<WrongAnswersItemData> list = new ArrayList<>();
+        private int position;
+        private RetrofitClientWrongAnswer retrofitClientWrongAnswer;
+        private WrongAnswerController wrongAnswerController;
+        long qeustionId, workbookId, wrongAnswerId;
+        private Holder(View view) {
             super(view);
             title = (TextView) view.findViewById(R.id.tv_title_wronganswers);
             content = (TextView) view.findViewById(R.id.tv_content);
-            radioGroup = (RadioGroup)view.findViewById(R.id.RadioGroup_answers);
-            Rd_btn1 = (RadioButton)view.findViewById(R.id.radio_btn1);
-            Rd_btn2 = (RadioButton)view.findViewById(R.id.radio_btn2);
-            Rd_btn3 = (RadioButton)view.findViewById(R.id.radio_btn3);
-            Rd_btn4 = (RadioButton)view.findViewById(R.id.radio_btn4);
+            choice_title1 = (TextView) view.findViewById(R.id.tv_choice_title1);
+            choice_title2 = (TextView) view.findViewById(R.id.tv_choice_title2);
+            test1 = (TextView) view.findViewById(R.id.tv_hideTest1);
+            show = (TextView) view.findViewById(R.id.tv_show);
+            checkBtn = (Button) view.findViewById(R.id.btn_wrongAnswerCheck);
 
-            }
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (selectedItems.get(position)) {
+                        // 펼쳐진 Item을 클릭 시
+                        selectedItems.delete(position);
+                    } else {
+                        // 직전의 클릭됐던 Item의 클릭상태를 지움
+                        selectedItems.delete(prePosition);
+                        // 클릭한 Item의 position을 저장
+                        selectedItems.put(position, true);
+                    }
+                    if (prePosition != -1) notifyItemChanged(prePosition);
+                    notifyItemChanged(position);
+                    prePosition = position;
+
+                }
+            });
+        }
+
+        /**
+         * 클릭된 Item의 상태 변경
+         *
+         * @param isExpanded Item을 펼칠 것인지 여부
+         */
+        private void changeVisibility(final boolean isExpanded) {
+            // height 값을 dp로 지정해서 넣고싶으면 아래 소스를 이용
+            int dpValue = 150;
+            float d = context.getResources().getDisplayMetrics().density;
+            int height = (int) (dpValue * d);
+            // ValueAnimator.ofInt(int... values)는 View가 변할 값을 지정, 인자는 int 배열
+            ValueAnimator va = isExpanded ? ValueAnimator.ofInt(0, height) : ValueAnimator.ofInt(height, 0);
+            // Animation이 실행되는 시간, n/1000초
+            va.setDuration(600);
+            va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    // value는 height 값
+                    int value = (int) animation.getAnimatedValue();
+                    // 해설 보여주기
+                    test1.getLayoutParams().height = value;
+                    test1.requestLayout();
+                    test1.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+                    //체크 버튼
+                    checkBtn.requestLayout();
+                    checkBtn.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+                    if (isExpanded == true) {
+                        show.setText("정답 및 해설 접기");
+                    } else {
+                        show.setText("정답 및 해설 보기");
+                    }
+                }
+            });
+            // Animation start
+            va.start();
+        }
+        public void onBind(List<WrongAnswersItemData> list, int position) {
+            this.list = list;
+            this.position = position;
+            workbookId  = list.get(itemposition).getWorkbookId();
+
+            String questionTitle = (list.get(itemposition).getQuestion().getTitle());
+            String qeustionContent = (list.get(itemposition).getQuestion().getContent());
+            qeustionId  = (list.get(itemposition).getQuestion().getQuestionId());
+            wrongAnswerId = (list.get(itemposition).getQuestion().getWrongAnswerId());
+
+            title.setText(questionTitle);
+            content.setText(qeustionContent);
+
+            String choiceContent1 = (list.get(itemposition)).getChoice1().get(itemposition).getContent();
+            String choiceContent2 = (list.get(itemposition)).getChoice1().get(itemposition).getContent();
+            choice_title1.setText(choiceContent1);
+            choice_title2.setText(choiceContent2);
+
+            test1.setText(list.get(itemposition).getQuestion().getComment());
+            changeVisibility(selectedItems.get(position));
+
+            checkBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    DeleteWrongAnswerRequestDto requestDto = new DeleteWrongAnswerRequestDto(qeustionId,workbookId);
+                    String token =PreferencesManager.getString(view.getContext(),"token");
+                    Call<DeleteWrongAnswerResponseDto> request = WrongAnswerController.DeletWrongAnswer(token,requestDto,wrongAnswerId);
+                    request.enqueue(new Callback<DeleteWrongAnswerResponseDto>() {
+                        @Override
+                        public void onResponse(Call<DeleteWrongAnswerResponseDto> call, Response<DeleteWrongAnswerResponseDto> response) {
+                            if(response.code() == 200){
+                                list.remove(position);
+                                notifyItemRemoved(position);
+                                notifyItemRangeChanged(position, list.size());
+                                System.out.println("response = " + response.body().getMessage());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<DeleteWrongAnswerResponseDto> call, Throwable t) {
+                            System.out.println("서버에러 ~~");
+                            t.printStackTrace();
+                        }
+                    });
+                   
+                }
+            });
         }
     }
+
+}
 
 
 
