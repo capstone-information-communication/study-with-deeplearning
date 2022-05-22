@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".workbook.activity.WorkBookQeustion">
 
 
@@ -11,11 +12,10 @@
         android:id="@+id/rv_WrongAnswers"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="never"
         app:layoutManager="LinearLayoutManager"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp"
-        tools:listitem="@layout/workbook_qeustion_view"></androidx.recyclerview.widget.RecyclerView>
+        tools:listitem="@layout/workbook_qeustion_view"/>
     <Button
         android:id="@+id/check_btn"
         android:layout_width="wrap_content"
