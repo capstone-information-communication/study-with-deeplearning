@@ -1,8 +1,13 @@
-package com.smp.frontend;
+package com.smp.frontend.common;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import com.smp.frontend.workbook.dto.WorkBookCheckRequestDto;
+
+import java.util.List;
+
 public class PreferencesManager { // 값 저장
 
     public static final String PREFERENCES_NAME = "perferences";
@@ -34,6 +39,7 @@ public class PreferencesManager { // 값 저장
         return value;
 
     }
+
     public static void removeValue(Context context){
         SharedPreferences prefs = getPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();

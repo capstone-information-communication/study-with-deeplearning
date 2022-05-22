@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.smp.frontend.member.activity.LoginActivity;
-import com.smp.frontend.PreferencesManager;
+import com.smp.frontend.common.PreferencesManager;
 import com.smp.frontend.R;
 
 public class HomeFragment extends Fragment {

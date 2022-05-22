@@ -8,11 +8,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.smp.frontend.PreferencesManager;
+import com.smp.frontend.common.PreferencesManager;
 import com.smp.frontend.R;
 import com.smp.frontend.common.choiceListDto;
 import com.smp.frontend.common.gsonParsing;
-import com.smp.frontend.common.questionListDto;
+import com.smp.frontend.common.WrongAnswerQuestionListDto;
 import com.smp.frontend.wrongAnswer.RetrofitClientWrongAnswer;
 import com.smp.frontend.wrongAnswer.WrongAnswerController;
 import com.smp.frontend.wrongAnswer.dto.WrongAnswerResponseDto;
@@ -23,7 +23,6 @@ import com.smp.frontend.wrongAnswer.list.WrongAnswersItemData;
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -41,7 +40,6 @@ public class WrongAnswersActivity extends AppCompatActivity {
     private long ID;
     private ArrayList<WrongAnswersItemData> list = new ArrayList<>();
 
-    private long backKeyPressedTime;
     Toast toast;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +86,7 @@ public class WrongAnswersActivity extends AppCompatActivity {
                                     WrongAnswerTestResponse commentry = (WrongAnswerTestResponse) instance.parsing(
                                             instance.toJson(parsing2.getCommentary()), WrongAnswerTestResponse.class);
                                     String qComment = commentry.getComment();
-                                    questionListDto QeustionListClass = new questionListDto(qid,wrongid,qtitle, qcontent, qComment);
+                                    WrongAnswerQuestionListDto QeustionListClass = new WrongAnswerQuestionListDto(qid,wrongid,qtitle, qcontent, qComment);
                                     //choiceList
                                     for (int k = 0; k < parsing2.getChoiceList().size(); k++) {
                                         WrongAnswerTestResponse parsing3 = (WrongAnswerTestResponse) instance.parsing(

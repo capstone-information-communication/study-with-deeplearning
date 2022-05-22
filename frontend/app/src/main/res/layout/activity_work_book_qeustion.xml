@@ -13,8 +13,17 @@
         android:layout_height="match_parent"
         android:overScrollMode="never"
         app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/workbook_qeustion_view">
-    </androidx.recyclerview.widget.RecyclerView>
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp"
+        tools:listitem="@layout/workbook_qeustion_view"></androidx.recyclerview.widget.RecyclerView>
+    <Button
+        android:id="@+id/check_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="채점하기"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 

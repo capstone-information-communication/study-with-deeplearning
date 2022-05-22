@@ -7,22 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.smp.frontend.PreferencesManager;
+import com.smp.frontend.common.PreferencesManager;
 import com.smp.frontend.R;
-import com.smp.frontend.workbook.dto.WorkBookResponseDto;
 import com.smp.frontend.wrongAnswer.RetrofitClientWrongAnswer;
 import com.smp.frontend.wrongAnswer.WrongAnswerController;
 import com.smp.frontend.wrongAnswer.dto.DeleteWrongAnswerRequestDto;
 import com.smp.frontend.wrongAnswer.dto.DeleteWrongAnswerResponseDto;
-import com.smp.frontend.wrongAnswer.dto.WrongAnswerResponseDto;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -162,7 +157,7 @@ public class WrongAnswersAdapter extends RecyclerView.Adapter<WrongAnswersAdapte
             content.setText(qeustionContent);
 
             String choiceContent1 = (list.get(itemposition)).getChoice1().get(itemposition).getContent();
-            String choiceContent2 = (list.get(itemposition)).getChoice1().get(itemposition).getContent();
+            String choiceContent2 = (list.get(itemposition)).getChoice2().get(itemposition).getContent();
             choice_title1.setText(choiceContent1);
             choice_title2.setText(choiceContent2);
 
