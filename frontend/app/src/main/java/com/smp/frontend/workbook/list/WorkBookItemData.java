@@ -15,13 +15,20 @@ public class WorkBookItemData {
         return description;
     }
 
+    public int getPage() {
+        return page;
+    }
+
+    private int page;
+
     private String title;
     private String description;
 
-    public WorkBookItemData(int id, String title, String description) {
+    public WorkBookItemData(int id, String title, String description,int page) {
         this.id = id;
         this.title = title;
         this.description = description;
+        this.page = page;
     }
     // 입력받은 숫자의 리스트생성
 

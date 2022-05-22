@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.smp.frontend.PreferencesManager;
+import com.smp.frontend.common.PreferencesManager;
 import com.smp.frontend.R;
 import com.smp.frontend.common.gsonParsing;
 import com.smp.frontend.wrongAnswer.RetrofitClientWrongAnswer;
@@ -19,8 +19,6 @@ import com.smp.frontend.wrongAnswer.dto.WrongAnswerResponseDto;
 import com.smp.frontend.wrongAnswer.dto.WrongAnswerTestResponse;
 import com.smp.frontend.wrongAnswer.list.WrongAnswerBookAdapter;
 import com.smp.frontend.wrongAnswer.list.WrongAnswerBookItemData;
-
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;

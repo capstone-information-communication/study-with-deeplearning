@@ -2,13 +2,9 @@ package com.smp.frontend.workbook.dto;
 
 import java.util.List;
 
-enum State {
-    ANSWER, WRONG;
-}
-
 public class WorkBookTestResponse {
     private long id;
-    private State state;
+    private String state;
     private String content;
     private String title;
     private String updatedAt;
@@ -35,9 +31,7 @@ public class WorkBookTestResponse {
         return id;
     }
 
-    public State getState() {
-        return state;
-    }
+    public String getState() { return state;}
 
     public String getContent() {
         return content;
@@ -49,5 +43,16 @@ public class WorkBookTestResponse {
 
     public String getCreatedAt() {
         return createdAt;
+    }
+
+    private String answer;
+    private String wrong;
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public String getWrong() {
+        return wrong;
     }
 }

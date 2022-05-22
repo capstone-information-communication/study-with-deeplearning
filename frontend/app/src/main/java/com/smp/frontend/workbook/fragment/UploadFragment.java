@@ -18,7 +18,7 @@ import android.widget.ImageButton;
 
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
-import com.smp.frontend.PreferencesManager;
+import com.smp.frontend.common.PreferencesManager;
 import com.smp.frontend.R;
 import com.smp.frontend.workbook.dto.UploadWorkBookResponseDto;
 import com.smp.frontend.workbook.RetrofitClientWorkbook;

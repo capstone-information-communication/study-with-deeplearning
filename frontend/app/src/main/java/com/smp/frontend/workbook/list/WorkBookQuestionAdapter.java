@@ -11,14 +11,18 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.smp.frontend.R;
+import com.smp.frontend.workbook.dto.WorkBookCheckRequestDto;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuestionAdapter.Holder> {
-
+    private List<WorkBookCheckRequestDto> checkWorkBookList = new ArrayList<>();
     private Context context;
     private List<WorkBookQuestionItemData> list = new ArrayList<>();
+    private HashMap<Integer,Long> quesiton = new HashMap<>();
+    private HashMap<Integer,Long> choice = new HashMap<>();
     private static long  id;
     public WorkBookQuestionAdapter(Context context, List<WorkBookQuestionItemData> list) {
         this.context = context;
@@ -42,11 +46,8 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
     public void onBindViewHolder(Holder holder, int position) {
         // 각 위치에 문자열 세팅
         int itemposition = position;
-        
-        holder.title.setText(list.get(itemposition).getTitle());
-        holder.content.setText(list.get(itemposition).getContent());
-        holder.Rd_btn1.setText(list.get(itemposition).getChoiceList().get(0));
-        holder.Rd_btn2.setText(list.get(itemposition).getChoiceList().get(1));
+        holder.onBind(list, position);
+
 
         id = list.get(itemposition).getId();
     }
@@ -56,6 +57,16 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
     public int getItemCount() {
         return list.size(); // RecyclerView의 size return
     }
+    public int getListCount() {
+        return quesiton.size(); // RecyclerView의 size return
+    }
+    public long getQeustionId(int i) {
+        return quesiton.get(i);
+    }
+    public long getChoiceId(int i) {
+        return choice.get(i);
+    }
+
 
     // ViewHolder는 하나의 View를 보존하는 역할을 한다
     public class Holder extends RecyclerView.ViewHolder{
@@ -74,8 +85,49 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
             Rd_btn3 = (RadioButton)view.findViewById(R.id.radio_btn3);
             Rd_btn4 = (RadioButton)view.findViewById(R.id.radio_btn4);
 
+
             }
+
+        public void onBind(List<WorkBookQuestionItemData> list, int position) {
+            long qId = list.get(position).getWorkBookQuestionListDto().getQuestionId();
+            title.setText(Long.toString(qId));
+            content.setText(list.get(position).getWorkBookQuestionListDto().getContent());
+            if(list.get(position).getChoice1().size() <=0 ) {
+                return;
+            }
+            else {
+                try {
+                    long ChocieId1 = list.get(position).getChoice1().get(position).getId();
+                    long ChocieId2 = list.get(position).getChoice2().get(position).getId();
+                    Rd_btn1.setText(Long.toString(ChocieId1));
+                    Rd_btn2.setText(Long.toString(ChocieId2));
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+                radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                        switch (i){
+                            case R.id.radio_btn1 :
+                                long ChocieId1 = list.get(position).getChoice1().get(position).getId();
+                                quesiton.put(position,qId);
+                                choice.put(position,ChocieId1);
+
+                                break;
+                            case R.id.radio_btn2 :
+                                long ChocieId2 = list.get(position).getChoice2().get(position).getId();
+                                quesiton.put(position,qId);
+                                choice.put(position,ChocieId2);
+                                break;
+                        }
+                    }
+                });
+            }
+
         }
+
+    }
     }
 
 

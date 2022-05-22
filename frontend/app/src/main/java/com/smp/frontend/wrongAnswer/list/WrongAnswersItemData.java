@@ -1,9 +1,8 @@
 package com.smp.frontend.wrongAnswer.list;
 
 import com.smp.frontend.common.choiceListDto;
-import com.smp.frontend.common.questionListDto;
+import com.smp.frontend.common.WrongAnswerQuestionListDto;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class WrongAnswersItemData {
@@ -42,14 +41,14 @@ public class WrongAnswersItemData {
     }
 
     private List<choiceListDto> choice2;
-    private questionListDto question;
+    private WrongAnswerQuestionListDto question;
 
     public long getWorkbookId() {
         return workbookId;
     }
 
     private long workbookId;
-    public WrongAnswersItemData(long workbookId, questionListDto qeustionClass, List<choiceListDto> ChoiceClass1, List<choiceListDto> ChoiceClass2) {
+    public WrongAnswersItemData(long workbookId, WrongAnswerQuestionListDto qeustionClass, List<choiceListDto> ChoiceClass1, List<choiceListDto> ChoiceClass2) {
         this.workbookId = workbookId;
         this.choice1 = ChoiceClass1;
         this.choice2 =ChoiceClass2;
@@ -57,7 +56,7 @@ public class WrongAnswersItemData {
     }
 
 
-    public questionListDto getQuestion() {
+    public WrongAnswerQuestionListDto getQuestion() {
         return question;
     }
 }

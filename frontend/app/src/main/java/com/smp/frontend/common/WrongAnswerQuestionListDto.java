@@ -1,7 +1,7 @@
 package com.smp.frontend.common;
 
-public class questionListDto {
-    public questionListDto(long questionid,long wrongAnswerId ,String title, String content,String comment) {
+public class WrongAnswerQuestionListDto {
+    public WrongAnswerQuestionListDto(long questionid, long wrongAnswerId , String title, String content, String comment) {
         this.questionId = questionid;
         this.wrongAnswerId = wrongAnswerId;
         this.title = title;

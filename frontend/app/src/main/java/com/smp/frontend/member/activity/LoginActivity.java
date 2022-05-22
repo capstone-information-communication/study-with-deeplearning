@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.smp.frontend.R;
-import com.smp.frontend.PreferencesManager;
+import com.smp.frontend.common.PreferencesManager;
 import com.smp.frontend.member.MemberController;
 import com.smp.frontend.member.RetrofitClientMember;
 import com.smp.frontend.member.dto.MemberSignInRequestDto;

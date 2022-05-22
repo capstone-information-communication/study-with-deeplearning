@@ -1,5 +1,6 @@
 package com.smp.frontend.workbook.list;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ public class WorkBookAdapter extends RecyclerView.Adapter<WorkBookAdapter.Holder
     private List<WorkBookItemData> list = new ArrayList<>();
     private int id;
     Map<Integer, Integer> a = new HashMap<>();
+    Map<Integer, Integer> b = new HashMap<>();
 
     Intent intent;
     public WorkBookAdapter(Context context, List<WorkBookItemData> list) {
@@ -52,6 +54,8 @@ public class WorkBookAdapter extends RecyclerView.Adapter<WorkBookAdapter.Holder
         holder.tv_description_workbook.setText(list.get(itemposition).getdescription());
         id =  list.get(itemposition).getId();
         a.put(itemposition,id);
+        b.put(itemposition,list.get(itemposition).getPage());
+
 
     }
 
@@ -70,6 +74,7 @@ public class WorkBookAdapter extends RecyclerView.Adapter<WorkBookAdapter.Holder
             super(view);
             tv_title_workbook = (TextView) view.findViewById(R.id.tv_title_workbook);
             tv_description_workbook = (TextView) view.findViewById(R.id.tv_description_workbook);
+
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -78,8 +83,13 @@ public class WorkBookAdapter extends RecyclerView.Adapter<WorkBookAdapter.Holder
                     if(pos != RecyclerView.NO_POSITION) {
                         intent = new Intent(context, WorkBookQeustion.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent.putExtra("ID",a.get(pos));
+                        intent.putExtra("page",b.get(pos));
                         System.out.println("a.get(pos) = " + a.get(pos));
+                        System.out.println("a.get(pos) = " + b.get(pos));
                         context.startActivity(intent);
+                        ((Activity)context).finish();
+
+
                     }
                 }
             });
