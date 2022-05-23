@@ -1,17 +1,17 @@
 package core.backend.global.error.exception;
 
-import core.backend.choice.exception.ChoiceNotFoundException;
+import core.backend.problem.choice.exception.ChoiceNotFoundException;
 import core.backend.likeWorkbook.exception.ExistLikeWorkbookException;
 import core.backend.likeWorkbook.exception.LikeWorkbookNotFoundException;
 import core.backend.likeWorkbook.exception.LikeWorkbookNotRegisterException;
 import core.backend.member.exception.*;
-import core.backend.question.exception.QuestionFlaskResponseException;
-import core.backend.question.exception.QuestionNotFoundException;
-import core.backend.workbook.exception.WorkbookExistTitleException;
-import core.backend.workbook.exception.WorkbookNotAuthorException;
-import core.backend.workbook.exception.WorkbookNotFoundException;
-import core.backend.wrongAnswer.exception.WrongAnswerNotFoundException;
-import core.backend.wrongAnswer.exception.WrongAnswerNotRegisterException;
+import core.backend.problem.question.exception.QuestionFlaskResponseException;
+import core.backend.problem.question.exception.QuestionNotFoundException;
+import core.backend.problem.workbook.exception.WorkbookExistTitleException;
+import core.backend.problem.workbook.exception.WorkbookNotAuthorException;
+import core.backend.problem.workbook.exception.WorkbookNotFoundException;
+import core.backend.wrongProblem.wrongAnswer.exception.WrongAnswerNotFoundException;
+import core.backend.wrongProblem.wrongAnswer.exception.WrongAnswerNotRegisterException;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 

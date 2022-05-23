@@ -5,7 +5,7 @@ import core.backend.global.dto.DefaultDeleteResponseDto;
 import core.backend.likeWorkbook.dto.LikeWorkbookSaveRequestDto;
 import core.backend.likeWorkbook.service.LikeWorkbookFacade;
 import core.backend.member.domain.Member;
-import core.backend.workbook.dto.WorkbookResponseDto;
+import core.backend.problem.workbook.dto.WorkbookResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;

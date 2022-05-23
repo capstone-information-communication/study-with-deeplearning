@@ -1,9 +1,10 @@
 package core.backend.workbook.service;
 
-import core.backend.workbook.domain.Workbook;
-import core.backend.workbook.dto.WorkbookCondition;
-import core.backend.workbook.dto.WorkbookUpdateRequestDto;
-import core.backend.workbook.exception.WorkbookNotFoundException;
+import core.backend.problem.workbook.domain.Workbook;
+import core.backend.problem.workbook.dto.WorkbookCondition;
+import core.backend.problem.workbook.dto.WorkbookUpdateRequestDto;
+import core.backend.problem.workbook.exception.WorkbookNotFoundException;
+import core.backend.problem.workbook.service.WorkbookService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

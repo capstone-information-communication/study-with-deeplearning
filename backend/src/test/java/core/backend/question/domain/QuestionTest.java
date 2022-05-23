@@ -1,6 +1,9 @@
 package core.backend.question.domain;
 
-import core.backend.workbook.domain.Workbook;
+import core.backend.problem.question.domain.Category;
+import core.backend.problem.question.domain.Commentary;
+import core.backend.problem.question.domain.Question;
+import core.backend.problem.workbook.domain.Workbook;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
