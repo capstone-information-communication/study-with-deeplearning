@@ -1,5 +1,6 @@
 package core.backend.workbook.domain;
 
+import core.backend.problem.workbook.domain.Workbook;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

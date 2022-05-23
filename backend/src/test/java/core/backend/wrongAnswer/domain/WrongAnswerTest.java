@@ -1,5 +1,6 @@
 package core.backend.wrongAnswer.domain;
 
+import core.backend.wrongProblem.wrongAnswer.domain.WrongAnswer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

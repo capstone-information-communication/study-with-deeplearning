@@ -3,7 +3,6 @@ package core.backend.likeWorkbook.service;
 import core.backend.likeWorkbook.domain.LikeWorkbook;
 import core.backend.likeWorkbook.exception.LikeWorkbookNotFoundException;
 import core.backend.likeWorkbook.repository.LikeWorkbookRepository;
-import core.backend.workbook.repository.WorkbookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

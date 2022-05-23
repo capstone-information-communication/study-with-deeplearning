@@ -1,9 +1,11 @@
 package core.backend.choice.domain;
 
-import core.backend.question.domain.Category;
-import core.backend.question.domain.Commentary;
-import core.backend.question.domain.Question;
-import core.backend.workbook.domain.Workbook;
+import core.backend.problem.choice.domain.Choice;
+import core.backend.problem.choice.domain.State;
+import core.backend.problem.question.domain.Category;
+import core.backend.problem.question.domain.Commentary;
+import core.backend.problem.question.domain.Question;
+import core.backend.problem.workbook.domain.Workbook;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
