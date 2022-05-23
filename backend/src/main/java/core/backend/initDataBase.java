@@ -1,6 +1,7 @@
 package core.backend;
 
 import core.backend.problem.choice.domain.Choice;
+import core.backend.problem.choice.domain.ChoiceData;
 import core.backend.problem.choice.domain.State;
 import core.backend.likeWorkbook.domain.LikeWorkbook;
 import core.backend.likeWorkbook.service.LikeWorkbookService;
@@ -9,11 +10,15 @@ import core.backend.member.domain.Role;
 import core.backend.problem.question.domain.Category;
 import core.backend.problem.question.domain.Commentary;
 import core.backend.problem.question.domain.Question;
+import core.backend.problem.question.domain.QuestionData;
 import core.backend.problem.question.service.QuestionService;
 import core.backend.problem.workbook.domain.Workbook;
+import core.backend.problem.workbook.domain.WorkbookData;
 import core.backend.problem.workbook.service.WorkbookService;
 import core.backend.wrongProblem.wrongAnswer.domain.WrongAnswer;
 import core.backend.wrongProblem.wrongAnswer.service.WrongAnswerService;
+import core.backend.wrongProblem.wrongQuestion.domain.WrongQuestion;
+import core.backend.wrongProblem.wrongWorkbook.domain.WrongWorkbook;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -37,7 +42,7 @@ public class initDataBase {
 
     @PostConstruct
     public void init() {
-        initService.dbInit(100);
+        initService.dbInit(10);
     }
 
     @Component
@@ -71,6 +76,7 @@ public class initDataBase {
 
                 generateLikeWorkbook(i);
                 generateWrongAnswer(i);
+                generateWrongWorkbook(i);
             }
         }
 
@@ -175,6 +181,28 @@ public class initDataBase {
                     .memberId(memberIdList.get(i))
                     .build();
             likeWorkbookService.save(likeWorkbook);
+        }
+
+        private void generateWrongWorkbook(int i) {
+            Workbook workbook = workbookService.findByIdOrThrow(workbookIdList.get(i));
+            WrongWorkbook wrongWorkbook = WrongWorkbook.builder()
+                    .memberId(memberIdList.get(i))
+                    .workbook(new WorkbookData(workbook))
+                    .build();
+            em.persist(wrongWorkbook);
+            generateWrongQuestion(i, wrongWorkbook);
+        }
+
+        private void generateWrongQuestion(int i, WrongWorkbook wrongWorkbook) {
+            Question question = questionService.findByIdOrThrow(questionIdList.get(i));
+            WrongQuestion wrongQuestion2 = WrongQuestion.builder()
+                    .question(new QuestionData(question))
+                    .wrongWorkbook(wrongWorkbook)
+                    .choiceList(question.getChoiceList().stream()
+                            .map(ChoiceData::new)
+                            .collect(Collectors.toList()))
+                    .build();
+            em.persist(wrongQuestion2);
         }
     }
 }

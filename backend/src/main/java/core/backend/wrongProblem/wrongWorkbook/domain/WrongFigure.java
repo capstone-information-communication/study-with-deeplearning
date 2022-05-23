@@ -28,6 +28,17 @@ public class WrongFigure {
         orderCount = 0;
     }
 
+    private WrongFigure(Integer blankCount, Integer multipleCount, Integer shortCount, Integer orderCount) {
+        this.blankCount = blankCount;
+        this.multipleCount = multipleCount;
+        this.shortCount = shortCount;
+        this.orderCount = orderCount;
+    }
+
+    public WrongFigure convertToWrongFigure() {
+        return new WrongFigure(blankCount, multipleCount, shortCount, orderCount);
+    }
+
     public void addByCategory(Category category, int count) {
         switch (category) {
             case ORDER:
