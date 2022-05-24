@@ -12,6 +12,8 @@ import core.backend.problem.workbook.exception.WorkbookNotAuthorException;
 import core.backend.problem.workbook.exception.WorkbookNotFoundException;
 import core.backend.wrongProblem.wrongAnswer.exception.WrongAnswerNotFoundException;
 import core.backend.wrongProblem.wrongAnswer.exception.WrongAnswerNotRegisterException;
+import core.backend.wrongProblem.wrongWorkbook.exception.WrongWorkbookExistTitleException;
+import core.backend.wrongProblem.wrongWorkbook.exception.WrongWorkbookNotFoundException;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
@@ -36,6 +38,7 @@ public enum ErrorCode {
     EXIST_LIKE_WORKBOOK(BAD_REQUEST, "이미 등록한 좋아요 문제집입니다", ExistLikeWorkbookException.class),
     WRONG_ANSWER_NOT_REGISTER(BAD_REQUEST, "자신의 오답 문제집만 삭제할 수 있습니다", WrongAnswerNotRegisterException.class),
     FLASK_RESPONSE_EXCEPTION(BAD_REQUEST, "플라스크 서버의 응답이 null 입니다", QuestionFlaskResponseException.class),
+    WRONG_WORKBOOK_EXIST_TITLE(BAD_REQUEST, "이미 존재하는 오답 문제집입니다", WrongWorkbookExistTitleException.class),
 
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     MEMBER_NOT_FOUND(NOT_FOUND, "회원을 찾을 수 없습니다", MemberNotFoundException.class),
@@ -46,6 +49,7 @@ public enum ErrorCode {
     QUESTION_NOT_FOUND(NOT_FOUND, "문제를 찾을 수 없습니다", QuestionNotFoundException.class),
     CHOICE_NOT_FOUND(NOT_FOUND, "선택지를 찾을 수 없습니다", ChoiceNotFoundException.class),
     LIKE_WORKBOOK_NOT_FOUND(NOT_FOUND, "좋아요 문제집을 찾을 수 없습니다", LikeWorkbookNotFoundException.class),
+    WRONG_WORKBOOK_NOT_FOUND(NOT_FOUND, "오답 문제집을 찾을 수 없습니다", WrongWorkbookNotFoundException.class),
     ;
 
     private final HttpStatus httpStatus;
