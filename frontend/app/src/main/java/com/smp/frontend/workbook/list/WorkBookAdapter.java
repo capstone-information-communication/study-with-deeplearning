@@ -87,7 +87,6 @@ public class WorkBookAdapter extends RecyclerView.Adapter<WorkBookAdapter.Holder
                         System.out.println("a.get(pos) = " + a.get(pos));
                         System.out.println("a.get(pos) = " + b.get(pos));
                         context.startActivity(intent);
-                        ((Activity)context).finish();
 
 
                     }

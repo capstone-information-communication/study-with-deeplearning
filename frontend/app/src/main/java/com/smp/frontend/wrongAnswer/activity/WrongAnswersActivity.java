@@ -40,7 +40,10 @@ public class WrongAnswersActivity extends AppCompatActivity {
     private long ID;
     private ArrayList<WrongAnswersItemData> list = new ArrayList<>();
 
-    Toast toast;
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

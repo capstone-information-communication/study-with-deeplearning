@@ -45,6 +45,12 @@ public class WorkBookQeustion extends AppCompatActivity {
     private List<WorkBookCheckRequestDto> WorkBookRequest = new ArrayList<>();
     private Button check_btn;
     private Toast toast;
+
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
