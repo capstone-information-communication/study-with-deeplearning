@@ -10,8 +10,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_WrongAnswerBook"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:overScrollMode="never"
         app:layoutManager="LinearLayoutManager"
         tools:listitem="@layout/wrong_answer_workbook_view">
