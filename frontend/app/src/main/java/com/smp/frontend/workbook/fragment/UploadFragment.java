@@ -43,7 +43,6 @@ import retrofit2.Response;
 
 public class UploadFragment extends Fragment {
     private EditText title,description;
-    private boolean pdf_check= false;
     private Button make_workbooks;
     private  View view;
     RetrofitClientWorkbook retrofitClient;
@@ -56,6 +55,9 @@ public class UploadFragment extends Fragment {
             int n = reader.getNumberOfPages();
             for (int i = 0; i < n; i++) {
                 extractedText = extractedText + PdfTextExtractor.getTextFromPage(reader, i + 1).trim();
+                if(extractedText.length() >= 3000){
+                    break;
+                }
             }
             reader.close();
         } catch (Exception e) {
@@ -66,41 +68,34 @@ public class UploadFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
 
-        }
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
          view =inflater.inflate(R.layout.fragment_upload, container, false);
-
          title = (EditText) view.findViewById(R.id.et_title_send);
          description = (EditText) view.findViewById(R.id.et_content_send);
          make_workbooks = view.findViewById(R.id.make_workbooks_btn);
+         make_workbooks.setEnabled(false);
          make_workbooks.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
                  String title_text = title.getText().toString();
                  String description_text = description.getText().toString();
 
-                 if (pdf_check == false) {
-                     System.out.println("pdf 먼저 올려라 알겠지");
-                     return;
-                 } else {
                      UploadWorkBookRequestDto request = new UploadWorkBookRequestDto(title_text, description_text, extractedText);
                      retrofitClient = RetrofitClientWorkbook.getInstance();
                      WorkbookController workbookController = RetrofitClientWorkbook.getRetrofitInterface();
-
                      Call<UploadWorkBookResponseDto> sendData = workbookController.SendWorkBook(
                              PreferencesManager.getString(getActivity().getApplicationContext(),"token"),request);
-
+                     make_workbooks.setEnabled(false);
+                     extractedText="";
                      sendData.enqueue(new Callback<UploadWorkBookResponseDto>() {
                          @Override
                          public void onResponse(Call<UploadWorkBookResponseDto> call, Response<UploadWorkBookResponseDto> response) {
                              if (response.code() == 201) {
                                  System.out.println("제이슨 요청 성공");
-                                 pdf_check = false;
                              }
                              else{
                                  try {
@@ -119,7 +114,7 @@ public class UploadFragment extends Fragment {
                              System.out.println("서버 통신 오류 서버 상태 확인");
                          }
                      });
-                 }
+
              }
          });
 
@@ -131,6 +126,7 @@ public class UploadFragment extends Fragment {
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 intent.setType("application/pdf");
                  intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
+                 extractedText="";
                 startReuslt.launch(intent);
              }
          });
@@ -143,12 +139,12 @@ public class UploadFragment extends Fragment {
                 if(result.getResultCode() == RESULT_OK){
                     Intent Getresponse = result.getData();
                     Uri path = Getresponse.getData();
-
+                    System.out.println("Getresponse = " + Getresponse);
                     ContentResolver res = getActivity().getContentResolver();
                     try {
+                        make_workbooks.setEnabled(true);
                         InputStream in = res.openInputStream(path);
                         extractPDF(in);
-                        pdf_check = true;
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }

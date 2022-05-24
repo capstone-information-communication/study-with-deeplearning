@@ -80,7 +80,6 @@ public class WrongAnswerBookAdapter extends RecyclerView.Adapter<WrongAnswerBook
                         intent.putExtra("ID",a.get(pos));
                         System.out.println("a.get(pos) = " + a.get(pos));
                         context.startActivity(intent);
-                        ((Activity)context).finish();
                     }
                 }
             });
