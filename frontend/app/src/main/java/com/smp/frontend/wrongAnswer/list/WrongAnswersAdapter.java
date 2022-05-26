@@ -13,10 +13,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.smp.frontend.common.PreferencesManager;
 import com.smp.frontend.R;
+import com.smp.frontend.common.gsonParsing;
+import com.smp.frontend.workbook.dto.WorkBookTestResponse;
 import com.smp.frontend.wrongAnswer.RetrofitClientWrongAnswer;
 import com.smp.frontend.wrongAnswer.WrongAnswerController;
 import com.smp.frontend.wrongAnswer.dto.DeleteWrongAnswerRequestDto;
 import com.smp.frontend.wrongAnswer.dto.DeleteWrongAnswerResponseDto;
+import com.smp.frontend.wrongAnswer.dto.WrongAnswerTestResponse;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,20 +75,23 @@ public class WrongAnswersAdapter extends RecyclerView.Adapter<WrongAnswersAdapte
     public class Holder extends RecyclerView.ViewHolder {
         private TextView title;
         private TextView content;
-        private TextView choice_title1, choice_title2, test1, show;
+        private TextView choice_title1, choice_title2,choice_title3,choice_title4, commentary, show;
         private Button checkBtn;
         private List<WrongAnswersItemData> list = new ArrayList<>();
         private int position;
         private RetrofitClientWrongAnswer retrofitClientWrongAnswer;
         private WrongAnswerController wrongAnswerController;
         long qeustionId, workbookId, wrongAnswerId;
+
         private Holder(View view) {
             super(view);
             title = (TextView) view.findViewById(R.id.tv_title_wronganswers);
             content = (TextView) view.findViewById(R.id.tv_content);
             choice_title1 = (TextView) view.findViewById(R.id.tv_choice_title1);
             choice_title2 = (TextView) view.findViewById(R.id.tv_choice_title2);
-            test1 = (TextView) view.findViewById(R.id.tv_hideTest1);
+            choice_title3 = (TextView) view.findViewById(R.id.tv_choice_title3);
+            choice_title4 = (TextView) view.findViewById(R.id.tv_choice_title4);
+            commentary = (TextView) view.findViewById(R.id.tv_hideTest1);
             show = (TextView) view.findViewById(R.id.tv_show);
             checkBtn = (Button) view.findViewById(R.id.btn_wrongAnswerCheck);
 
@@ -102,6 +110,8 @@ public class WrongAnswersAdapter extends RecyclerView.Adapter<WrongAnswersAdapte
                     if (prePosition != -1) notifyItemChanged(prePosition);
                     notifyItemChanged(position);
                     prePosition = position;
+                    System.out.println("prePosition = " + prePosition);
+                    System.out.println("position = " + position);
 
                 }
             });
@@ -127,9 +137,9 @@ public class WrongAnswersAdapter extends RecyclerView.Adapter<WrongAnswersAdapte
                     // value는 height 값
                     int value = (int) animation.getAnimatedValue();
                     // 해설 보여주기
-                    test1.getLayoutParams().height = value;
-                    test1.requestLayout();
-                    test1.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+                    commentary.getLayoutParams().height = value;
+                    commentary.requestLayout();
+                    commentary.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
                     //체크 버튼
                     checkBtn.requestLayout();
                     checkBtn.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
@@ -150,19 +160,58 @@ public class WrongAnswersAdapter extends RecyclerView.Adapter<WrongAnswersAdapte
 
             String questionTitle = (list.get(itemposition).getQuestion().getTitle());
             String qeustionContent = (list.get(itemposition).getQuestion().getContent());
+            String category = list.get(itemposition).getQuestion().getCategory();
             qeustionId  = (list.get(itemposition).getQuestion().getQuestionId());
             wrongAnswerId = (list.get(itemposition).getQuestion().getWrongAnswerId());
 
             title.setText(questionTitle);
             content.setText(qeustionContent);
+            List<?> choiceList = list.get(itemposition).getChoice();
+            List<String> choiceListComment = new ArrayList<>();
+            int size = choiceList.size();
+            gsonParsing instance = gsonParsing.getInstance();
+            for(int i=0; i<size; i++){
+                try {
+                    WrongAnswerTestResponse wrongChoiceParsing = (WrongAnswerTestResponse)instance.parsing(
+                            instance.ArrToString(instance.toJsonArr(choiceList),i),
+                            WrongAnswerTestResponse.class
+                    );
+                    choiceListComment.add(wrongChoiceParsing.getContent());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
-            String choiceContent1 = (list.get(itemposition)).getChoice1().get(itemposition).getContent();
-            String choiceContent2 = (list.get(itemposition)).getChoice2().get(itemposition).getContent();
-            choice_title1.setText(choiceContent1);
-            choice_title2.setText(choiceContent2);
-
-            test1.setText(list.get(itemposition).getQuestion().getComment());
-            changeVisibility(selectedItems.get(position));
+            }
+            if(size <=0 ) {
+                choice_title1.setVisibility(View.GONE);
+                choice_title2.setVisibility(View.GONE);
+                choice_title3.setVisibility(View.GONE);
+                choice_title4.setVisibility(View.GONE);
+                return;
+            }
+            else{
+                try {
+                    if(size <=0 ) {
+                        return;
+                    }
+                    if (category.equals("BLANK") || category.equals("SHORT")) {
+                        choice_title2.setVisibility(View.GONE);
+                        choice_title3.setVisibility(View.GONE);
+                        choice_title4.setVisibility(View.GONE);
+                        choice_title1.setText(choiceListComment.get(0));
+                        System.out.println("choiceList = " + choiceListComment.get(0));
+                    } else {
+                        choice_title1.setText(choiceListComment.get(0));
+                        choice_title2.setText(choiceListComment.get(1));
+                        choice_title3.setText(choiceListComment.get(2));
+                        choice_title4.setText(choiceListComment.get(3));
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+            commentary.setText(list.get(itemposition).getQuestion().getComment());
+            changeVisibility(selectedItems.get(itemposition));
 
             checkBtn.setOnClickListener(new View.OnClickListener() {
                 @Override

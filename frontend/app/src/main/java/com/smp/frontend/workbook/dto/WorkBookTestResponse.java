@@ -47,6 +47,11 @@ public class WorkBookTestResponse {
 
     private String answer;
     private String wrong;
+    private String category;
+
+    public String getCategory() {
+        return category;
+    }
 
     public String getAnswer() {
         return answer;
