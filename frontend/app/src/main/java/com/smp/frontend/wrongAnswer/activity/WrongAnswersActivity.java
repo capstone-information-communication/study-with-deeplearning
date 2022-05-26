@@ -35,8 +35,6 @@ public class WrongAnswersActivity extends AppCompatActivity {
     private WrongAnswerController wrongAnswerController;
     private WrongAnswersAdapter adapter;
 
-    private List<choiceListDto> choiceListDtoList1 = new ArrayList<>();
-    private List<choiceListDto> choiceListDtoList2 = new ArrayList<>();
     private long ID;
     private ArrayList<WrongAnswersItemData> list = new ArrayList<>();
 
@@ -84,38 +82,24 @@ public class WrongAnswersActivity extends AppCompatActivity {
                                     long wrongid = parsing2.getWrongAnswerId();
                                     String qtitle = parsing2.getTitle();
                                     String qcontent = parsing2.getContent();
+                                    String category = parsing2.getCategory();
 
                                     //코멘트 가져오기 나중에 수정 필요해보임
                                     WrongAnswerTestResponse commentry = (WrongAnswerTestResponse) instance.parsing(
                                             instance.toJson(parsing2.getCommentary()), WrongAnswerTestResponse.class);
                                     String qComment = commentry.getComment();
-                                    WrongAnswerQuestionListDto QeustionListClass = new WrongAnswerQuestionListDto(qid,wrongid,qtitle, qcontent, qComment);
+                                    WrongAnswerQuestionListDto QeustionListClass = new WrongAnswerQuestionListDto(qid,wrongid,qtitle, qcontent, qComment,category);
                                     //choiceList
-                                    for (int k = 0; k < parsing2.getChoiceList().size(); k++) {
-                                        WrongAnswerTestResponse parsing3 = (WrongAnswerTestResponse) instance.parsing(
-                                                instance.ArrToString(instance.toJsonArr(parsing2.getChoiceList()), k),
-                                                WrongAnswerTestResponse.class
-                                        );
-                                        long ChoiceId = parsing3.getId();
-                                        String ChoiceState = parsing3.getState();
-                                        String ChoiceContent = parsing3.getContent();
-                                        if(k ==0) {
-                                            choiceListDtoList1.add(new choiceListDto(ChoiceId, ChoiceState, ChoiceContent));
 
-                                        }
-                                        else if(k==1){
-                                            choiceListDtoList2.add(new choiceListDto(ChoiceId, ChoiceState, ChoiceContent));
-                                        }
-                                    }
+                                    List<?> choiceList = parsing2.getChoiceList();
 
-                                    list.add(new WrongAnswersItemData(id,QeustionListClass, choiceListDtoList1,choiceListDtoList2));
+                                    list.add(new WrongAnswersItemData(id,QeustionListClass, choiceList));
                                     recyclerView.setHasFixedSize(true);
                                     adapter = new WrongAnswersAdapter(getApplicationContext(), list);
                                     recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                                     recyclerView.setAdapter(adapter);
                                     recyclerView.setHasFixedSize(true);
                                 }
-
                             }
 
                         } catch (JSONException e) {

@@ -1,9 +1,14 @@
 package com.smp.frontend.workbook.list;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -11,7 +16,12 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.smp.frontend.R;
+import com.smp.frontend.common.gsonParsing;
 import com.smp.frontend.workbook.dto.WorkBookCheckRequestDto;
+import com.smp.frontend.workbook.dto.WorkBookTestResponse;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +33,7 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
     private List<WorkBookQuestionItemData> list = new ArrayList<>();
     private HashMap<Integer,Long> quesiton = new HashMap<>();
     private HashMap<Integer,Long> choice = new HashMap<>();
+    private String shortAnswer;
     private static long  id;
     public WorkBookQuestionAdapter(Context context, List<WorkBookQuestionItemData> list) {
         this.context = context;
@@ -74,6 +85,7 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
         private TextView content;
         private RadioGroup radioGroup;
         private RadioButton Rd_btn1,Rd_btn2,Rd_btn3,Rd_btn4;
+        private EditText Ed_text;
 
         private Holder(View view){
             super(view);
@@ -84,23 +96,90 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
             Rd_btn2 = (RadioButton)view.findViewById(R.id.radio_btn2);
             Rd_btn3 = (RadioButton)view.findViewById(R.id.radio_btn3);
             Rd_btn4 = (RadioButton)view.findViewById(R.id.radio_btn4);
-
+            Ed_text = (EditText)view.findViewById(R.id.Ed_Short);
 
             }
 
         public void onBind(List<WorkBookQuestionItemData> list, int position) {
+            //qeustionList
             long qId = list.get(position).getWorkBookQuestionListDto().getQuestionId();
-            title.setText(Long.toString(qId));
-            content.setText(list.get(position).getWorkBookQuestionListDto().getContent());
-            if(list.get(position).getChoice1().size() <=0 ) {
+            String category = list.get(position).getWorkBookQuestionListDto().getCategory();
+            String QTitle = list.get(position).getWorkBookQuestionListDto().getTitle();
+            String QContent = list.get(position).getWorkBookQuestionListDto().getContent();
+
+            //chocieList
+            List<?> parsing = list.get(position).getChoiceList();
+            List<Long> choiceListId = new ArrayList<>();
+            List<String> choiceList = new ArrayList<>();
+            int size = list.get(position).getChoiceList().size();
+
+            gsonParsing instance = gsonParsing.getInstance();
+            try {
+                for(int i=0;i< size;i++){
+                    WorkBookTestResponse choiceParsing = (WorkBookTestResponse)instance.parsing(
+                            instance.ArrToString(instance.toJsonArr(parsing), i),
+                            WorkBookTestResponse.class
+                    );
+                    choiceListId.add(choiceParsing.getId());
+                    choiceList.add(choiceParsing.getContent());
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            title.setText(QTitle);
+            content.setText(QContent);
+
+            if(size <=0 ) {
+                radioGroup.setVisibility(View.GONE);
+                Ed_text.setVisibility(View.GONE);
                 return;
             }
             else {
                 try {
-                    long ChocieId1 = list.get(position).getChoice1().get(position).getId();
-                    long ChocieId2 = list.get(position).getChoice2().get(position).getId();
-                    Rd_btn1.setText(Long.toString(ChocieId1));
-                    Rd_btn2.setText(Long.toString(ChocieId2));
+                    if(category.equals("BLANK") || category.equals("SHORT")){
+                        radioGroup.setVisibility(View.GONE);
+                        quesiton.put(position,qId);
+                        choice.put(position,(long) -1);
+                        Ed_text.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                                shortAnswer = charSequence.toString();
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                                shortAnswer = charSequence.toString();
+                            }
+                            @Override
+                            public void afterTextChanged(Editable editable) {
+                                System.out.println("choiceList = " + choiceList.get(0));
+                                if(shortAnswer.equals(choiceList.get(0))){
+                                    System.out.println("shortAnswer = " + shortAnswer);
+                                    quesiton.put(position,qId);
+                                    choice.put(position,choiceListId.get(0));
+                                }
+                                else{
+                                    System.out.println("shortAnswer22 = " + shortAnswer);
+                                    quesiton.put(position,qId);
+                                    choice.put(position, (long) -1);
+                                }
+                            }
+                        });
+
+
+
+
+
+                    }
+                    else {
+                        Ed_text.setVisibility(View.GONE);
+                        Rd_btn1.setText(choiceList.get(0));
+                        Rd_btn2.setText(choiceList.get(1));
+                        Rd_btn3.setText(choiceList.get(2));
+                        Rd_btn4.setText(choiceList.get(3));
+                    }
                 }
                 catch (Exception e){
                     e.printStackTrace();
@@ -110,15 +189,29 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
                     public void onCheckedChanged(RadioGroup radioGroup, int i) {
                         switch (i){
                             case R.id.radio_btn1 :
-                                long ChocieId1 = list.get(position).getChoice1().get(position).getId();
+                                long ChocieId1 = choiceListId.get(0);
+                                System.out.println("ChocieId1 = " + ChocieId1);
                                 quesiton.put(position,qId);
                                 choice.put(position,ChocieId1);
 
                                 break;
                             case R.id.radio_btn2 :
-                                long ChocieId2 = list.get(position).getChoice2().get(position).getId();
+                                long ChocieId2 = choiceListId.get(1);
+                                System.out.println("ChocieId2 = " + ChocieId2);
                                 quesiton.put(position,qId);
                                 choice.put(position,ChocieId2);
+                                break;
+                            case R.id.radio_btn3 :
+                                long ChocieId3 = choiceListId.get(2);
+                                System.out.println("ChocieId3 = " + ChocieId3);
+                                quesiton.put(position,qId);
+                                choice.put(position,ChocieId3);
+                                break;
+                            case R.id.radio_btn4 :
+                                long ChocieId4 = choiceListId.get(3);
+                                System.out.println("ChocieId4 = " + ChocieId4);
+                                quesiton.put(position,qId);
+                                choice.put(position,ChocieId4);
                                 break;
                         }
                     }

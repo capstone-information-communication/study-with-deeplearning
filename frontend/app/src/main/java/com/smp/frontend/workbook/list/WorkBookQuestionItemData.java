@@ -4,6 +4,8 @@ import com.smp.frontend.common.WorkBookQuestionListDto;
 import com.smp.frontend.common.choiceListDto;
 import com.smp.frontend.common.WrongAnswerQuestionListDto;
 
+import org.json.JSONArray;
+
 import java.util.List;
 
 public class WorkBookQuestionItemData {
@@ -19,34 +21,18 @@ public class WorkBookQuestionItemData {
 
 
     private WorkBookQuestionListDto WorkBookQuestionListDto;
+    private List<?> choiceList;
 
-    private List<choiceListDto> choice2;
-    private List<choiceListDto> choice1;
-/*    private List<choiceListDto> choice3;
-    private List<choiceListDto> choice4;
-
-    public List<choiceListDto> getChoice3() {
-        return choice3;
+    public List<?> getChoiceList() {
+        return choiceList;
     }
 
-    public List<choiceListDto> getChoice4() {
-        return choice4;
-    }*/
-
-    public List<choiceListDto> getChoice1() {
-        return choice1;
-    }
-
-    public List<choiceListDto> getChoice2() {
-        return choice2;
-    }
-
-    public WorkBookQuestionItemData(long workbookId, WorkBookQuestionListDto qeustionClass, List<choiceListDto> choice1 , List<choiceListDto> choice2
+    public WorkBookQuestionItemData(long workbookId, WorkBookQuestionListDto qeustionClass,List<?> choiceList
 /*    ,List<choiceListDto> choice3,List<choiceListDto> choice4*/) {
         this.id = workbookId;
         this.WorkBookQuestionListDto = qeustionClass;
-        this.choice1 = choice1;
-        this.choice2 = choice2;
+        this.choiceList = choiceList;
+
 /*        this.choice3 = choice3;
         this.choice4 = choice4;*/
     }

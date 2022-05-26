@@ -24,6 +24,7 @@ import com.smp.frontend.workbook.dto.WorkBookTestResponse;
 import com.smp.frontend.workbook.list.WorkBookQuestionAdapter;
 import com.smp.frontend.workbook.list.WorkBookQuestionItemData;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
@@ -40,8 +41,6 @@ public class WorkBookQeustion extends AppCompatActivity {
     private WorkBookQuestionAdapter adapter;
     private List<choiceListDto> choiceListDtoList1 = new ArrayList<>();
     private List<choiceListDto> choiceListDtoList2 = new ArrayList<>();
-    private List<choiceListDto> choiceListDtoList3 = new ArrayList<>();
-    private List<choiceListDto> choiceListDtoList4 = new ArrayList<>();
     private List<WorkBookCheckRequestDto> WorkBookRequest = new ArrayList<>();
     private Button check_btn;
     private Toast toast;
@@ -130,32 +129,18 @@ public class WorkBookQeustion extends AppCompatActivity {
                                     long qid = parsing2.getId();
                                     String qtitle = parsing2.getTitle();
                                     String qcontent = parsing2.getContent();
-                                    WorkBookQuestionListDto WorkBookQuestionListDto = new WorkBookQuestionListDto(qid,qtitle, qcontent);
+                                    String category =  parsing2.getCategory();
+                                    WorkBookQuestionListDto WorkBookQuestionListDto = new WorkBookQuestionListDto(qid,qtitle, qcontent,category);
                                     //chocieList
-                                    for (int k = 0; k < parsing2.getChoiceList().size(); k++) {
-
-                                        WorkBookTestResponse parsing3 = (WorkBookTestResponse) instance.parsing(
-                                                instance.ArrToString(instance.toJsonArr(parsing2.getChoiceList()), k),
-                                                WorkBookTestResponse.class
-                                        );
-                                        long ChoiceId = parsing3.getId();
-                                        String ChoiceState = parsing3.getState();
-                                        String ChoiceContent = parsing3.getContent();
-
-                                        if(k ==0) {
-                                            choiceListDtoList1.add(new choiceListDto(ChoiceId, ChoiceState, ChoiceContent));
-                                        }
-                                        else if(k==1 ){
-                                            choiceListDtoList2.add(new choiceListDto(ChoiceId, ChoiceState, ChoiceContent));
-                                        }
-/*                                        else if(k==2){
-                                            choiceListDtoList3.add(new choiceListDto(ChoiceId, ChoiceState, ChoiceContent));
-                                        }
-                                        else if(k==3){
-                                            choiceListDtoList4.add(new choiceListDto(ChoiceId, ChoiceState, ChoiceContent));
-                                        }*/
+                                    List<?> choiceList = parsing2.getChoiceList();
+                                    if(category.equals("BLANK") || category.equals("SHORT")){
+                                        System.out.println("주관식 입력");
                                     }
-                                    list.add(new WorkBookQuestionItemData(id, WorkBookQuestionListDto, choiceListDtoList1,choiceListDtoList2));
+                                    else{
+                                        System.out.println("객관식 입력");
+                                    }
+
+                                    list.add(new WorkBookQuestionItemData(id, WorkBookQuestionListDto, choiceList));
                                     adapter = new WorkBookQuestionAdapter(getApplicationContext(), list);
                                     recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                                     recyclerView.setAdapter(adapter);
