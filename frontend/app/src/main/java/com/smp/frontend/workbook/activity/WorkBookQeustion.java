@@ -10,11 +10,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.smp.frontend.common.PreferencesManager;
+import com.smp.frontend.global.PreferencesManager;
 import com.smp.frontend.R;
-import com.smp.frontend.common.WorkBookQuestionListDto;
-import com.smp.frontend.common.choiceListDto;
-import com.smp.frontend.common.gsonParsing;
+import com.smp.frontend.global.WorkBookQuestionListDto;
+import com.smp.frontend.global.choiceListDto;
+import com.smp.frontend.global.gsonParsing;
 import com.smp.frontend.member.activity.MainActivity;
 import com.smp.frontend.workbook.RetrofitClientWorkbook;
 import com.smp.frontend.workbook.WorkbookController;
@@ -24,7 +24,6 @@ import com.smp.frontend.workbook.dto.WorkBookTestResponse;
 import com.smp.frontend.workbook.list.WorkBookQuestionAdapter;
 import com.smp.frontend.workbook.list.WorkBookQuestionItemData;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
@@ -36,6 +35,8 @@ import retrofit2.Response;
 
 public class WorkBookQeustion extends AppCompatActivity {
     private int ID,page;
+    private String title,description;
+    private boolean search;
     private RecyclerView recyclerView;
     private List<WorkBookQuestionItemData> list= new ArrayList<>();;
     private WorkBookQuestionAdapter adapter;
@@ -58,6 +59,10 @@ public class WorkBookQeustion extends AppCompatActivity {
         Intent intent = getIntent();
         ID = intent.getIntExtra("ID",0);
         page = intent.getIntExtra("page",0);
+        title = intent.getStringExtra("title");
+        description = intent.getStringExtra("descritpion");
+        search = intent.getBooleanExtra("search",true);
+
         recyclerView = findViewById(R.id.rv_WrongAnswers);
         getQeustion();
         check_btn = findViewById(R.id.check_btn);
@@ -100,64 +105,124 @@ public class WorkBookQeustion extends AppCompatActivity {
 
     }
 
-    public void getQeustion(){
-        RetrofitClientWorkbook retrofitClientWorkbook = RetrofitClientWorkbook.getInstance();
-        WorkbookController workbookController = RetrofitClientWorkbook.getRetrofitInterface();
-        Call<WorkBookResponseDto> responseCall = workbookController.getWorkbook(PreferencesManager.getString(getApplicationContext(),"token"),page);
-        responseCall.enqueue(new Callback<WorkBookResponseDto>() {
-            @Override
-            public void onResponse(Call<WorkBookResponseDto> call, Response<WorkBookResponseDto> response) {
-                gsonParsing instance = gsonParsing.getInstance();
-                WorkBookResponseDto body = response.body();
-                if (response.code() == 200) {
-                    List<?> data = body.getData();
+    public void getQeustion() {
+        if (search == false) {
+            RetrofitClientWorkbook retrofitClientWorkbook = RetrofitClientWorkbook.getInstance();
+            WorkbookController workbookController = RetrofitClientWorkbook.getRetrofitInterface();
+            Call<WorkBookResponseDto> responseCall = workbookController.getWorkbook(PreferencesManager.getString(getApplicationContext(), "token"), page);
+            responseCall.enqueue(new Callback<WorkBookResponseDto>() {
+                @Override
+                public void onResponse(Call<WorkBookResponseDto> call, Response<WorkBookResponseDto> response) {
+                    gsonParsing instance = gsonParsing.getInstance();
+                    WorkBookResponseDto body = response.body();
+                    if (response.code() == 200) {
+                        List<?> data = body.getData();
 
-                    for (int i = 0; i < body.getCount(); i++) {
-                        WorkBookTestResponse parsing = (WorkBookTestResponse) instance.parsing(
-                                instance.toJson(data.get(i)),
-                                WorkBookTestResponse.class);
-                        long id =  parsing.getId();
-                        if (id == ID) {
-                            for (int j = 0; j < parsing.getQuestionList().size(); j++) {
-                                System.out.println("parsing.getQuestionList() = " + parsing.getQuestionList());
-                                try {
-                                    //questionList
-                                    WorkBookTestResponse parsing2 = (WorkBookTestResponse) instance.parsing(
-                                            instance.ArrToString(instance.toJsonArr(parsing.getQuestionList()), j),
-                                            WorkBookTestResponse.class
-                                    );
-                                    long qid = parsing2.getId();
-                                    String qtitle = parsing2.getTitle();
-                                    String qcontent = parsing2.getContent();
-                                    String category =  parsing2.getCategory();
-                                    WorkBookQuestionListDto WorkBookQuestionListDto = new WorkBookQuestionListDto(qid,qtitle, qcontent,category);
-                                    //chocieList
-                                    List<?> choiceList = parsing2.getChoiceList();
-                                    if(category.equals("BLANK") || category.equals("SHORT")){
-                                        System.out.println("주관식 입력");
-                                    }
-                                    else{
-                                        System.out.println("객관식 입력");
-                                    }
+                        for (int i = 0; i < body.getCount(); i++) {
+                            WorkBookTestResponse parsing = (WorkBookTestResponse) instance.parsing(
+                                    instance.toJson(data.get(i)),
+                                    WorkBookTestResponse.class);
+                            long id = parsing.getId();
+                            if (id == ID) {
+                                for (int j = 0; j < parsing.getQuestionList().size(); j++) {
+                                    System.out.println("parsing.getQuestionList() = " + parsing.getQuestionList());
+                                    try {
+                                        //questionList
+                                        WorkBookTestResponse parsing2 = (WorkBookTestResponse) instance.parsing(
+                                                instance.ArrToString(instance.toJsonArr(parsing.getQuestionList()), j),
+                                                WorkBookTestResponse.class
+                                        );
+                                        long qid = parsing2.getId();
+                                        String qtitle = parsing2.getTitle();
+                                        String qcontent = parsing2.getContent();
+                                        String category = parsing2.getCategory();
+                                        WorkBookQuestionListDto WorkBookQuestionListDto = new WorkBookQuestionListDto(qid, qtitle, qcontent, category);
+                                        //chocieList
+                                        List<?> choiceList = parsing2.getChoiceList();
+                                        if (category.equals("BLANK") || category.equals("SHORT")) {
+                                            System.out.println("주관식 입력");
+                                        } else {
+                                            System.out.println("객관식 입력");
+                                        }
 
-                                    list.add(new WorkBookQuestionItemData(id, WorkBookQuestionListDto, choiceList));
-                                    adapter = new WorkBookQuestionAdapter(getApplicationContext(), list);
-                                    recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                                    recyclerView.setAdapter(adapter);
-                                    recyclerView.setHasFixedSize(true);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                                        list.add(new WorkBookQuestionItemData(id, WorkBookQuestionListDto, choiceList));
+                                        adapter = new WorkBookQuestionAdapter(getApplicationContext(), list);
+                                        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                                        recyclerView.setAdapter(adapter);
+                                        recyclerView.setHasFixedSize(true);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<WorkBookResponseDto> call, Throwable t) {
+                @Override
+                public void onFailure(Call<WorkBookResponseDto> call, Throwable t) {
 
-            }
-        });
+                }
+            });
+        }
+        else{
+            RetrofitClientWorkbook retrofitClientWorkbook = RetrofitClientWorkbook.getInstance();
+            WorkbookController workbookController = RetrofitClientWorkbook.getRetrofitInterface();
+            Call<WorkBookResponseDto> responseCall = workbookController.getWorkBookSearch(PreferencesManager.getString(getApplicationContext(), "token"),title,description, page);
+            responseCall.enqueue(new Callback<WorkBookResponseDto>() {
+                @Override
+                public void onResponse(Call<WorkBookResponseDto> call, Response<WorkBookResponseDto> response) {
+                    gsonParsing instance = gsonParsing.getInstance();
+                    WorkBookResponseDto body = response.body();
+                    if (response.code() == 200) {
+                        List<?> data = body.getData();
+
+                        for (int i = 0; i < body.getCount(); i++) {
+                            WorkBookTestResponse parsing = (WorkBookTestResponse) instance.parsing(
+                                    instance.toJson(data.get(i)),
+                                    WorkBookTestResponse.class);
+                            long id = parsing.getId();
+                            if (id == ID) {
+                                for (int j = 0; j < parsing.getQuestionList().size(); j++) {
+                                    System.out.println("parsing.getQuestionList() = " + parsing.getQuestionList());
+                                    try {
+                                        //questionList
+                                        WorkBookTestResponse parsing2 = (WorkBookTestResponse) instance.parsing(
+                                                instance.ArrToString(instance.toJsonArr(parsing.getQuestionList()), j),
+                                                WorkBookTestResponse.class
+                                        );
+                                        long qid = parsing2.getId();
+                                        String qtitle = parsing2.getTitle();
+                                        String qcontent = parsing2.getContent();
+                                        String category = parsing2.getCategory();
+                                        WorkBookQuestionListDto WorkBookQuestionListDto = new WorkBookQuestionListDto(qid, qtitle, qcontent, category);
+                                        //chocieList
+                                        List<?> choiceList = parsing2.getChoiceList();
+                                        if (category.equals("BLANK") || category.equals("SHORT")) {
+                                            System.out.println("주관식 입력");
+                                        } else {
+                                            System.out.println("객관식 입력");
+                                        }
+
+                                        list.add(new WorkBookQuestionItemData(id, WorkBookQuestionListDto, choiceList));
+                                        adapter = new WorkBookQuestionAdapter(getApplicationContext(), list);
+                                        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                                        recyclerView.setAdapter(adapter);
+                                        recyclerView.setHasFixedSize(true);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<WorkBookResponseDto> call, Throwable t) {
+
+                }
+            });
+        }
     }
 }

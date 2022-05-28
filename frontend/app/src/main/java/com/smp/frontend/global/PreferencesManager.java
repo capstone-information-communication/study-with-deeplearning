@@ -1,12 +1,7 @@
-package com.smp.frontend.common;
+package com.smp.frontend.global;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-
-import com.smp.frontend.workbook.dto.WorkBookCheckRequestDto;
-
-import java.util.List;
 
 public class PreferencesManager { // 값 저장
 

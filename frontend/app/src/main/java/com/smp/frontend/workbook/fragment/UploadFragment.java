@@ -18,7 +18,7 @@ import android.widget.ImageButton;
 
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
-import com.smp.frontend.common.PreferencesManager;
+import com.smp.frontend.global.PreferencesManager;
 import com.smp.frontend.R;
 import com.smp.frontend.workbook.dto.UploadWorkBookResponseDto;
 import com.smp.frontend.workbook.RetrofitClientWorkbook;
@@ -97,7 +97,7 @@ public class UploadFragment extends Fragment {
                              if (response.code() == 201) {
                                  System.out.println("제이슨 요청 성공");
                              }
-                             else{
+                             else if(response.code() == 400){
                                  try {
                                      JSONObject jsonObject = new JSONObject(response.errorBody().string());
                                      String message = jsonObject.get("message").toString();
@@ -105,6 +105,13 @@ public class UploadFragment extends Fragment {
                                  } catch (IOException | JSONException e) {
                                      e.printStackTrace();
                                      System.out.println("제이슨 에러 메세지 message를 찾을 수 없음");
+                                 }
+                             }
+                             else if(response.code() == 500){
+                                 try {
+                                     System.out.println("response.errorBody().string() = " + response.errorBody().string());
+                                 } catch (IOException e) {
+                                     e.printStackTrace();
                                  }
                              }
                          }

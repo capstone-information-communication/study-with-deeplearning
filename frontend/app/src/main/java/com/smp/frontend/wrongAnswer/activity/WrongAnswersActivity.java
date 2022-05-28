@@ -6,13 +6,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
-import com.smp.frontend.common.PreferencesManager;
+import com.smp.frontend.global.PreferencesManager;
 import com.smp.frontend.R;
-import com.smp.frontend.common.choiceListDto;
-import com.smp.frontend.common.gsonParsing;
-import com.smp.frontend.common.WrongAnswerQuestionListDto;
+import com.smp.frontend.global.gsonParsing;
+import com.smp.frontend.global.WrongAnswerQuestionListDto;
 import com.smp.frontend.wrongAnswer.RetrofitClientWrongAnswer;
 import com.smp.frontend.wrongAnswer.WrongAnswerController;
 import com.smp.frontend.wrongAnswer.dto.WrongAnswerResponseDto;

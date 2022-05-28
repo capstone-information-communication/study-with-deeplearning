@@ -26,9 +26,11 @@ public interface WorkbookController {
     @GET("api/v1/choices")
     Call<WorkBookResponseDto> getChoiceList();
 
-
     @GET("api/v1/workbooks")
     Call<WorkBookResponseDto> getWorkbook(@Header("Authorization") String token, @Query("page") int page);
+
+    @GET("api/v1/workbook/search")
+    Call<WorkBookResponseDto> getWorkBookSearch(@Header("Authorization") String token,@Query("title") String title,@Query("description") String description ,@Query("page") int page);
 
     @POST("api/v1/workbook/{id}/check")
     Call<WorkBookTestResponse> WorkBookCheck(@Header("Authorization") String token,@Path("id") long workbookId,@Body List<WorkBookCheckRequestDto> requestDto );

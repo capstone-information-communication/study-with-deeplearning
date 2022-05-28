@@ -24,11 +24,18 @@ public class WorkBookItemData {
     private String title;
     private String description;
 
-    public WorkBookItemData(int id, String title, String description,int page) {
+    public boolean isSearch() {
+        return search;
+    }
+
+    private boolean search;
+
+    public WorkBookItemData(int id, String title, String description,int page,boolean search) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.page = page;
+        this.search = search;
     }
     // 입력받은 숫자의 리스트생성
 

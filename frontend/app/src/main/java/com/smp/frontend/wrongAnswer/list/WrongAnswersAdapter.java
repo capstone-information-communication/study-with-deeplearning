@@ -11,10 +11,9 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.smp.frontend.common.PreferencesManager;
+import com.smp.frontend.global.PreferencesManager;
 import com.smp.frontend.R;
-import com.smp.frontend.common.gsonParsing;
-import com.smp.frontend.workbook.dto.WorkBookTestResponse;
+import com.smp.frontend.global.gsonParsing;
 import com.smp.frontend.wrongAnswer.RetrofitClientWrongAnswer;
 import com.smp.frontend.wrongAnswer.WrongAnswerController;
 import com.smp.frontend.wrongAnswer.dto.DeleteWrongAnswerRequestDto;
