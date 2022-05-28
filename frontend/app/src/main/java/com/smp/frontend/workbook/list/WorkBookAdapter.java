@@ -24,8 +24,11 @@ public class WorkBookAdapter extends RecyclerView.Adapter<WorkBookAdapter.Holder
     private Context context;
     private List<WorkBookItemData> list = new ArrayList<>();
     private int id;
-    Map<Integer, Integer> a = new HashMap<>();
-    Map<Integer, Integer> b = new HashMap<>();
+    Map<Integer, Integer> intentId = new HashMap<>();
+    Map<Integer, Integer> intentPage = new HashMap<>();
+    Map<Integer, String> intentTitle = new HashMap<>();
+    Map<Integer, String> intentDescription = new HashMap<>();
+    Map<Integer, Boolean> intentSearch = new HashMap<>();
 
     Intent intent;
     public WorkBookAdapter(Context context, List<WorkBookItemData> list) {
@@ -53,8 +56,11 @@ public class WorkBookAdapter extends RecyclerView.Adapter<WorkBookAdapter.Holder
         holder.tv_title_workbook.setText(list.get(itemposition).getTitle());
         holder.tv_description_workbook.setText(list.get(itemposition).getdescription());
         id =  list.get(itemposition).getId();
-        a.put(itemposition,id);
-        b.put(itemposition,list.get(itemposition).getPage());
+        intentId.put(itemposition,id);
+        intentPage.put(itemposition,list.get(itemposition).getPage());
+        intentTitle.put(itemposition,list.get(itemposition).getTitle());
+        intentDescription.put(itemposition,list.get(itemposition).getdescription());
+        intentSearch.put(itemposition,list.get(itemposition).isSearch());
 
 
     }
@@ -82,18 +88,18 @@ public class WorkBookAdapter extends RecyclerView.Adapter<WorkBookAdapter.Holder
 
                     if(pos != RecyclerView.NO_POSITION) {
                         intent = new Intent(context, WorkBookQeustion.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra("ID",a.get(pos));
-                        intent.putExtra("page",b.get(pos));
-                        System.out.println("a.get(pos) = " + a.get(pos));
-                        System.out.println("a.get(pos) = " + b.get(pos));
+                        intent.putExtra("ID",intentId.get(pos));
+                        intent.putExtra("page",intentPage.get(pos));
+                        intent.putExtra("title",intentTitle.get(pos));
+                        intent.putExtra("description",intentDescription.get(pos));
+                        intent.putExtra("search",intentSearch.get(pos));
                         context.startActivity(intent);
-
-
                     }
                 }
             });
             }
         }
+
     }
 
 

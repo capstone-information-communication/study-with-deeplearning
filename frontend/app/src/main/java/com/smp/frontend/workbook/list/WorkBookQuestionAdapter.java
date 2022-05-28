@@ -3,11 +3,9 @@ package com.smp.frontend.workbook.list;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -16,11 +14,10 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.smp.frontend.R;
-import com.smp.frontend.common.gsonParsing;
+import com.smp.frontend.global.gsonParsing;
 import com.smp.frontend.workbook.dto.WorkBookCheckRequestDto;
 import com.smp.frontend.workbook.dto.WorkBookTestResponse;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;

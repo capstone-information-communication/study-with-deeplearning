@@ -1,4 +1,4 @@
-package com.smp.frontend.common;
+package com.smp.frontend.global;
 
 import com.google.gson.Gson;
 

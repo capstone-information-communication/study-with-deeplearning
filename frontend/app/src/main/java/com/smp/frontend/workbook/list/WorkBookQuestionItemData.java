@@ -1,10 +1,6 @@
 package com.smp.frontend.workbook.list;
 
-import com.smp.frontend.common.WorkBookQuestionListDto;
-import com.smp.frontend.common.choiceListDto;
-import com.smp.frontend.common.WrongAnswerQuestionListDto;
-
-import org.json.JSONArray;
+import com.smp.frontend.global.WorkBookQuestionListDto;
 
 import java.util.List;
 

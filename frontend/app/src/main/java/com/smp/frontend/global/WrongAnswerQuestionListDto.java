@@ -1,4 +1,4 @@
-package com.smp.frontend.common;
+package com.smp.frontend.global;
 
 public class WrongAnswerQuestionListDto {
     public WrongAnswerQuestionListDto(long questionid, long wrongAnswerId , String title, String content, String comment, String category) {

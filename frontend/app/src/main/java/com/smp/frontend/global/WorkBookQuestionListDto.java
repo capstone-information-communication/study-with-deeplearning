@@ -1,4 +1,4 @@
-package com.smp.frontend.common;
+package com.smp.frontend.global;
 
 public class WorkBookQuestionListDto {
     public WorkBookQuestionListDto(long questionid, String title, String content,String category) {

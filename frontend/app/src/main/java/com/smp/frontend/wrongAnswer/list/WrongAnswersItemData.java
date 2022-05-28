@@ -1,7 +1,6 @@
 package com.smp.frontend.wrongAnswer.list;
 
-import com.smp.frontend.common.choiceListDto;
-import com.smp.frontend.common.WrongAnswerQuestionListDto;
+import com.smp.frontend.global.WrongAnswerQuestionListDto;
 
 import java.util.List;
 
