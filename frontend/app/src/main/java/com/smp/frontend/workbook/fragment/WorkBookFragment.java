@@ -1,5 +1,7 @@
 package com.smp.frontend.workbook.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,7 +28,12 @@ import com.smp.frontend.workbook.dto.WorkBookResponseDto;
 import com.smp.frontend.workbook.dto.WorkBookTestResponse;
 import com.smp.frontend.workbook.list.WorkBookAdapter;
 import com.smp.frontend.workbook.list.WorkBookItemData;
+import com.smp.frontend.workbook.list.RecyclerItemTouchHelper;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +44,7 @@ import retrofit2.Response;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
 
-public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSearchActionListener {
+public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSearchActionListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
     private ArrayList<WorkBookItemData> list = new ArrayList<>();
     private View view;
     private WorkBookAdapter adapter;
@@ -47,6 +55,8 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
     private List<String> lastSearches;
     private MaterialSearchBar searchBar;
     private Spinner spinner;
+    private RetrofitClientWorkbook retrofitClient = RetrofitClientWorkbook.getInstance();
+    private WorkbookController workbookController = RetrofitClientWorkbook.getRetrofitInterface();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +70,6 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_work_book, container, false);
         recyclerView =(RecyclerView) view.findViewById(R.id.rv_workBook);
-
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -93,6 +102,9 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
         searchBar.setOnSearchActionListener(this);
         lastSearches =searchBar.getLastSuggestions();
         spinner = view.findViewById(R.id.spinner);
+
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
         return view;
 
     }
@@ -112,8 +124,6 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
     }
     public void getList(int page){
         search= false;
-        RetrofitClientWorkbook retrofitClient = RetrofitClientWorkbook.getInstance();
-        WorkbookController workbookController = RetrofitClientWorkbook.getRetrofitInterface();
         Call<WorkBookResponseDto> test = workbookController.getWorkbook(PreferencesManager.getString(getContext(),"token"),page);
 
         test.enqueue(new Callback<WorkBookResponseDto>() {
@@ -154,10 +164,7 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
     }
     public void getSearchList(int page,String title, String description){
         search = true;
-        RetrofitClientWorkbook retrofitClient = RetrofitClientWorkbook.getInstance();
-        WorkbookController workbookController = RetrofitClientWorkbook.getRetrofitInterface();
         Call<WorkBookResponseDto> test = workbookController.getWorkBookSearch(PreferencesManager.getString(getContext(),"token"),title,description,page);
-
         test.enqueue(new Callback<WorkBookResponseDto>() {
             @Override
             public void onResponse(Call<WorkBookResponseDto> call, Response<WorkBookResponseDto> response) {
@@ -247,5 +254,73 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
     public void onButtonClicked(int buttonCode) {
         System.out.println("buttonCode = " + buttonCode);
 
+    }
+
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        if (viewHolder instanceof WorkBookAdapter.Holder) {
+            // get the removed item name to display it in snack bar
+            String name = list.get(viewHolder.getAbsoluteAdapterPosition()).getTitle();
+            long WorkBookId = list.get(viewHolder.getAbsoluteAdapterPosition()).getId();
+
+            // backup of removed item for undo purpose
+             WorkBookItemData deletedItem = list.get(viewHolder.getAbsoluteAdapterPosition());
+             int deletedIndex = viewHolder.getAbsoluteAdapterPosition();
+
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                    getContext());
+            alertDialogBuilder.setTitle(name);
+            alertDialogBuilder
+                    .setMessage("정말로 이 문제집을 삭제할까요?")
+                    .setCancelable(false)
+                    .setPositiveButton("예",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(
+                                        DialogInterface dialog, int id) {
+                                     RetrofitClientWorkbook retrofitClient = RetrofitClientWorkbook.getInstance();
+                                     WorkbookController workbookController = RetrofitClientWorkbook.getRetrofitInterface();
+                                    Call<WorkBookResponseDto> responseCall = workbookController.DeleteWorkBook(PreferencesManager.getString(getContext(),"token"),WorkBookId);
+                                    responseCall.enqueue(new Callback<WorkBookResponseDto>() {
+                                        @Override
+                                        public void onResponse(Call<WorkBookResponseDto> call, Response<WorkBookResponseDto> response) {
+                                            if(response.code() == 200){
+                                                adapter.removeItem(viewHolder.getAbsoluteAdapterPosition());
+                                            }
+                                            else if(response.code() == 400){
+                                                try {
+                                                    JSONObject jsonObject = new JSONObject(response.errorBody().string());
+                                                    String message = jsonObject.get("message").toString();
+                                                    Toast.makeText(getContext(),message,Toast.LENGTH_LONG).show();
+                                                    adapter.notifyDataSetChanged();
+                                                } catch (IOException | JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                            else  if(response.code() == 500){
+                                                Toast.makeText(getContext(),"삭제할수 없습니다.",Toast.LENGTH_LONG).show();
+                                                adapter.notifyDataSetChanged();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<WorkBookResponseDto> call, Throwable t) {
+
+                                        }
+                                    });
+
+                                }
+                            })
+                    .setNegativeButton("취소",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(
+                                        DialogInterface dialog, int id) {
+                                    adapter.notifyDataSetChanged();
+                                }
+                            });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+
+
+        }
     }
 }

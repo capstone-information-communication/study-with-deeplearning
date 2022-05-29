@@ -5,12 +5,16 @@ import com.smp.frontend.workbook.dto.WorkBookCheckRequestDto;
 import com.smp.frontend.workbook.dto.WorkBookResponseDto;
 import com.smp.frontend.workbook.dto.WorkBookTestResponse;
 import com.smp.frontend.workbook.dto.UploadWorkBookRequestDto;
+import com.smp.frontend.wrongAnswer.dto.DeleteWrongAnswerRequestDto;
+import com.smp.frontend.wrongAnswer.dto.DeleteWrongAnswerResponseDto;
 
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -34,5 +38,8 @@ public interface WorkbookController {
 
     @POST("api/v1/workbook/{id}/check")
     Call<WorkBookTestResponse> WorkBookCheck(@Header("Authorization") String token,@Path("id") long workbookId,@Body List<WorkBookCheckRequestDto> requestDto );
+
+    @DELETE("api/v1/workbook/{id}")
+    Call<WorkBookResponseDto> DeleteWorkBook(@Header("Authorization") String token, @Path("id") long id);
 
 }

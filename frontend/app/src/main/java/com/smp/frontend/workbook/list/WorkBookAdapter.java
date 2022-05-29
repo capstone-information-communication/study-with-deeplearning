@@ -71,6 +71,16 @@ public class WorkBookAdapter extends RecyclerView.Adapter<WorkBookAdapter.Holder
         return list.size(); // RecyclerView의 size return
     }
 
+    public void removeItem(int absoluteAdapterPosition) {
+        list.remove(absoluteAdapterPosition);
+        notifyItemRemoved(absoluteAdapterPosition);
+    }
+
+    public void restoreItem(WorkBookItemData item, int absoluteAdapterPosition) {
+        list.add(absoluteAdapterPosition, item);
+        notifyItemChanged(absoluteAdapterPosition);
+    }
+
     // ViewHolder는 하나의 View를 보존하는 역할을 한다
     public class Holder extends RecyclerView.ViewHolder{
         private TextView tv_title_workbook;
