@@ -3,9 +3,12 @@ package com.smp.frontend.workbook.list;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -24,13 +27,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
+
 public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuestionAdapter.Holder> {
     private List<WorkBookCheckRequestDto> checkWorkBookList = new ArrayList<>();
     private Context context;
     private List<WorkBookQuestionItemData> list = new ArrayList<>();
     private HashMap<Integer,Long> quesiton = new HashMap<>();
     private HashMap<Integer,Long> choice = new HashMap<>();
-    private String shortAnswer;
+    private int itemposition;
     private static long  id;
     public WorkBookQuestionAdapter(Context context, List<WorkBookQuestionItemData> list) {
         this.context = context;
@@ -53,10 +58,8 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
     @Override
     public void onBindViewHolder(Holder holder, int position) {
         // 각 위치에 문자열 세팅
-        int itemposition = position;
+        itemposition = position;
         holder.onBind(list, position);
-
-
         id = list.get(itemposition).getId();
     }
 
@@ -83,7 +86,7 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
         private RadioGroup radioGroup;
         private RadioButton Rd_btn1,Rd_btn2,Rd_btn3,Rd_btn4;
         private EditText Ed_text;
-
+        private String shortAnswer;
         private Holder(View view){
             super(view);
             title = (TextView) view.findViewById(R.id.tv_title_wronganswers);
@@ -128,7 +131,7 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
             title.setText(QTitle);
             content.setText(QContent);
 
-            if(size <=0 ) {
+            if(size  == 0 ) {
                 radioGroup.setVisibility(View.GONE);
                 Ed_text.setVisibility(View.GONE);
                 return;
@@ -137,6 +140,7 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
                 try {
                     if(category.equals("BLANK") || category.equals("SHORT")){
                         radioGroup.setVisibility(View.GONE);
+                        Ed_text.setVisibility(View.VISIBLE);
                         quesiton.put(position,qId);
                         choice.put(position,(long) -1);
                         Ed_text.addTextChangedListener(new TextWatcher() {
@@ -164,14 +168,23 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
                                 }
                             }
                         });
-
-
-
-
+                        Ed_text.setOnKeyListener(new View.OnKeyListener() {
+                            @Override
+                            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                                switch (keyCode){
+                                    case KeyEvent.KEYCODE_ENTER:
+                                        System.out.println("엔터키 입력");
+                                        InputMethodManager manager = (InputMethodManager)context.getSystemService(INPUT_METHOD_SERVICE);
+                                        manager.hideSoftInputFromWindow(itemView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                                }
+                                return true;
+                            }
+                        });
 
                     }
-                    else {
+                    else if(category.equals("MULTIPLE") || category.equals("ORDER")){
                         Ed_text.setVisibility(View.GONE);
+                        radioGroup.setVisibility(View.VISIBLE);
                         Rd_btn1.setText(choiceList.get(0));
                         Rd_btn2.setText(choiceList.get(1));
                         Rd_btn3.setText(choiceList.get(2));
