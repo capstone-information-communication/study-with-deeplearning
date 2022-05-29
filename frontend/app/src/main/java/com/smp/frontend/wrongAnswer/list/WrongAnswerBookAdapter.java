@@ -1,12 +1,15 @@
 package com.smp.frontend.wrongAnswer.list;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -60,6 +63,9 @@ public class WrongAnswerBookAdapter extends RecyclerView.Adapter<WrongAnswerBook
     public int getItemCount() {
         return list.size(); // RecyclerView의 size return
     }
+
+
+
 
     // ViewHolder는 하나의 View를 보존하는 역할을 한다
     public class Holder extends RecyclerView.ViewHolder{

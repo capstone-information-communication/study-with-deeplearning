@@ -3,6 +3,7 @@
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,6 +34,7 @@ public class WrongAnswerFragment extends Fragment {
     private ArrayList<WrongAnswerBookItemData> list = new ArrayList<>();
     RetrofitClientWrongAnswer retrofitClient;
     WrongAnswerController wrongAnswerController;
+    ItemTouchHelper helper;
     private boolean first =true;
     @Override
     public void onCreate(Bundle savedInstanceState) {
