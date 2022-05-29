@@ -40,12 +40,11 @@ public class WorkBookQeustion extends AppCompatActivity {
     private RecyclerView recyclerView;
     private List<WorkBookQuestionItemData> list= new ArrayList<>();;
     private WorkBookQuestionAdapter adapter;
-    private List<choiceListDto> choiceListDtoList1 = new ArrayList<>();
-    private List<choiceListDto> choiceListDtoList2 = new ArrayList<>();
     private List<WorkBookCheckRequestDto> WorkBookRequest = new ArrayList<>();
     private Button check_btn;
     private Toast toast;
-
+    private RetrofitClientWorkbook retrofitClientWorkbook = RetrofitClientWorkbook.getInstance();
+    private WorkbookController workbookController = RetrofitClientWorkbook.getRetrofitInterface();
     @Override
     public void onBackPressed() {
         finish();
@@ -107,8 +106,7 @@ public class WorkBookQeustion extends AppCompatActivity {
 
     public void getQeustion() {
         if (search == false) {
-            RetrofitClientWorkbook retrofitClientWorkbook = RetrofitClientWorkbook.getInstance();
-            WorkbookController workbookController = RetrofitClientWorkbook.getRetrofitInterface();
+            list = new ArrayList<>();
             Call<WorkBookResponseDto> responseCall = workbookController.getWorkbook(PreferencesManager.getString(getApplicationContext(), "token"), page);
             responseCall.enqueue(new Callback<WorkBookResponseDto>() {
                 @Override
@@ -125,7 +123,6 @@ public class WorkBookQeustion extends AppCompatActivity {
                             long id = parsing.getId();
                             if (id == ID) {
                                 for (int j = 0; j < parsing.getQuestionList().size(); j++) {
-                                    System.out.println("parsing.getQuestionList() = " + parsing.getQuestionList());
                                     try {
                                         //questionList
                                         WorkBookTestResponse parsing2 = (WorkBookTestResponse) instance.parsing(
@@ -139,11 +136,6 @@ public class WorkBookQeustion extends AppCompatActivity {
                                         WorkBookQuestionListDto WorkBookQuestionListDto = new WorkBookQuestionListDto(qid, qtitle, qcontent, category);
                                         //chocieList
                                         List<?> choiceList = parsing2.getChoiceList();
-                                        if (category.equals("BLANK") || category.equals("SHORT")) {
-                                            System.out.println("주관식 입력");
-                                        } else {
-                                            System.out.println("객관식 입력");
-                                        }
 
                                         list.add(new WorkBookQuestionItemData(id, WorkBookQuestionListDto, choiceList));
                                         adapter = new WorkBookQuestionAdapter(getApplicationContext(), list);
@@ -166,8 +158,7 @@ public class WorkBookQeustion extends AppCompatActivity {
             });
         }
         else{
-            RetrofitClientWorkbook retrofitClientWorkbook = RetrofitClientWorkbook.getInstance();
-            WorkbookController workbookController = RetrofitClientWorkbook.getRetrofitInterface();
+            list = new ArrayList<>();
             Call<WorkBookResponseDto> responseCall = workbookController.getWorkBookSearch(PreferencesManager.getString(getApplicationContext(), "token"),title,description, page);
             responseCall.enqueue(new Callback<WorkBookResponseDto>() {
                 @Override
@@ -184,7 +175,6 @@ public class WorkBookQeustion extends AppCompatActivity {
                             long id = parsing.getId();
                             if (id == ID) {
                                 for (int j = 0; j < parsing.getQuestionList().size(); j++) {
-                                    System.out.println("parsing.getQuestionList() = " + parsing.getQuestionList());
                                     try {
                                         //questionList
                                         WorkBookTestResponse parsing2 = (WorkBookTestResponse) instance.parsing(
@@ -198,11 +188,6 @@ public class WorkBookQeustion extends AppCompatActivity {
                                         WorkBookQuestionListDto WorkBookQuestionListDto = new WorkBookQuestionListDto(qid, qtitle, qcontent, category);
                                         //chocieList
                                         List<?> choiceList = parsing2.getChoiceList();
-                                        if (category.equals("BLANK") || category.equals("SHORT")) {
-                                            System.out.println("주관식 입력");
-                                        } else {
-                                            System.out.println("객관식 입력");
-                                        }
 
                                         list.add(new WorkBookQuestionItemData(id, WorkBookQuestionListDto, choiceList));
                                         adapter = new WorkBookQuestionAdapter(getApplicationContext(), list);
