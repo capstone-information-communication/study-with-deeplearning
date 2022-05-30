@@ -63,6 +63,6 @@ public class WrongWorkbookServiceImpl implements WrongWorkbookService {
 
     @Override
     public List<WrongWorkbook> findAllByMemberId(Long memberId) {
-        return wrongWorkbookRepository.findByMemberId(memberId).toList();
+        return wrongWorkbookRepository.findByMemberId(memberId);
     }
 }
