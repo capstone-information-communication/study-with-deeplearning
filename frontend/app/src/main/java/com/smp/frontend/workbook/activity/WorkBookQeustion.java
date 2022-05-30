@@ -68,6 +68,7 @@ public class WorkBookQeustion extends AppCompatActivity {
         check_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                List<Long> choiceList = new ArrayList<>();
                 for(int i=0;i<adapter.getItemCount();i++){
                     System.out.println("adapter.getListCount() = " + adapter.getListCount());
                     System.out.println("adapter.getItemCount() = " + adapter.getItemCount());
@@ -75,12 +76,11 @@ public class WorkBookQeustion extends AppCompatActivity {
                         System.out.println("빈칸이거나 선택하지않은 문제가 있습니다.");
                         return;
                     }
-                    WorkBookRequest.add(i,new WorkBookCheckRequestDto(adapter.getQeustionId(i),adapter.getChoiceId(i)));
+                    choiceList.add(adapter.getQeustionId(i));
+                    WorkBookRequest.add(i,new WorkBookCheckRequestDto(ID,choiceList));
                 }
-                RetrofitClientWorkbook retrofitClientWorkbook = RetrofitClientWorkbook.getInstance();
-                WorkbookController workbookController = RetrofitClientWorkbook.getRetrofitInterface();
-                Call<WorkBookTestResponse> request = workbookController.WorkBookCheck(PreferencesManager.getString(getApplicationContext(),"token"),
-                        ID,WorkBookRequest
+                Call<WorkBookTestResponse> request = workbookController.WorkBookCheck(PreferencesManager.getString(getApplicationContext(),"token")
+                        ,WorkBookRequest
                 );
                 request.enqueue(new Callback<WorkBookTestResponse>() {
                     @Override

@@ -1,20 +1,17 @@
 package com.smp.frontend.workbook.dto;
 
+import java.util.List;
+
 public class WorkBookCheckRequestDto {
-    private long questionId;
-    private long choiceId;
+    private long workbookId;
+    private List<Long> questionIdList;
 
 
-    public WorkBookCheckRequestDto(long questionId, long choiceId) {
-        this.questionId = questionId;
-        this.choiceId = choiceId;
+    public WorkBookCheckRequestDto(long workbookId,  List<Long> questionIdList) {
+        this.workbookId = workbookId;
+        this.questionIdList = questionIdList;
     }
 
-    public long getQuestionId() {
-        return questionId;
-    }
 
-    public long getChoiceId() {
-        return choiceId;
-    }
+
 }

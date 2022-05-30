@@ -6,15 +6,18 @@ public class WorkBookQuestionListDto {
         this.title = title;
         this.content = content;
         this.category = category;
+
     }
     private long questionId;
     private String title;
     private String content;
-    private String category;
 
     public String getCategory() {
         return category;
     }
+
+    private String category;
+
 
     public long getQuestionId() {
         return questionId;

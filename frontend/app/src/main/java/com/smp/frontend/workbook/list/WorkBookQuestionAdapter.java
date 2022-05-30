@@ -36,6 +36,8 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
     private HashMap<Integer,Long> quesiton = new HashMap<>();
     private HashMap<Integer,Long> choice = new HashMap<>();
     private int itemposition;
+    private String State;
+    private HashMap<Integer,String> choiceState = new HashMap<>();
     private static long  id;
     public WorkBookQuestionAdapter(Context context, List<WorkBookQuestionItemData> list) {
         this.context = context;
@@ -107,6 +109,7 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
             String QTitle = list.get(position).getWorkBookQuestionListDto().getTitle();
             String QContent = list.get(position).getWorkBookQuestionListDto().getContent();
 
+            System.out.println("123123 = " + State);
             //chocieList
             List<?> parsing = list.get(position).getChoiceList();
             List<Long> choiceListId = new ArrayList<>();
@@ -122,6 +125,8 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
                     );
                     choiceListId.add(choiceParsing.getId());
                     choiceList.add(choiceParsing.getContent());
+                    State = choiceParsing.getState();
+                    choiceState.put(i,State);
                 }
 
             } catch (JSONException e) {
@@ -162,9 +167,7 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
                                     choice.put(position,choiceListId.get(0));
                                 }
                                 else{
-                                    System.out.println("shortAnswer22 = " + shortAnswer);
-                                    quesiton.put(position,qId);
-                                    choice.put(position, (long) -1);
+                                    System.out.println("틀린 답 입력");
                                 }
                             }
                         });
@@ -199,29 +202,36 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
                     public void onCheckedChanged(RadioGroup radioGroup, int i) {
                         switch (i){
                             case R.id.radio_btn1 :
-                                long ChocieId1 = choiceListId.get(0);
-                                System.out.println("ChocieId1 = " + ChocieId1);
-                                quesiton.put(position,qId);
-                                choice.put(position,ChocieId1);
-
+                                if(choiceState.get(0).equals("WRONG")){
+                                    long ChocieId1 = choiceListId.get(0);
+                                    System.out.println("ChocieId1 = " + ChocieId1);
+                                    quesiton.put(position,qId);
+                                    choice.put(position,ChocieId1);
+                                }
                                 break;
                             case R.id.radio_btn2 :
-                                long ChocieId2 = choiceListId.get(1);
-                                System.out.println("ChocieId2 = " + ChocieId2);
-                                quesiton.put(position,qId);
-                                choice.put(position,ChocieId2);
+                                if(choiceState.get(1).equals("WRONG")) {
+                                    long ChocieId2 = choiceListId.get(1);
+                                    System.out.println("ChocieId2 = " + ChocieId2);
+                                    quesiton.put(position, qId);
+                                    choice.put(position, ChocieId2);
+                                }
                                 break;
                             case R.id.radio_btn3 :
-                                long ChocieId3 = choiceListId.get(2);
-                                System.out.println("ChocieId3 = " + ChocieId3);
-                                quesiton.put(position,qId);
-                                choice.put(position,ChocieId3);
+                                if(choiceState.get(2).equals("WRONG")) {
+                                    long ChocieId3 = choiceListId.get(2);
+                                    System.out.println("ChocieId3 = " + ChocieId3);
+                                    quesiton.put(position, qId);
+                                    choice.put(position, ChocieId3);
+                                }
                                 break;
                             case R.id.radio_btn4 :
-                                long ChocieId4 = choiceListId.get(3);
-                                System.out.println("ChocieId4 = " + ChocieId4);
-                                quesiton.put(position,qId);
-                                choice.put(position,ChocieId4);
+                                if(choiceState.get(3).equals("WRONG")) {
+                                    long ChocieId4 = choiceListId.get(3);
+                                    System.out.println("ChocieId4 = " + ChocieId4);
+                                    quesiton.put(position, qId);
+                                    choice.put(position, ChocieId4);
+                                }
                                 break;
                         }
                     }
