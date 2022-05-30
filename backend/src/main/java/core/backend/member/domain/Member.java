@@ -55,6 +55,10 @@ public class Member extends BaseTimeEntity {
         this.nickname = dto.getNickname();
     }
 
+    public void updateWrongFigure(WrongFigure wrongFigure) {
+        this.wrongFigure = wrongFigure;
+    }
+
     public void updatePassword(String password, PasswordEncoder encoder) {
         this.password = encoder.encode(password);
     }
