@@ -10,6 +10,5 @@ import java.util.List;
 
 @Repository
 public interface WrongWorkbookRepository extends JpaRepository<WrongWorkbook, Long> {
-    List<WrongWorkbook> findByMemberId(Long memberId);
-
+    Page<WrongWorkbook> findByMemberId(Long memberId);
 }
