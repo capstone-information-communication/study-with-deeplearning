@@ -29,10 +29,6 @@ public class WrongWorkbook extends BaseTimeEntity {
     @Column(nullable = false)
     private String description;
 
-    @Embedded
-    @Column(nullable = false)
-    private WrongFigure wrongFigure;
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "wrongWorkbook")
     List<WrongQuestion> wrongQuestionList = new ArrayList<>();
 
@@ -42,6 +38,5 @@ public class WrongWorkbook extends BaseTimeEntity {
         this.memberId = memberId;
         title = workbook.getTitle();
         description = workbook.getDescription();
-        wrongFigure = new WrongFigure();
     }
 }

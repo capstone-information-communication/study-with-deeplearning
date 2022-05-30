@@ -1,7 +1,5 @@
 package core.backend.wrongProblem.wrongWorkbook.service;
 
-import core.backend.problem.question.domain.Category;
-import core.backend.wrongProblem.wrongWorkbook.domain.WrongFigure;
 import core.backend.wrongProblem.wrongWorkbook.domain.WrongWorkbook;
 import core.backend.wrongProblem.wrongWorkbook.exception.WrongWorkbookExistTitleException;
 import core.backend.wrongProblem.wrongWorkbook.exception.WrongWorkbookNotFoundException;
@@ -32,13 +30,6 @@ public class WrongWorkbookService {
                 .filter(item -> item.getTitle().equals(wrongWorkbook.getTitle()))
                 .findFirst()
                 .orElseThrow(WrongWorkbookExistTitleException::new);
-    }
-
-    @Transactional
-    public Long updateWrongFigure(WrongWorkbook wrongWorkbook, Category category, int count) {
-        WrongFigure figure = wrongWorkbook.getWrongFigure();
-        figure.addByCategory(category, count);
-        return wrongWorkbook.getId();
     }
 
     public WrongWorkbook findByIdOrThrow(Long id) {

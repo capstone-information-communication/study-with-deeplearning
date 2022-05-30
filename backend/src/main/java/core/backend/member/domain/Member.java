@@ -34,6 +34,10 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private String password;
 
+    @Embedded
+    @Column(nullable = false)
+    private WrongFigure wrongFigure;
+
     //-- 비즈니스 로직 --//
     @Builder
     public Member(Role role, String name, String nickname, String email, String password) {
@@ -42,6 +46,7 @@ public class Member extends BaseTimeEntity {
         this.nickname = nickname;
         this.email = email;
         this.password = password;
+        wrongFigure = new WrongFigure();
     }
 
     public void update(MemberUpdateRequestDto dto) {
