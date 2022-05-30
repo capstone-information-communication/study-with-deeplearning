@@ -1,4 +1,4 @@
-package core.backend.wrongProblem.wrongWorkbook.domain;
+package core.backend.member.domain;
 
 import core.backend.problem.question.domain.Category;
 import lombok.Getter;
