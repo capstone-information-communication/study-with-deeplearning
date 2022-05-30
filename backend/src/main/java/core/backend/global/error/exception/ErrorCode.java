@@ -14,6 +14,7 @@ import core.backend.wrongProblem.wrongAnswer.exception.WrongAnswerNotFoundExcept
 import core.backend.wrongProblem.wrongAnswer.exception.WrongAnswerNotRegisterException;
 import core.backend.wrongProblem.wrongWorkbook.exception.WrongWorkbookExistTitleException;
 import core.backend.wrongProblem.wrongWorkbook.exception.WrongWorkbookNotFoundException;
+import core.backend.wrongProblem.wrongWorkbook.exception.WrongWorkbookNotYoursException;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
@@ -39,6 +40,7 @@ public enum ErrorCode {
     WRONG_ANSWER_NOT_REGISTER(BAD_REQUEST, "자신의 오답 문제집만 삭제할 수 있습니다", WrongAnswerNotRegisterException.class),
     FLASK_RESPONSE_EXCEPTION(BAD_REQUEST, "플라스크 서버의 응답이 null 입니다", QuestionFlaskResponseException.class),
     WRONG_WORKBOOK_EXIST_TITLE(BAD_REQUEST, "이미 존재하는 오답 문제집입니다", WrongWorkbookExistTitleException.class),
+    WRONG_WORKBOOK_NOT_YOURS(BAD_REQUEST, "자신의 오답 문제집만 삭제할 수 있습니다", WrongWorkbookNotYoursException.class),
 
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     MEMBER_NOT_FOUND(NOT_FOUND, "회원을 찾을 수 없습니다", MemberNotFoundException.class),
