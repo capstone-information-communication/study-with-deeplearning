@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -57,7 +58,7 @@ public class WrongQuestion extends BaseTimeEntity {
 
     //- 비즈니스 로직 -//
     @Builder
-    public WrongQuestion(QuestionData question, WrongWorkbook wrongWorkbook, List<ChoiceData> choiceList) {
+    public WrongQuestion(QuestionData question, WrongWorkbook wrongWorkbook) {
         title = question.getTitle();
         content = question.getContent();
         category = question.getCategory();
@@ -65,7 +66,10 @@ public class WrongQuestion extends BaseTimeEntity {
 
         state = WrongQuestionState.WRONG;
 
-        this.choiceList.addAll(choiceList);
+        choiceList = question.getChoiceList()
+                .stream()
+                .map(ChoiceData::new)
+                .collect(Collectors.toList());
         setWrongWorkbook(wrongWorkbook);
     }
 

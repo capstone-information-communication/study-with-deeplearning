@@ -1,5 +1,7 @@
 package core.backend.wrongProblem.wrongQuestion.service;
 
+import core.backend.member.domain.WrongFigure;
+import core.backend.member.service.MemberService;
 import core.backend.wrongProblem.wrongQuestion.domain.WrongQuestion;
 import core.backend.wrongProblem.wrongQuestion.exception.WrongQuestionNotFoundException;
 import core.backend.wrongProblem.wrongQuestion.exception.WrongQuestionNotYoursException;
@@ -18,10 +20,15 @@ import java.util.List;
 public class WrongQuestionServiceImpl implements WrongQuestionService {
 
     private final WrongQuestionRepository wrongQuestionRepository;
+    private final MemberService memberService;
 
     @Override
     @Transactional
-    public Long save(WrongQuestion wrongQuestion) {
+    public Long save(Long id, WrongQuestion wrongQuestion) {
+        WrongFigure wrongFigure = memberService.findByIdOrThrow(id)
+                .getWrongFigure();
+        wrongFigure.addByCategory(wrongQuestion.getCategory(), 1);
+        System.out.println("wrongFigure.toString() = " + wrongFigure.toString());
         wrongQuestionRepository.save(wrongQuestion);
         return wrongQuestion.getId();
     }

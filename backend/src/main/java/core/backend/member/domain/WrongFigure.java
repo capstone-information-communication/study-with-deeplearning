@@ -54,4 +54,14 @@ public class WrongFigure {
                 blankCount += count;
         }
     }
+
+    @Override
+    public String toString() {
+        return "WrongFigure{" +
+                "blankCount=" + blankCount +
+                ", multipleCount=" + multipleCount +
+                ", shortCount=" + shortCount +
+                ", orderCount=" + orderCount +
+                '}';
+    }
 }

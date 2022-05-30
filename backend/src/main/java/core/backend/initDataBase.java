@@ -198,9 +198,6 @@ public class initDataBase {
             WrongQuestion wrongQuestion2 = WrongQuestion.builder()
                     .question(new QuestionData(question))
                     .wrongWorkbook(wrongWorkbook)
-                    .choiceList(question.getChoiceList().stream()
-                            .map(ChoiceData::new)
-                            .collect(Collectors.toList()))
                     .build();
             em.persist(wrongQuestion2);
         }

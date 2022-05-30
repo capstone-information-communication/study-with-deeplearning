@@ -31,7 +31,9 @@ public class WrongWorkbookServiceImpl implements WrongWorkbookService {
                 .stream()
                 .filter(item -> item.getTitle().equals(wrongWorkbook.getTitle()))
                 .findFirst()
-                .orElseThrow(WrongWorkbookExistTitleException::new);
+                .ifPresent(e -> {
+                    throw new WrongWorkbookExistTitleException();
+                });
     }
 
     @Override
