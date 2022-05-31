@@ -144,12 +144,12 @@ public class UploadFragment extends Fragment {
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if(result.getResultCode() == RESULT_OK){
+                    make_workbooks.setEnabled(true);
                     Intent Getresponse = result.getData();
                     Uri path = Getresponse.getData();
                     System.out.println("Getresponse = " + Getresponse);
                     ContentResolver res = getActivity().getContentResolver();
                     try {
-                        make_workbooks.setEnabled(true);
                         InputStream in = res.openInputStream(path);
                         extractPDF(in);
                     } catch (FileNotFoundException e) {

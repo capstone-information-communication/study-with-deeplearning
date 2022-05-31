@@ -5,6 +5,7 @@ import com.smp.frontend.workbook.dto.WorkBookCheckRequestDto;
 import com.smp.frontend.workbook.dto.WorkBookResponseDto;
 import com.smp.frontend.workbook.dto.WorkBookTestResponse;
 import com.smp.frontend.workbook.dto.UploadWorkBookRequestDto;
+import com.smp.frontend.workbook.dto.likeWorkBook;
 import com.smp.frontend.wrongAnswer.dto.DeleteWrongAnswerRequestDto;
 import com.smp.frontend.wrongAnswer.dto.DeleteWrongAnswerResponseDto;
 
@@ -38,5 +39,12 @@ public interface WorkbookController {
 
     @DELETE("api/v1/workbook/{id}")
     Call<WorkBookResponseDto> DeleteWorkBook(@Header("Authorization") String token, @Path("id") long id);
+
+    @POST("api/v1/like-workbook")
+    Call<WorkBookTestResponse> likeWorkBook(@Header("Authorization") String token, @Body likeWorkBook workBookId);
+
+    @DELETE("api/v1/like-workbook/{id}")
+    Call<WorkBookTestResponse> deleteLikeWorkBook(@Header("Authorization") String token, @Path("id") long id);
+
 
 }

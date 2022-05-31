@@ -3,6 +3,11 @@ package com.smp.frontend.workbook.list;
 public class WorkBookItemData {
     private int id;
 
+    public int getLikeCount() {
+        return likeCount;
+    }
+
+    private int likeCount;
     public int getId() {
         return id;
     }
@@ -30,9 +35,10 @@ public class WorkBookItemData {
 
     private boolean search;
 
-    public WorkBookItemData(int id, String title, String description,int page,boolean search) {
+    public WorkBookItemData(int id, String title, String description,int likeCount,int page,boolean search) {
         this.id = id;
         this.title = title;
+        this.likeCount = likeCount;
         this.description = description;
         this.page = page;
         this.search = search;
