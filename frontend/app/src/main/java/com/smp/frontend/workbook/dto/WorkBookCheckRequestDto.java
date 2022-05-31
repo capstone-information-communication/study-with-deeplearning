@@ -3,12 +3,12 @@ package com.smp.frontend.workbook.dto;
 import java.util.List;
 
 public class WorkBookCheckRequestDto {
-    private long workbookId;
-    private List<Long> questionIdList;
+    private long id;
+    private List<?> questionIdList;
 
 
-    public WorkBookCheckRequestDto(long workbookId,  List<Long> questionIdList) {
-        this.workbookId = workbookId;
+    public WorkBookCheckRequestDto(long id,  List<?> questionIdList) {
+        this.id = id;
         this.questionIdList = questionIdList;
     }
 

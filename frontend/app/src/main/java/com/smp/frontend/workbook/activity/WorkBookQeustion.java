@@ -26,8 +26,10 @@ import com.smp.frontend.workbook.list.WorkBookQuestionItemData;
 
 import org.json.JSONException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,7 +42,6 @@ public class WorkBookQeustion extends AppCompatActivity {
     private RecyclerView recyclerView;
     private List<WorkBookQuestionItemData> list= new ArrayList<>();;
     private WorkBookQuestionAdapter adapter;
-    private List<WorkBookCheckRequestDto> WorkBookRequest = new ArrayList<>();
     private Button check_btn;
     private Toast toast;
     private RetrofitClientWorkbook retrofitClientWorkbook = RetrofitClientWorkbook.getInstance();
@@ -61,36 +62,52 @@ public class WorkBookQeustion extends AppCompatActivity {
         title = intent.getStringExtra("title");
         description = intent.getStringExtra("descritpion");
         search = intent.getBooleanExtra("search",true);
-
         recyclerView = findViewById(R.id.rv_WrongAnswers);
+
         getQeustion();
+
         check_btn = findViewById(R.id.check_btn);
         check_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<Long> choiceList = new ArrayList<>();
-                for(int i=0;i<adapter.getItemCount();i++){
-                    System.out.println("adapter.getListCount() = " + adapter.getListCount());
-                    System.out.println("adapter.getItemCount() = " + adapter.getItemCount());
-                    if(adapter.getListCount() == 0 || adapter.getListCount() != adapter.getItemCount()){
-                        System.out.println("빈칸이거나 선택하지않은 문제가 있습니다.");
-                        return;
-                    }
-                    choiceList.add(adapter.getQeustionId(i));
-                    WorkBookRequest.add(i,new WorkBookCheckRequestDto(ID,choiceList));
+                List<Long> questionList = new ArrayList<>();
+                if(adapter.getChoiceCount() <= 0 || adapter.getChoiceCount() != adapter.getQeustionCount()){
+                    System.out.println("adapter = " + adapter.getQeustionCount());
+                    System.out.println("adapter = " + adapter.getChoiceCount());
+                    System.out.println("문제 선택 해주세요 하나라도");
+                    return;
                 }
+                Set<Integer> keySet = adapter.getQuestion().keySet();
+                for (Integer key : keySet) {
+                    System.out.println(key + " : " + adapter.getQuestion().get(key));
+                    questionList.add(adapter.getQuestion().get(key));
+                }
+
+                WorkBookCheckRequestDto check = new WorkBookCheckRequestDto(ID,questionList);
                 Call<WorkBookTestResponse> request = workbookController.WorkBookCheck(PreferencesManager.getString(getApplicationContext(),"token")
-                        ,WorkBookRequest
+                        ,check
                 );
                 request.enqueue(new Callback<WorkBookTestResponse>() {
                     @Override
                     public void onResponse(Call<WorkBookTestResponse> call, Response<WorkBookTestResponse> response) {
-                        if(response.code() == 200){
+                        if(response.code() == 201){
                             WorkBookTestResponse data =  response.body();
-                            toast.makeText(getApplicationContext(),"answer : "+data.getAnswer() +" worng : " + data.getWrong() ,Toast.LENGTH_LONG).show();
+                            System.out.println("response = " + response.body());
+                            toast.makeText(getApplicationContext(),"채점 완료",Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(intent);
                             finish();
+                        }
+
+                        else{
+                            try {
+                                System.out.println("response.errorBody().string() = " + response.errorBody().string());
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
 

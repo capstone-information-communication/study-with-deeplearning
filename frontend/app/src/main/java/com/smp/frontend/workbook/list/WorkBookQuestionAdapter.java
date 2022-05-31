@@ -34,7 +34,7 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
     private Context context;
     private List<WorkBookQuestionItemData> list = new ArrayList<>();
     private HashMap<Integer,Long> quesiton = new HashMap<>();
-    private HashMap<Integer,Long> choice = new HashMap<>();
+    private HashMap<Integer,String> choice = new HashMap<>();
     private int itemposition;
     private String State;
     private HashMap<Integer,String> choiceState = new HashMap<>();
@@ -70,16 +70,21 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
     public int getItemCount() {
         return list.size(); // RecyclerView의 size return
     }
-    public int getListCount() {
+    public int getQeustionCount() {
         return quesiton.size(); // RecyclerView의 size return
     }
-    public long getQeustionId(int i) {
-        return quesiton.get(i);
+    public HashMap<Integer,Long> getQuestion() {
+        return quesiton;
     }
-    public long getChoiceId(int i) {
-        return choice.get(i);
+    public int getItemposition(){
+        return itemposition;
     }
-
+    public int getChoiceCount() {
+        return choice.size(); // RecyclerView의 size return
+    }
+    public HashMap<Integer,String> getChoice() {
+        return choice;
+    }
 
     // ViewHolder는 하나의 View를 보존하는 역할을 한다
     public class Holder extends RecyclerView.ViewHolder{
@@ -109,13 +114,12 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
             String QTitle = list.get(position).getWorkBookQuestionListDto().getTitle();
             String QContent = list.get(position).getWorkBookQuestionListDto().getContent();
 
-            System.out.println("123123 = " + State);
             //chocieList
             List<?> parsing = list.get(position).getChoiceList();
             List<Long> choiceListId = new ArrayList<>();
             List<String> choiceList = new ArrayList<>();
             int size = list.get(position).getChoiceList().size();
-
+            quesiton.put(position,qId);
             gsonParsing instance = gsonParsing.getInstance();
             try {
                 for(int i=0;i< size;i++){
@@ -147,7 +151,6 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
                         radioGroup.setVisibility(View.GONE);
                         Ed_text.setVisibility(View.VISIBLE);
                         quesiton.put(position,qId);
-                        choice.put(position,(long) -1);
                         Ed_text.addTextChangedListener(new TextWatcher() {
                             @Override
                             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -161,10 +164,10 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
                             @Override
                             public void afterTextChanged(Editable editable) {
                                 System.out.println("choiceList = " + choiceList.get(0));
+                                choice.put(position,"선택");
                                 if(shortAnswer.equals(choiceList.get(0))){
                                     System.out.println("shortAnswer = " + shortAnswer);
-                                    quesiton.put(position,qId);
-                                    choice.put(position,choiceListId.get(0));
+                                    quesiton.remove(position);
                                 }
                                 else{
                                     System.out.println("틀린 답 입력");
@@ -202,35 +205,47 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
                     public void onCheckedChanged(RadioGroup radioGroup, int i) {
                         switch (i){
                             case R.id.radio_btn1 :
+                                choice.put(position,"선택");
                                 if(choiceState.get(0).equals("WRONG")){
                                     long ChocieId1 = choiceListId.get(0);
                                     System.out.println("ChocieId1 = " + ChocieId1);
                                     quesiton.put(position,qId);
-                                    choice.put(position,ChocieId1);
+                                }
+                                else{
+                                    quesiton.remove(position);
                                 }
                                 break;
                             case R.id.radio_btn2 :
+                                choice.put(position,"선택");
                                 if(choiceState.get(1).equals("WRONG")) {
                                     long ChocieId2 = choiceListId.get(1);
                                     System.out.println("ChocieId2 = " + ChocieId2);
                                     quesiton.put(position, qId);
-                                    choice.put(position, ChocieId2);
+                                }
+                                else {
+                                    quesiton.remove(position);
                                 }
                                 break;
                             case R.id.radio_btn3 :
+                                choice.put(position,"선택");
                                 if(choiceState.get(2).equals("WRONG")) {
                                     long ChocieId3 = choiceListId.get(2);
                                     System.out.println("ChocieId3 = " + ChocieId3);
                                     quesiton.put(position, qId);
-                                    choice.put(position, ChocieId3);
+                                }
+                                else {
+                                    quesiton.remove(position);
                                 }
                                 break;
                             case R.id.radio_btn4 :
+                                choice.put(position,"선택");
                                 if(choiceState.get(3).equals("WRONG")) {
                                     long ChocieId4 = choiceListId.get(3);
                                     System.out.println("ChocieId4 = " + ChocieId4);
                                     quesiton.put(position, qId);
-                                    choice.put(position, ChocieId4);
+                                }
+                                else {
+                                    quesiton.remove(position);
                                 }
                                 break;
                         }
