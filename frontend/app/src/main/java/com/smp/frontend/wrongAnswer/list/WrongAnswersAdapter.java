@@ -75,7 +75,6 @@ public class WrongAnswersAdapter extends RecyclerView.Adapter<WrongAnswersAdapte
         private TextView title;
         private TextView content;
         private TextView choice_title1, choice_title2,choice_title3,choice_title4, commentary, show;
-        private Button checkBtn;
         private List<WrongAnswersItemData> list = new ArrayList<>();
         private int position;
         private RetrofitClientWrongAnswer retrofitClientWrongAnswer;
@@ -92,7 +91,6 @@ public class WrongAnswersAdapter extends RecyclerView.Adapter<WrongAnswersAdapte
             choice_title4 = (TextView) view.findViewById(R.id.tv_choice_title4);
             commentary = (TextView) view.findViewById(R.id.tv_hideTest1);
             show = (TextView) view.findViewById(R.id.tv_show);
-            checkBtn = (Button) view.findViewById(R.id.btn_wrongAnswerCheck);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -139,9 +137,6 @@ public class WrongAnswersAdapter extends RecyclerView.Adapter<WrongAnswersAdapte
                     commentary.getLayoutParams().height = value;
                     commentary.requestLayout();
                     commentary.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
-                    //체크 버튼
-                    checkBtn.requestLayout();
-                    checkBtn.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
                     if (isExpanded == true) {
                         show.setText("정답 및 해설 접기");
                     } else {
@@ -212,32 +207,6 @@ public class WrongAnswersAdapter extends RecyclerView.Adapter<WrongAnswersAdapte
             commentary.setText(list.get(itemposition).getQuestion().getComment());
             changeVisibility(selectedItems.get(itemposition));
 
-            checkBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    DeleteWrongAnswerRequestDto requestDto = new DeleteWrongAnswerRequestDto(qeustionId,workbookId);
-                    String token =PreferencesManager.getString(view.getContext(),"token");
-                    Call<DeleteWrongAnswerResponseDto> request = WrongAnswerController.DeletWrongAnswer(token,requestDto,wrongAnswerId);
-                    request.enqueue(new Callback<DeleteWrongAnswerResponseDto>() {
-                        @Override
-                        public void onResponse(Call<DeleteWrongAnswerResponseDto> call, Response<DeleteWrongAnswerResponseDto> response) {
-                            if(response.code() == 200){
-                                list.remove(position);
-                                notifyItemRemoved(position);
-                                notifyItemRangeChanged(position, list.size());
-                                System.out.println("response = " + response.body().getMessage());
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<DeleteWrongAnswerResponseDto> call, Throwable t) {
-                            System.out.println("서버에러 ~~");
-                            t.printStackTrace();
-                        }
-                    });
-                   
-                }
-            });
         }
     }
 

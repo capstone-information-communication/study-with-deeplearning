@@ -6,12 +6,18 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.smp.frontend.R;
+import com.smp.frontend.global.PreferencesManager;
+import com.smp.frontend.workbook.RetrofitClientWorkbook;
+import com.smp.frontend.workbook.WorkbookController;
 import com.smp.frontend.workbook.activity.WorkBookQeustion;
+import com.smp.frontend.workbook.dto.WorkBookTestResponse;
+import com.smp.frontend.workbook.dto.likeWorkBook;
 import com.smp.frontend.wrongAnswer.activity.WrongAnswersActivity;
 
 import java.util.ArrayList;
@@ -19,11 +25,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class WorkBookAdapter extends RecyclerView.Adapter<WorkBookAdapter.Holder> {
 
     private Context context;
     private List<WorkBookItemData> list = new ArrayList<>();
-    private int id;
+    private int id,itemposition;
     Map<Integer, Integer> intentId = new HashMap<>();
     Map<Integer, Integer> intentPage = new HashMap<>();
     Map<Integer, String> intentTitle = new HashMap<>();
@@ -52,7 +62,7 @@ public class WorkBookAdapter extends RecyclerView.Adapter<WorkBookAdapter.Holder
     @Override
     public void onBindViewHolder(Holder holder, int position) {
         // 각 위치에 문자열 세팅
-        int itemposition = position;
+        itemposition = position;
         holder.tv_title_workbook.setText(list.get(itemposition).getTitle());
         holder.tv_description_workbook.setText(list.get(itemposition).getdescription());
         id =  list.get(itemposition).getId();
@@ -61,7 +71,6 @@ public class WorkBookAdapter extends RecyclerView.Adapter<WorkBookAdapter.Holder
         intentTitle.put(itemposition,list.get(itemposition).getTitle());
         intentDescription.put(itemposition,list.get(itemposition).getdescription());
         intentSearch.put(itemposition,list.get(itemposition).isSearch());
-
 
     }
 
@@ -82,11 +91,13 @@ public class WorkBookAdapter extends RecyclerView.Adapter<WorkBookAdapter.Holder
     }
 
     // ViewHolder는 하나의 View를 보존하는 역할을 한다
-    public class Holder extends RecyclerView.ViewHolder{
-        private TextView tv_title_workbook;
-        private TextView tv_description_workbook;
-
-        public Holder(View view){
+    public class Holder extends RecyclerView.ViewHolder {
+        private TextView tv_title_workbook, tv_description_workbook , cntLike;
+        private RetrofitClientWorkbook retrofitClientWorkbook = RetrofitClientWorkbook.getInstance();
+        private WorkbookController workbookController = RetrofitClientWorkbook.getRetrofitInterface();
+        private String btn_click = "";
+        private ImageView like;
+        public Holder(View view) {
             super(view);
             tv_title_workbook = (TextView) view.findViewById(R.id.tv_title_workbook);
             tv_description_workbook = (TextView) view.findViewById(R.id.tv_description_workbook);
@@ -96,21 +107,40 @@ public class WorkBookAdapter extends RecyclerView.Adapter<WorkBookAdapter.Holder
                 public void onClick(View view) {
                     int pos = getBindingAdapterPosition();
 
-                    if(pos != RecyclerView.NO_POSITION) {
+                    if (pos != RecyclerView.NO_POSITION) {
                         intent = new Intent(context, WorkBookQeustion.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra("ID",intentId.get(pos));
-                        intent.putExtra("page",intentPage.get(pos));
-                        intent.putExtra("title",intentTitle.get(pos));
-                        intent.putExtra("description",intentDescription.get(pos));
-                        intent.putExtra("search",intentSearch.get(pos));
+                        intent.putExtra("ID", intentId.get(pos));
+                        intent.putExtra("page", intentPage.get(pos));
+                        intent.putExtra("title", intentTitle.get(pos));
+                        intent.putExtra("description", intentDescription.get(pos));
+                        intent.putExtra("search", intentSearch.get(pos));
                         context.startActivity(intent);
                     }
                 }
             });
-            }
-        }
+            like = view.findViewById(R.id.like);
+            cntLike = view.findViewById(R.id.likeCount);
+            like.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(btn_click.equals("")){
+                        System.out.println("zzzzzzzzzzzzzzzzzz");
+                        like.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+                        btn_click ="z";
+                    }else if (btn_click.equals("z")){
+                        System.out.println("vvvvvvvvvvvvvvvvv");
+                        like.setImageResource(R.drawable.ic_baseline_favorite_24);
+                        btn_click="";
+                    }
 
+
+                }
+            });
+
+
+        }
     }
+}
 
 
 

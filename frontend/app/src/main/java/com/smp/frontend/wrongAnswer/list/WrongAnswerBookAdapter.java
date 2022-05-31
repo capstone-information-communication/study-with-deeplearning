@@ -64,7 +64,10 @@ public class WrongAnswerBookAdapter extends RecyclerView.Adapter<WrongAnswerBook
         return list.size(); // RecyclerView의 size return
     }
 
-
+    public void removeItem(int absoluteAdapterPosition) {
+        list.remove(absoluteAdapterPosition);
+        notifyItemRemoved(absoluteAdapterPosition);
+    }
 
 
     // ViewHolder는 하나의 View를 보존하는 역할을 한다

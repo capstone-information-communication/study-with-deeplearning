@@ -10,6 +10,11 @@ public class WorkBookTestResponse {
     private String updatedAt;
     private String createdAt;
     private String description;
+    private int likeCount;
+
+    public int getLikeCount() {
+        return likeCount;
+    }
 
     public List<?> getChoiceList() {
         return choiceList;

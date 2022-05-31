@@ -203,9 +203,9 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
                 radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                        choice.put(position,"선택");
                         switch (i){
                             case R.id.radio_btn1 :
-                                choice.put(position,"선택");
                                 if(choiceState.get(0).equals("WRONG")){
                                     long ChocieId1 = choiceListId.get(0);
                                     System.out.println("ChocieId1 = " + ChocieId1);
@@ -216,7 +216,6 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
                                 }
                                 break;
                             case R.id.radio_btn2 :
-                                choice.put(position,"선택");
                                 if(choiceState.get(1).equals("WRONG")) {
                                     long ChocieId2 = choiceListId.get(1);
                                     System.out.println("ChocieId2 = " + ChocieId2);
@@ -227,7 +226,6 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
                                 }
                                 break;
                             case R.id.radio_btn3 :
-                                choice.put(position,"선택");
                                 if(choiceState.get(2).equals("WRONG")) {
                                     long ChocieId3 = choiceListId.get(2);
                                     System.out.println("ChocieId3 = " + ChocieId3);
@@ -238,7 +236,6 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
                                 }
                                 break;
                             case R.id.radio_btn4 :
-                                choice.put(position,"선택");
                                 if(choiceState.get(3).equals("WRONG")) {
                                     long ChocieId4 = choiceListId.get(3);
                                     System.out.println("ChocieId4 = " + ChocieId4);

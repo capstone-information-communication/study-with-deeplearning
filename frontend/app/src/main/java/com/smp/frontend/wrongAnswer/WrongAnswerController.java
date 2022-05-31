@@ -16,10 +16,10 @@ import retrofit2.http.Header;
 import retrofit2.http.Path;
 
 public interface WrongAnswerController {
-    @GET("api/v1/wrong-answer/workbook")
+    @GET("api/v1/my/wrong-workbook")
     Call<WrongAnswerResponseDto> WrongAnswerBook(@Header("Authorization") String token);
 
-    @HTTP(method = "DELETE", path = "api/v1/wrong-answer/{id}",hasBody = true)
-    Call<DeleteWrongAnswerResponseDto> DeletWrongAnswer(@Header("Authorization") String token, @Body DeleteWrongAnswerRequestDto request, @Path("id") long id);
+    @HTTP(method = "DELETE", path = "api/v1/wrong-workbook/{id}",hasBody = false)
+    Call<DeleteWrongAnswerResponseDto> DeletWrongAnswer(@Header("Authorization") String token, @Path("id") long id);
 
 }
