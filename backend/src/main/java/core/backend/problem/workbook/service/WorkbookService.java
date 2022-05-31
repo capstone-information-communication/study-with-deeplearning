@@ -34,6 +34,12 @@ public class WorkbookService {
                 .update(dto.getTitle(), dto.getDescription());
     }
 
+    @Transactional
+    public void updateLikeCount(Long workbookId) {
+        Workbook workbook = findByIdOrThrow(workbookId);
+        workbook.addLikeCount();
+    }
+
     public Workbook findByIdOrThrow(Long id) {
         return workbookRepository.findById(id)
                 .orElseThrow(WorkbookNotFoundException::new);

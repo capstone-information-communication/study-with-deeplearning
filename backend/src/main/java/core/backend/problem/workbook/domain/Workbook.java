@@ -49,4 +49,8 @@ public class Workbook extends BaseTimeEntity {
         this.description = description;
         return id;
     }
+
+    public void addLikeCount() {
+        this.likeCount += 1;
+    }
 }
