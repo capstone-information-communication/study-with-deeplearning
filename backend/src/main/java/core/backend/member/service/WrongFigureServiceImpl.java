@@ -15,13 +15,11 @@ public class WrongFigureServiceImpl implements WrongFigureService {
     private final MemberService memberService;
 
     @Transactional
-    public Long update(Long id, Category category) {
-        Member members = memberService.findByIdOrThrow(id);
-        members.getWrongFigure();
+    public Long update(Long memberId, Category category) {
         WrongFigure wrongFigure = memberService
-                .findByIdOrThrow(id)
+                .findByIdOrThrow(memberId)
                 .getWrongFigure();
         wrongFigure.addByCategory(category, 1);
-        return id;
+        return memberId;
     }
 }

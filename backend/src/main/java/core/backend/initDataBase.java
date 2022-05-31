@@ -1,5 +1,6 @@
 package core.backend;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import core.backend.problem.choice.domain.Choice;
 import core.backend.problem.choice.domain.ChoiceData;
 import core.backend.problem.choice.domain.State;

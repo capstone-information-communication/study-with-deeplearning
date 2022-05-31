@@ -24,11 +24,7 @@ public class WrongQuestionServiceImpl implements WrongQuestionService {
 
     @Override
     @Transactional
-    public Long save(Long id, WrongQuestion wrongQuestion) {
-        WrongFigure wrongFigure = memberService.findByIdOrThrow(id)
-                .getWrongFigure();
-        wrongFigure.addByCategory(wrongQuestion.getCategory(), 1);
-        System.out.println("wrongFigure.toString() = " + wrongFigure.toString());
+    public Long save(WrongQuestion wrongQuestion) {
         wrongQuestionRepository.save(wrongQuestion);
         return wrongQuestion.getId();
     }
