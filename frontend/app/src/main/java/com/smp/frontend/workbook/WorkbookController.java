@@ -24,9 +24,6 @@ public interface WorkbookController {
     @POST("api/v1/workbook-with-text")
     Call<UploadWorkBookResponseDto> SendWorkBook(@Header("Authorization") String token, @Body UploadWorkBookRequestDto request);
 
-    @GET("api/v1/choice/{id}")
-    Call<WorkBookTestResponse> getTestApi(@Path("id") Long id);
-
     @GET("api/v1/choices")
     Call<WorkBookResponseDto> getChoiceList();
 
@@ -36,8 +33,8 @@ public interface WorkbookController {
     @GET("api/v1/workbook/search")
     Call<WorkBookResponseDto> getWorkBookSearch(@Header("Authorization") String token,@Query("title") String title,@Query("description") String description ,@Query("page") int page);
 
-    @POST("api/v1/workbook/{id}/check")
-    Call<WorkBookTestResponse> WorkBookCheck(@Header("Authorization") String token,@Path("id") long workbookId,@Body List<WorkBookCheckRequestDto> requestDto );
+    @POST("api/v1/wrong-workbook")
+    Call<WorkBookTestResponse> WorkBookCheck(@Header("Authorization") String token,@Body WorkBookCheckRequestDto requestDto );
 
     @DELETE("api/v1/workbook/{id}")
     Call<WorkBookResponseDto> DeleteWorkBook(@Header("Authorization") String token, @Path("id") long id);
