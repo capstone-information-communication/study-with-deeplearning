@@ -71,9 +71,9 @@ public class WrongAnswersActivity extends AppCompatActivity {
                             long id = parsing.getId();
                             if(id == ID){
                                 //qeustionList
-                                for(int j=0;j<parsing.getWrongAnswerQuestionList().size();j++) {
+                                for(int j=0;j<parsing.getWrongQuestionList().size();j++) {
                                     WrongAnswerTestResponse parsing2 = (WrongAnswerTestResponse) instance.parsing(
-                                            instance.ArrToString(instance.toJsonArr(parsing.getWrongAnswerQuestionList()), j),
+                                            instance.ArrToString(instance.toJsonArr(parsing.getWrongQuestionList()), j),
                                             WrongAnswerTestResponse.class
                                     );
                                     long qid = parsing2.getQuestionId();

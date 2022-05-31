@@ -16,6 +16,12 @@ public class WrongAnswerTestResponse {
     private Object commentary;
     private long questionId;
 
+    public List<?> getWrongQuestionList() {
+        return wrongQuestionList;
+    }
+
+    private List<?> wrongQuestionList;
+
     public String getCategory() { return category; }
 
     private String category;
@@ -52,12 +58,6 @@ public class WrongAnswerTestResponse {
     }
 
     private List<?> choiceList;
-
-    public List<?> getWrongAnswerQuestionList() {
-        return wrongAnswerQuestionList;
-    }
-
-    private List<?> wrongAnswerQuestionList;
 
     public String getTitle() { return title; }
 
