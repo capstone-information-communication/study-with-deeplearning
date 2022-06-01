@@ -1,5 +1,9 @@
 package com.smp.frontend.member.activity;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -8,18 +12,26 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import com.smp.frontend.R;
 import com.smp.frontend.likeWorkbook.fragment.likeWorkBookFragment;
 import com.smp.frontend.workbook.fragment.UploadFragment;
 import com.smp.frontend.workbook.fragment.WorkBookFragment;
 import com.smp.frontend.wrongAnswer.fragment.WrongAnswerFragment;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
     private Toast toast;
@@ -34,12 +46,60 @@ public class MainActivity extends AppCompatActivity {
     private WrongAnswerFragment WrongAnswerFrag;
     // Storage Permissions
     Boolean PermissionGranted = false;
+
+    public String getExtractedText() {
+        return extractedText;
+    }
+
+    private String extractedText ="";
+
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
 
     };
+    private void extractPDF(InputStream Filename) {
+        try {
+            PdfReader reader = new PdfReader(Filename);
+            int n = reader.getNumberOfPages();
+            for (int i = 0; i < n; i++) {
+                extractedText = extractedText + PdfTextExtractor.getTextFromPage(reader, i + 1).trim();
+                if(extractedText.length() >= 3000){
+                    break;
+                }
+            }
+            reader.close();
+        } catch (Exception e) {
+            System.out.println("Error found is : \n" + e);
+        }
+
+    }
+    public void startUpload(Intent intent){
+        startReuslt.launch(intent);
+
+    }
+    ActivityResultLauncher<Intent> startReuslt =registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if(result.getResultCode() == RESULT_OK){
+                    extractedText ="";
+                    Intent Getresponse = result.getData();
+                    Uri path = Getresponse.getData();
+                    ContentResolver res = getContentResolver();
+                    try {
+                        InputStream in = res.openInputStream(path);
+                        extractPDF(in);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    System.out.println("result.toString() = " + result.toString());
+                    extractedText ="";
+
+                }
+            });
 
     /**
      * Checks if the app has permission to write to device storage

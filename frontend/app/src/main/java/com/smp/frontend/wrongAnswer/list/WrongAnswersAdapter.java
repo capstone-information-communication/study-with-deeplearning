@@ -193,12 +193,17 @@ public class WrongAnswersAdapter extends RecyclerView.Adapter<WrongAnswersAdapte
                         choice_title3.setVisibility(View.GONE);
                         choice_title4.setVisibility(View.GONE);
                         choice_title1.setText(choiceListComment.get(0));
+                        choice_title1.setVisibility(View.VISIBLE);
                         System.out.println("choiceList = " + choiceListComment.get(0));
                     } else {
                         choice_title1.setText(choiceListComment.get(0));
                         choice_title2.setText(choiceListComment.get(1));
                         choice_title3.setText(choiceListComment.get(2));
                         choice_title4.setText(choiceListComment.get(3));
+                        choice_title1.setVisibility(View.VISIBLE);
+                        choice_title2.setVisibility(View.VISIBLE);
+                        choice_title3.setVisibility(View.VISIBLE);
+                        choice_title4.setVisibility(View.VISIBLE);
                     }
                 }catch (Exception e){
                     e.printStackTrace();

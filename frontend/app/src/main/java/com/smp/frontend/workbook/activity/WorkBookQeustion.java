@@ -74,9 +74,10 @@ public class WorkBookQeustion extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 List<Long> questionList = new ArrayList<>();
-                if(adapter.getChoiceCount() <= 0 || adapter.getChoiceCount() != adapter.getQeustionCount()){
-                    System.out.println("adapter = " + adapter.getQeustionCount());
-                    System.out.println("adapter = " + adapter.getChoiceCount());
+                if(adapter.getChoiceCount() <= 0 || list.size() != adapter.getChoiceCount()){
+                    System.out.println("getQeustionCount = " + adapter.getQeustionCount());
+                    System.out.println("getChoiceCount = " + adapter.getChoiceCount());
+                    System.out.println("list.size() = " + list.size());
                     System.out.println("문제 선택 해주세요 하나라도");
                     return;
                 }

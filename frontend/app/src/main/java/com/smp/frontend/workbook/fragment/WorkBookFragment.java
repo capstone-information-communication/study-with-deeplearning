@@ -3,6 +3,7 @@ package com.smp.frontend.workbook.fragment;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,6 +28,8 @@ import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.smp.frontend.global.PreferencesManager;
 import com.smp.frontend.R;
 import com.smp.frontend.global.gsonParsing;
+import com.smp.frontend.member.activity.LoginActivity;
+import com.smp.frontend.member.activity.MainActivity;
 import com.smp.frontend.workbook.RetrofitClientWorkbook;
 import com.smp.frontend.workbook.WorkbookController;
 import com.smp.frontend.workbook.dto.WorkBookResponseDto;
@@ -40,7 +43,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import retrofit2.Call;
@@ -66,6 +71,7 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
     private RetrofitClientWorkbook retrofitClient = RetrofitClientWorkbook.getInstance();
     private WorkbookController workbookController = RetrofitClientWorkbook.getRetrofitInterface();
     private Drawable drawable;
+    private Map<Long,Drawable> likeMap= new HashMap<>();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,16 +98,17 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
                 super.onScrolled(recyclerView, dx, dy);
                 lastVisibleItemPosition = ((LinearLayoutManager)recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
                 int itemTotalCount = recyclerView.getAdapter().getItemCount() - 1;
-                adapter.likeCheck();
                 if(lastVisibleItemPosition == itemTotalCount && pageDone == false){
                     if(search == true){
                         System.out.println("list.size() = " + list.size());
                         page++;
+                        checkLike(page);
                         getSearchList(page,title,description);
                     }
                     else{
                         System.out.println("list.size() = " + list.size());
                         page++;
+                        checkLike(page);
                         getList(page);
                     }
 
@@ -133,38 +140,71 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
     @Override
     public void onResume() {
         super.onResume();
+        checkLike(page);
         getList(page);
     }
     public void getList(int page){
         search= false;
         Call<WorkBookResponseDto> test = workbookController.getWorkbook(PreferencesManager.getString(getContext(),"token"),page);
         test.enqueue(new Callback<WorkBookResponseDto>() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onResponse(Call<WorkBookResponseDto> call, Response<WorkBookResponseDto> response) {
                 gsonParsing instance = gsonParsing.getInstance();
-                WorkBookResponseDto body = response.body();
-                List<?> data = body.getData();
-                if (body.getCount() != 0) {
-                    for (int i = 0; i < body.getCount(); i++) {
-                        WorkBookTestResponse parsing = (WorkBookTestResponse) instance.parsing(
-                                instance.toJson(data.get(i)),
-                                WorkBookTestResponse.class);
-                        int id = (int) parsing.getId();
-                        String title = parsing.getTitle();
-                        String description = parsing.getDescription();
-                        int likeCount = (int)parsing.getLikeCount();
-                        list.add(new WorkBookItemData(id, title, description,likeCount,page,search,drawable));
-                        adapter = new WorkBookAdapter(getActivity(), list);
-                        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                        recyclerView.setAdapter(adapter);
-                        recyclerView.scrollToPosition(page*10 -10);
-                        recyclerView.setHasFixedSize(true);
+
+                if(response.code() == 200){
+                    WorkBookResponseDto body = response.body();
+                    List<?> data = body.getData();
+                    if (body.getCount() != 0) {
+                        for (int i = 0; i < body.getCount(); i++) {
+                            WorkBookTestResponse parsing = (WorkBookTestResponse) instance.parsing(
+                                    instance.toJson(data.get(i)),
+                                    WorkBookTestResponse.class);
+                            int id = (int) parsing.getId();
+
+                            Set<Long> keySet1 = likeMap.keySet();
+                            for (Long key : keySet1) {
+                                if(key == id){
+                                    System.out.println("key = " + key);
+                                    drawable = getContext().getDrawable(R.drawable.ic_baseline_favorite_24);
+                                    break;
+                                }
+                                else{
+                                    drawable = getContext().getDrawable(R.drawable.ic_baseline_favorite_border_24);
+                                }
+                            }
+
+                            String title = parsing.getTitle();
+                            String description = parsing.getDescription();
+                            int likeCount = (int)parsing.getLikeCount();
+                            list.add(new WorkBookItemData(id, title, description,likeCount,page,search,drawable));
+                            adapter = new WorkBookAdapter(getActivity(), list);
+                            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                            recyclerView.setAdapter(adapter);
+                            recyclerView.scrollToPosition(page*10 -10);
+                            recyclerView.setHasFixedSize(true);
+                        }
+                    }
+                    else {
+                        System.out.println("페이지 끝");
+                        pageDone = true;
                     }
                 }
-                else {
-                    System.out.println("페이지 끝");
-                    pageDone = true;
+                else if(response.code() == 400){
+                    try {
+                        JSONObject jsonObject = new JSONObject(response.errorBody().string());
+                        String message = jsonObject.get("message").toString();
+                        System.out.println("message = " + message);
+                        Intent intent = new Intent(getActivity(), LoginActivity.class);
+                        startActivity(intent);
+                        getActivity().finish();
+
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                        System.out.println("제이슨 에러 메세지 message를 찾을 수 없음");
+                    }
                 }
+
             }
 
 
@@ -178,6 +218,7 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
         search = true;
         Call<WorkBookResponseDto> test = workbookController.getWorkBookSearch(PreferencesManager.getString(getContext(),"token"),title,description,page);
         test.enqueue(new Callback<WorkBookResponseDto>() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onResponse(Call<WorkBookResponseDto> call, Response<WorkBookResponseDto> response) {
                 if(response.code() == 200) {
@@ -193,6 +234,18 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
                             String title = parsing.getTitle();
                             String description = parsing.getDescription();
                             int likeCount = parsing.getLikeCount();
+
+                            Set<Long> keySet1 = likeMap.keySet();
+                            for (Long key : keySet1) {
+                                if(key == id){
+                                    System.out.println("key = " + key);
+                                    drawable = getContext().getDrawable(R.drawable.ic_baseline_favorite_24);
+                                    break;
+                                }
+                                else{
+                                    drawable = getContext().getDrawable(R.drawable.ic_baseline_favorite_border_24);
+                                }
+                            }
                             list.add(new WorkBookItemData(id, title, description,likeCount, page, search,drawable));
                             adapter = new WorkBookAdapter(getActivity(), list);
                             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -332,5 +385,40 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
         }
+    }
+    public void checkLike(int page) {
+        Call<WorkBookResponseDto> likebookcheck = workbookController.getlikeWorkBook(PreferencesManager.getString(getContext(), "token"), page);
+        likebookcheck.enqueue(new Callback<WorkBookResponseDto>() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onResponse(Call<WorkBookResponseDto> call, Response<WorkBookResponseDto> response) {
+                gsonParsing instance = gsonParsing.getInstance();
+                WorkBookResponseDto body = response.body();
+                if (response.code() == 200) {
+                    List<?> data = body.getData();
+                    NONE:
+                    for (int i = 0; i < body.getCount(); i++) {
+                        WorkBookTestResponse parsing = (WorkBookTestResponse) instance.parsing(
+                                instance.toJson(data.get(i)),
+                                WorkBookTestResponse.class);
+                        long id = parsing.getId();
+                        System.out.println("123123123 = " + id);
+                        drawable = getContext().getDrawable(R.drawable.ic_baseline_favorite_24);
+                        likeMap.put(id, drawable);
+
+                        if (response.body().getCount() == 0) {
+                            break NONE;
+                        }
+
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<WorkBookResponseDto> call, Throwable t) {
+
+            }
+        });
     }
 }

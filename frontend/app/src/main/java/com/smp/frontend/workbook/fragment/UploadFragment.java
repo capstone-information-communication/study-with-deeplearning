@@ -1,10 +1,13 @@
 package com.smp.frontend.workbook.fragment;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
@@ -20,6 +23,7 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import com.smp.frontend.global.PreferencesManager;
 import com.smp.frontend.R;
+import com.smp.frontend.member.activity.MainActivity;
 import com.smp.frontend.workbook.dto.UploadWorkBookResponseDto;
 import com.smp.frontend.workbook.RetrofitClientWorkbook;
 import com.smp.frontend.workbook.WorkbookController;
@@ -44,27 +48,10 @@ import retrofit2.Response;
 public class UploadFragment extends Fragment {
     private EditText title,description;
     private Button make_workbooks;
+    private ImageButton Upload_btn;
     private  View view;
     RetrofitClientWorkbook retrofitClient;
     private String extractedText="";
-    private void extractPDF(InputStream Filename) {
-        try {
-
-            PdfReader reader = new PdfReader(Filename);
-
-            int n = reader.getNumberOfPages();
-            for (int i = 0; i < n; i++) {
-                extractedText = extractedText + PdfTextExtractor.getTextFromPage(reader, i + 1).trim();
-                if(extractedText.length() >= 3000){
-                    break;
-                }
-            }
-            reader.close();
-        } catch (Exception e) {
-            System.out.println("Error found is : \n" + e);
-        }
-
-    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,13 +64,18 @@ public class UploadFragment extends Fragment {
          title = (EditText) view.findViewById(R.id.et_title_send);
          description = (EditText) view.findViewById(R.id.et_content_send);
          make_workbooks = view.findViewById(R.id.make_workbooks_btn);
+         Upload_btn = view.findViewById(R.id.btn_upload);
          make_workbooks.setEnabled(false);
          make_workbooks.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
                  String title_text = title.getText().toString();
                  String description_text = description.getText().toString();
-
+                    if(title.equals("") || description_text.equals("") || extractedText.equals("")){
+                        make_workbooks.setEnabled(false);
+                        System.out.println("빈칸 입력 !!!");
+                        return;
+                    }
                      UploadWorkBookRequestDto request = new UploadWorkBookRequestDto(title_text, description_text, extractedText);
                      retrofitClient = RetrofitClientWorkbook.getInstance();
                      WorkbookController workbookController = RetrofitClientWorkbook.getRetrofitInterface();
@@ -124,43 +116,27 @@ public class UploadFragment extends Fragment {
 
              }
          });
-
-         ImageButton Upload_btn = view.findViewById(R.id.btn_upload);
-         Upload_btn.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View view) {
+        Upload_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 intent.setType("application/pdf");
-                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
-                 extractedText="";
-                startReuslt.launch(intent);
-             }
-         });
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
+                extractedText="";
+                ((MainActivity)getActivity()).startUpload(intent);
+                extractedText= ((MainActivity)getActivity()).getExtractedText();
+                make_workbooks.setEnabled(true);
+            }
+        });
         // Inflate the layout for this fragment
         return view;
     }
-    ActivityResultLauncher<Intent> startReuslt =registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if(result.getResultCode() == RESULT_OK){
-                    make_workbooks.setEnabled(true);
-                    Intent Getresponse = result.getData();
-                    Uri path = Getresponse.getData();
-                    System.out.println("Getresponse = " + Getresponse);
-                    ContentResolver res = getActivity().getContentResolver();
-                    try {
-                        InputStream in = res.openInputStream(path);
-                        extractPDF(in);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-                else {
-                    System.out.println("result.toString() = " + result.toString());
-                }
-            }
-    );
 
+    @Override
+    public void onResume() {
+
+        super.onResume();
+    }
 
 }

@@ -98,37 +98,7 @@ public class WorkBookAdapter extends RecyclerView.Adapter<WorkBookAdapter.Holder
         intentDescription.put(itemposition,list.get(itemposition).getdescription());
         intentSearch.put(itemposition,list.get(itemposition).isSearch());
     }
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public void likeCheck(){
 
-        Call<WorkBookResponseDto> likebookcheck = workbookController.getlikeWorkBook(PreferencesManager.getString(context,"token"),page);
-        page++;
-        likebookcheck.enqueue(new Callback<WorkBookResponseDto>() {
-            @Override
-            public void onResponse(Call<WorkBookResponseDto> call, Response<WorkBookResponseDto> response) {
-                gsonParsing instance = gsonParsing.getInstance();
-                WorkBookResponseDto body = response.body();
-                if (response.code() == 200) {
-                    List<?> data = body.getData();
-                    NONE:
-                    for (int i = 0; i < body.getCount(); i++) {
-                        WorkBookTestResponse parsing = (WorkBookTestResponse) instance.parsing(
-                                instance.toJson(data.get(i)),
-                                WorkBookTestResponse.class);
-                        long id = parsing.getId();
-                        likeMap.put(id,true);
-                        if(response.body().getCount() == 0){
-                            break NONE;
-                        }
-                    }
-                }
-            }
-            @Override
-            public void onFailure(Call<WorkBookResponseDto> call, Throwable t) {
-
-            }
-        });
-    }
     // 몇개의 데이터를 리스트로 뿌려줘야하는지 반드시 정의해줘야한다
     @Override
     public int getItemCount() {
@@ -148,11 +118,7 @@ public class WorkBookAdapter extends RecyclerView.Adapter<WorkBookAdapter.Holder
     // ViewHolder는 하나의 View를 보존하는 역할을 한다
     public class Holder extends RecyclerView.ViewHolder {
         private TextView tv_title_workbook, tv_description_workbook , cntLike;
-
         private ImageView likeView;
-
-        private boolean likeCheck;
-
         private String a;
 
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -163,7 +129,6 @@ public class WorkBookAdapter extends RecyclerView.Adapter<WorkBookAdapter.Holder
             likeView = (ImageView) view.findViewById(R.id.like);
             cntLike = (TextView) view.findViewById(R.id.likeCount);
 
-            check();
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -188,27 +153,7 @@ public class WorkBookAdapter extends RecyclerView.Adapter<WorkBookAdapter.Holder
             });
         }
 
-        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-        public void check(){
-            Set<Long> keySet1 = likeMap.keySet();
-            System.out.println("likeMap = " + likeMap.size());
-            for (Long key : keySet1) {
-                System.out.println("key = " + key);
-                for(int j=0;j<list.size();j++){
-                    if(list.get(j).getId() == key){
-                        System.out.println("key + key.getClass(key) = " +  key +" + " +likeMap.get(key));
-                        WorkBookItemData data1 = new WorkBookItemData(list.get(j).getId(),
-                                list.get(j).getTitle(),
-                                list.get(j).getdescription(),
-                                list.get(j).getLikeCount(),
-                                list.get(j).getPage(),list.get(j).isSearch(),
-                                itemView.getContext().getDrawable(R.drawable.ic_baseline_favorite_24));
-                        list.set(j, data1);
-                        notifyItemChanged(j);
-                    }
-                }
-            }
-        }
+
         public void sumbitLike(){
                 Call<WorkBookTestResponse> checklike = workbookController.likeWorkBook(PreferencesManager.getString(itemView.getContext(),"token"),
                         new likeWorkBook(intentId.get(getAbsoluteAdapterPosition())));
