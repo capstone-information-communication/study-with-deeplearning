@@ -25,8 +25,8 @@ public interface WorkbookController {
     @POST("api/v1/workbook-with-text")
     Call<UploadWorkBookResponseDto> SendWorkBook(@Header("Authorization") String token, @Body UploadWorkBookRequestDto request);
 
-    @GET("api/v1/choices")
-    Call<WorkBookResponseDto> getChoiceList();
+    @GET("api/v1/like-workbooks")
+    Call<WorkBookResponseDto> getlikeWorkBook(@Header("Authorization") String token, @Query("page") int page);
 
     @GET("api/v1/workbooks")
     Call<WorkBookResponseDto> getWorkbook(@Header("Authorization") String token, @Query("page") int page);
