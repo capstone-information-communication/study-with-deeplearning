@@ -15,6 +15,8 @@ import com.smp.frontend.R;
 import com.smp.frontend.global.WorkBookQuestionListDto;
 import com.smp.frontend.global.choiceListDto;
 import com.smp.frontend.global.gsonParsing;
+import com.smp.frontend.likeWorkbook.list.likeBookAdapter;
+import com.smp.frontend.likeWorkbook.list.likeBookItemData;
 import com.smp.frontend.member.activity.MainActivity;
 import com.smp.frontend.workbook.RetrofitClientWorkbook;
 import com.smp.frontend.workbook.WorkbookController;
@@ -38,7 +40,7 @@ import retrofit2.Response;
 public class WorkBookQeustion extends AppCompatActivity {
     private int ID,page;
     private String title,description;
-    private boolean search;
+    private boolean search,likebook;
     private RecyclerView recyclerView;
     private List<WorkBookQuestionItemData> list= new ArrayList<>();;
     private WorkBookQuestionAdapter adapter;
@@ -62,6 +64,7 @@ public class WorkBookQeustion extends AppCompatActivity {
         title = intent.getStringExtra("title");
         description = intent.getStringExtra("descritpion");
         search = intent.getBooleanExtra("search",true);
+        likebook = intent.getBooleanExtra("likeBook",false);
         recyclerView = findViewById(R.id.rv_WrongAnswers);
 
         getQeustion();
@@ -122,7 +125,7 @@ public class WorkBookQeustion extends AppCompatActivity {
     }
 
     public void getQeustion() {
-        if (search == false) {
+        if (search == false && likebook == false) {
             list = new ArrayList<>();
             Call<WorkBookResponseDto> responseCall = workbookController.getWorkbook(PreferencesManager.getString(getApplicationContext(), "token"), page);
             responseCall.enqueue(new Callback<WorkBookResponseDto>() {
@@ -174,10 +177,62 @@ public class WorkBookQeustion extends AppCompatActivity {
                 }
             });
         }
-        else{
+        else if(search == true && likebook == false){
             list = new ArrayList<>();
             Call<WorkBookResponseDto> responseCall = workbookController.getWorkBookSearch(PreferencesManager.getString(getApplicationContext(), "token"),title,description, page);
             responseCall.enqueue(new Callback<WorkBookResponseDto>() {
+                @Override
+                public void onResponse(Call<WorkBookResponseDto> call, Response<WorkBookResponseDto> response) {
+                    gsonParsing instance = gsonParsing.getInstance();
+                    WorkBookResponseDto body = response.body();
+                    if (response.code() == 200) {
+                        List<?> data = body.getData();
+
+                        for (int i = 0; i < body.getCount(); i++) {
+                            WorkBookTestResponse parsing = (WorkBookTestResponse) instance.parsing(
+                                    instance.toJson(data.get(i)),
+                                    WorkBookTestResponse.class);
+                            long id = parsing.getId();
+                            if (id == ID) {
+                                for (int j = 0; j < parsing.getQuestionList().size(); j++) {
+                                    try {
+                                        //questionList
+                                        WorkBookTestResponse parsing2 = (WorkBookTestResponse) instance.parsing(
+                                                instance.ArrToString(instance.toJsonArr(parsing.getQuestionList()), j),
+                                                WorkBookTestResponse.class
+                                        );
+                                        long qid = parsing2.getId();
+                                        String qtitle = parsing2.getTitle();
+                                        String qcontent = parsing2.getContent();
+                                        String category = parsing2.getCategory();
+                                        WorkBookQuestionListDto WorkBookQuestionListDto = new WorkBookQuestionListDto(qid, qtitle, qcontent, category);
+                                        //chocieList
+                                        List<?> choiceList = parsing2.getChoiceList();
+
+                                        list.add(new WorkBookQuestionItemData(id, WorkBookQuestionListDto, choiceList));
+                                        adapter = new WorkBookQuestionAdapter(getApplicationContext(), list);
+                                        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                                        recyclerView.setAdapter(adapter);
+                                        recyclerView.setHasFixedSize(true);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<WorkBookResponseDto> call, Throwable t) {
+
+                }
+            });
+        }
+        else if(likebook == true){
+            list = new ArrayList<>();
+            Call<WorkBookResponseDto> getlikeWorkBook = workbookController.getlikeWorkBook(PreferencesManager.getString(getApplicationContext(),"token"),page);
+            getlikeWorkBook.enqueue(new Callback<WorkBookResponseDto>() {
                 @Override
                 public void onResponse(Call<WorkBookResponseDto> call, Response<WorkBookResponseDto> response) {
                     gsonParsing instance = gsonParsing.getInstance();

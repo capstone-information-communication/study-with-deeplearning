@@ -1,7 +1,10 @@
 package com.smp.frontend.workbook.fragment;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -14,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,6 +41,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,8 +65,7 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
     //retrofit
     private RetrofitClientWorkbook retrofitClient = RetrofitClientWorkbook.getInstance();
     private WorkbookController workbookController = RetrofitClientWorkbook.getRetrofitInterface();
-
-
+    private Drawable drawable;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,10 +74,12 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
 
     private TextView test1;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_work_book, container, false);
+        drawable = getContext().getDrawable(R.drawable.ic_baseline_favorite_border_24);
         recyclerView =(RecyclerView) view.findViewById(R.id.rv_workBook);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -86,7 +92,7 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
                 super.onScrolled(recyclerView, dx, dy);
                 lastVisibleItemPosition = ((LinearLayoutManager)recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
                 int itemTotalCount = recyclerView.getAdapter().getItemCount() - 1;
-
+                adapter.likeCheck();
                 if(lastVisibleItemPosition == itemTotalCount && pageDone == false){
                     if(search == true){
                         System.out.println("list.size() = " + list.size());
@@ -112,7 +118,6 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
 
-
         return view;
 
     }
@@ -133,7 +138,6 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
     public void getList(int page){
         search= false;
         Call<WorkBookResponseDto> test = workbookController.getWorkbook(PreferencesManager.getString(getContext(),"token"),page);
-
         test.enqueue(new Callback<WorkBookResponseDto>() {
             @Override
             public void onResponse(Call<WorkBookResponseDto> call, Response<WorkBookResponseDto> response) {
@@ -149,7 +153,7 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
                         String title = parsing.getTitle();
                         String description = parsing.getDescription();
                         int likeCount = (int)parsing.getLikeCount();
-                        list.add(new WorkBookItemData(id, title, description,likeCount,page,search));
+                        list.add(new WorkBookItemData(id, title, description,likeCount,page,search,drawable));
                         adapter = new WorkBookAdapter(getActivity(), list);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                         recyclerView.setAdapter(adapter);
@@ -189,7 +193,7 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
                             String title = parsing.getTitle();
                             String description = parsing.getDescription();
                             int likeCount = parsing.getLikeCount();
-                            list.add(new WorkBookItemData(id, title, description,likeCount, page, search));
+                            list.add(new WorkBookItemData(id, title, description,likeCount, page, search,drawable));
                             adapter = new WorkBookAdapter(getActivity(), list);
                             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                             recyclerView.setAdapter(adapter);
@@ -327,8 +331,6 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
                             });
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
-
-
         }
     }
 }

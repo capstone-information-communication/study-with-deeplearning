@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.smp.frontend.R;
-import com.smp.frontend.member.fragment.HomeFragment;
+import com.smp.frontend.likeWorkbook.fragment.likeWorkBookFragment;
 import com.smp.frontend.workbook.fragment.UploadFragment;
 import com.smp.frontend.workbook.fragment.WorkBookFragment;
 import com.smp.frontend.wrongAnswer.fragment.WrongAnswerFragment;
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     private FragmentManager fm;
     private FragmentTransaction ft;
-    private HomeFragment HomeFrag;
+    private likeWorkBookFragment HomeFrag;
     private UploadFragment UploadFrag;
     private WorkBookFragment WorkBookFrag;
     private WrongAnswerFragment WrongAnswerFrag;
@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-        HomeFrag = new HomeFragment();
+        HomeFrag = new likeWorkBookFragment();
         //fragment1로 번들 전달
         UploadFrag = new UploadFragment();
         WorkBookFrag = new WorkBookFragment();
