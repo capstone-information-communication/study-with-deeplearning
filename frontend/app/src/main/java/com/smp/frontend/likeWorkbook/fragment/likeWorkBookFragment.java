@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,7 +38,7 @@ public class likeWorkBookFragment extends Fragment {
     private List<likeBookItemData> list = new ArrayList<>();
     private likeBookAdapter adapter;
     private boolean pageDone =false;
-    private int page =0;
+    private int page =0, lastVisibleItemPosition;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,9 +55,25 @@ public class likeWorkBookFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_likebook, container, false);
-
-        getlikeList(page);
         recyclerView =(RecyclerView) view.findViewById(R.id.rv_likebook);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+            }
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                lastVisibleItemPosition = ((LinearLayoutManager)recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+                int itemTotalCount = recyclerView.getAdapter().getItemCount() - 1;
+                if(lastVisibleItemPosition == itemTotalCount && pageDone == false){
+                        System.out.println("list.size() = " + list.size());
+                        page++;
+                    getlikeList(page);
+                    }
+            }
+        });
 
         // Inflate the layout for this fragment
         return view;
@@ -65,6 +82,7 @@ public class likeWorkBookFragment extends Fragment {
     @Override
     public void onResume() {
         list = new ArrayList<>();
+            getlikeList(page);
         super.onResume();
     }
     public void getlikeList(int page){
