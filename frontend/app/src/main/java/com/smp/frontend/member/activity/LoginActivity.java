@@ -105,39 +105,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //loginAutoTokenCheck
-        if(!(PreferencesManager.getString(getApplication(),"token").equals(null))){
-            Call<MemberSginInResponseDto> UserInfo = memberController.GetUser(PreferencesManager.getString(getApplication(),"token"));
-            UserInfo.enqueue(new Callback<MemberSginInResponseDto>() {
-                @Override
-                public void onResponse(Call<MemberSginInResponseDto> call, Response<MemberSginInResponseDto> response) {
-                    if(response.code() == 200) {
-                        System.out.println("response2 = " + response.body().getEmail());
-                        PreferencesManager.setData(getApplication(),"nickname",response.body().getNickname());
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                    else {
-                        try {
-                            if(response.code() != 500) {
-                                JSONObject jsonObject = new JSONObject(response.errorBody().string());
-                                String message = jsonObject.get("message").toString();
-                                Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
-                            }
-                        } catch (IOException|JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-                @Override
-                public void onFailure(Call<MemberSginInResponseDto> call, Throwable t) {
-                    Toast.makeText(getBaseContext(),"서버에러",Toast.LENGTH_LONG).show();
-                }
-            });
-        }
-
-
 
         btn_login = (Button)findViewById(R.id.btn_login); //로그인 버튼
         btn_register = (Button)findViewById(R.id.btn_register); //회원가입 버튼

@@ -45,24 +45,22 @@ public class SplashActivity extends AppCompatActivity {
                                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 finish();
-                            } else {
+                            }
+                            else if(response.code() == 500){
+                                        Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                                        startActivity(intent);
+                                        finish();
+
+                            }
+                            else if(response.code() == 400){
                                 try {
-                                    if (response.code() != 500) {
-                                        JSONObject jsonObject = new JSONObject(response.errorBody().string());
-                                        String message = jsonObject.get("message").toString();
-                                        Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
-                                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                    if(response.code() != 400){
-                                        JSONObject jsonObject = new JSONObject(response.errorBody().string());
-                                        String message = jsonObject.get("message").toString();
-                                        Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
-                                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }
+                                    JSONObject jsonObject = new JSONObject(response.errorBody().string());
+                                    String message = jsonObject.get("message").toString();
+                                    Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
+                                    Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                                    startActivity(intent);
+                                    finish();
+
                                 } catch (IOException | JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -75,7 +73,7 @@ public class SplashActivity extends AppCompatActivity {
                         }
                     });
                 } else {
-                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
                     startActivity(intent);
                     finish();
                 }
