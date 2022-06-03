@@ -15,7 +15,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Frontend">
-        <activity android:name=".workbook.activity.WorkBookQeustion"></activity>
+        <activity android:name=".global.acitivity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".workbook.activity.WorkBookQeustion" />
         <activity android:name=".wrongAnswer.activity.WrongAnswersActivity" />
         <activity
             android:name=".member.activity.RegisterActivity"
@@ -26,11 +33,6 @@
         <activity
             android:name=".member.activity.LoginActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

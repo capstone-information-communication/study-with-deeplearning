@@ -34,12 +34,12 @@ public class LoginActivity extends AppCompatActivity {
     private Button btn_login, btn_register;
     private EditText et_id, et_pass;
 
-    private RetrofitClientMember retrofitClient;
+    private RetrofitClientMember retrofitClient = RetrofitClientMember.getInstance();
+    private MemberController memberController =  RetrofitClientMember.getRetrofitInterface();
 
     Toast toast;
     private void SginInConnection(MemberSignInRequestDto request){
-        retrofitClient = RetrofitClientMember.getInstance();
-        MemberController memberController =  RetrofitClientMember.getRetrofitInterface();
+
         try { // 서버 종료되어있으면 catch 예외처리
             Call<MemberSginInResponseDto> signrequest =  memberController.SignIn(request);
             signrequest.enqueue(new Callback<MemberSginInResponseDto>() {
@@ -107,8 +107,6 @@ public class LoginActivity extends AppCompatActivity {
 
         //loginAutoTokenCheck
         if(!(PreferencesManager.getString(getApplication(),"token").equals(null))){
-            retrofitClient = RetrofitClientMember.getInstance();
-            MemberController memberController =  RetrofitClientMember.getRetrofitInterface();
             Call<MemberSginInResponseDto> UserInfo = memberController.GetUser(PreferencesManager.getString(getApplication(),"token"));
             UserInfo.enqueue(new Callback<MemberSginInResponseDto>() {
                 @Override
