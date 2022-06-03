@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -44,22 +43,17 @@ public class likeWorkBookFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
     }
-
+    public static likeWorkBookFragment newInstance(int number) {
+        likeWorkBookFragment likeWorkBookFragment = new likeWorkBookFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("number", number);
+        likeWorkBookFragment.setArguments(bundle);
+        return likeWorkBookFragment;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_likebook, container, false);
-        Button logout;
-        logout = view.findViewById(R.id.btn_logout);
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PreferencesManager.removeValue(getActivity().getApplicationContext());
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                startActivity(intent);
-                getActivity().finish();
-            }
-        });
 
         getlikeList(page);
         recyclerView =(RecyclerView) view.findViewById(R.id.rv_likebook);

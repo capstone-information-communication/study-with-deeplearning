@@ -1,18 +1,18 @@
 package com.smp.frontend.member.activity;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -22,9 +22,13 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.navigation.NavigationView;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import com.smp.frontend.R;
+
+import com.smp.frontend.global.PreferencesManager;
+import com.smp.frontend.global.ViewPagerAdapter;
 import com.smp.frontend.likeWorkbook.fragment.likeWorkBookFragment;
 import com.smp.frontend.workbook.fragment.UploadFragment;
 import com.smp.frontend.workbook.fragment.WorkBookFragment;
@@ -32,26 +36,29 @@ import com.smp.frontend.wrongAnswer.fragment.WrongAnswerFragment;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Toast toast;
     private long backKeyPressedTime = 0;
 
+    private NavigationView navigationView;
+
+
+
     BottomNavigationView bottomNavigationView;
-    private FragmentManager fm;
-    private FragmentTransaction ft;
-    private likeWorkBookFragment HomeFrag;
-    private UploadFragment UploadFrag;
-    private WorkBookFragment WorkBookFrag;
-    private WrongAnswerFragment WrongAnswerFrag;
+
+
     // Storage Permissions
     Boolean PermissionGranted = false;
 
     public String getExtractedText() {
         return extractedText;
     }
-
     private String extractedText ="";
+
+    ViewPager2 pager;
+    ViewPagerAdapter adapter;
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
@@ -157,57 +164,65 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         verifyStoragePermissions(this);
+        navigationView = (NavigationView)findViewById(R.id.nav);
+        navigationView.setNavigationItemSelectedListener(this);
+
+
+        pager = findViewById(R.id.pager);
+        ArrayList<Fragment> fragments = new ArrayList<>();
+        fragments.add(likeWorkBookFragment.newInstance(0));
+        fragments.add(UploadFragment.newInstance(1));
+        fragments.add(WorkBookFragment.newInstance(2));
+        fragments.add(WrongAnswerFragment.newInstance(3));
+
+        pager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                bottomNavigationView.getMenu().getItem(position).setChecked(true);
+            }
+
+        });
         bottomNavigationView = (BottomNavigationView)findViewById(R.id.bottomNav);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.home:
-                        setFrag(0);
-                        break;
-                    case R.id.upload:
-                        setFrag(1);
-                        break;
-                    case R.id.work_book:
-                        setFrag(2);
-                        break;
-                    case R.id.wrong_answer_book:
-                        setFrag(3);
-                        break;
-                }
+                    switch (menuItem.getItemId()) {
+                        case R.id.home:
+                            pager.setCurrentItem(0);
+                            break;
+                        case R.id.upload:
+                            pager.setCurrentItem(1);
+                            break;
+                        case R.id.work_book:
+                            pager.setCurrentItem(2);
+                            break;
+                        case R.id.wrong_answer_book:
+                            pager.setCurrentItem(3);
+                            break;
+                    }
                 return true;
             }
         });
-        HomeFrag = new likeWorkBookFragment();
-        //fragment1로 번들 전달
-        UploadFrag = new UploadFragment();
-        WorkBookFrag = new WorkBookFragment();
-        WrongAnswerFrag = new WrongAnswerFragment();
+        pager = (ViewPager2) findViewById(R.id.pager);
 
-        setFrag(0); // 첫 프래그먼트 화면을 무엇으로 지정해줄 것인지 선택.
+        ViewPagerAdapter viewPager2Adapter = new ViewPagerAdapter(this, fragments);
+        pager.setAdapter(viewPager2Adapter);
+
 
     }
-    // 프래그먼트 교체가 일어나는 실행문이다.
-    public void setFrag(int n) {
-        fm = getSupportFragmentManager();
-        ft = fm.beginTransaction();
-        switch (n) {
-            case 0:
-                ft.replace(R.id.main_frame, HomeFrag);
-                ft.commit();
-                break;
-            case 1:
-                ft.replace(R.id.main_frame, UploadFrag);
-                ft.commit();
-                break;
-            case 2:
-                ft.replace(R.id.main_frame, WorkBookFrag);
-                ft.commit();
-                break;
-            case 3:
-                ft.replace(R.id.main_frame, WrongAnswerFrag);
-                ft.commit();
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.btn_logout:
+                PreferencesManager.removeValue(getApplicationContext());
+                Intent intent=new Intent(getApplicationContext(), LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+                finish();
                 break;
         }
+        return false;
     }
 }

@@ -21,7 +21,6 @@ android {
         //BASEURL
         buildConfigField "String", "BASEURL", properties['BaseUrl']
 
-
     }
 
     buildTypes {
@@ -62,5 +61,8 @@ dependencies {
 
     //searchbar
     implementation 'com.github.mancj:MaterialSearchBar:0.8.5'
+
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
+
 
 }
