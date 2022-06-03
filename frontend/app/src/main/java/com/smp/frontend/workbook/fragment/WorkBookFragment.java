@@ -28,6 +28,7 @@ import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.smp.frontend.global.PreferencesManager;
 import com.smp.frontend.R;
 import com.smp.frontend.global.gsonParsing;
+import com.smp.frontend.likeWorkbook.fragment.likeWorkBookFragment;
 import com.smp.frontend.member.activity.LoginActivity;
 import com.smp.frontend.member.activity.MainActivity;
 import com.smp.frontend.workbook.RetrofitClientWorkbook;
@@ -76,6 +77,13 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+    }
+    public static WorkBookFragment newInstance(int number) {
+        WorkBookFragment WorkBookFragment = new WorkBookFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("number", number);
+        WorkBookFragment.setArguments(bundle);
+        return WorkBookFragment;
     }
 
     private TextView test1;
@@ -140,6 +148,7 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
     @Override
     public void onResume() {
         super.onResume();
+        list = new ArrayList<>();
         checkLike(page);
         getList(page);
     }

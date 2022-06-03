@@ -23,6 +23,7 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import com.smp.frontend.global.PreferencesManager;
 import com.smp.frontend.R;
+import com.smp.frontend.likeWorkbook.fragment.likeWorkBookFragment;
 import com.smp.frontend.member.activity.MainActivity;
 import com.smp.frontend.workbook.dto.UploadWorkBookResponseDto;
 import com.smp.frontend.workbook.RetrofitClientWorkbook;
@@ -56,6 +57,13 @@ public class UploadFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+    }
+    public static UploadFragment newInstance(int number) {
+        UploadFragment UploadFragment = new UploadFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("number", number);
+        UploadFragment.setArguments(bundle);
+        return UploadFragment;
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

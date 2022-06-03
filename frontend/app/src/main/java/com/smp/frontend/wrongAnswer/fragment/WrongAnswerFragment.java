@@ -20,6 +20,7 @@ import com.smp.frontend.global.gsonParsing;
 import com.smp.frontend.workbook.RetrofitClientWorkbook;
 import com.smp.frontend.workbook.WorkbookController;
 import com.smp.frontend.workbook.dto.WorkBookResponseDto;
+import com.smp.frontend.workbook.fragment.WorkBookFragment;
 import com.smp.frontend.workbook.list.RecyclerItemTouchHelper;
 import com.smp.frontend.workbook.list.WorkBookAdapter;
 import com.smp.frontend.workbook.list.WorkBookItemData;
@@ -56,7 +57,13 @@ public class WrongAnswerFragment extends Fragment implements RecyclerItemTouchHe
         super.onCreate(savedInstanceState);
 
     }
-
+    public static WrongAnswerFragment newInstance(int number) {
+        WrongAnswerFragment WrongAnswerFragment = new WrongAnswerFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("number", number);
+        WrongAnswerFragment.setArguments(bundle);
+        return WrongAnswerFragment;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -78,6 +85,7 @@ public class WrongAnswerFragment extends Fragment implements RecyclerItemTouchHe
     @Override
     public void onResume() {
         super.onResume();
+        list = new ArrayList<>();
         RetrofitStart();
     }
 
