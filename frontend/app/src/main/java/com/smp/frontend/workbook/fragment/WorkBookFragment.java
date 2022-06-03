@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -38,12 +39,17 @@ import com.smp.frontend.workbook.dto.WorkBookTestResponse;
 import com.smp.frontend.workbook.list.WorkBookAdapter;
 import com.smp.frontend.workbook.list.WorkBookItemData;
 import com.smp.frontend.workbook.list.RecyclerItemTouchHelper;
+import com.smp.frontend.workbook.list.WorkBookQuestionItemData;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +64,7 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 
 public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSearchActionListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
     private ArrayList<WorkBookItemData> list = new ArrayList<>();
+    private List<WorkBookItemData> myArrayData = new ArrayList();
     private View view;
     private WorkBookAdapter adapter;
     private RecyclerView recyclerView;
@@ -73,6 +80,9 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
     private WorkbookController workbookController = RetrofitClientWorkbook.getRetrofitInterface();
     private Drawable drawable;
     private Map<Long,Drawable> likeMap= new HashMap<>();
+    private String sort="좋아요순", back ="되돌리기";
+    private Button sort_btn;
+    private boolean chk = false;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,8 +95,6 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
         WorkBookFragment.setArguments(bundle);
         return WorkBookFragment;
     }
-
-    private TextView test1;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -108,15 +116,11 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
                 int itemTotalCount = recyclerView.getAdapter().getItemCount() - 1;
                 if(lastVisibleItemPosition == itemTotalCount && pageDone == false){
                     if(search == true){
-                        System.out.println("list.size() = " + list.size());
                         page++;
-                        checkLike(page);
                         getSearchList(page,title,description);
                     }
                     else{
-                        System.out.println("list.size() = " + list.size());
                         page++;
-                        checkLike(page);
                         getList(page);
                     }
 
@@ -129,6 +133,47 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
         lastSearches =searchBar.getLastSuggestions();
         spinner = view.findViewById(R.id.spinner);
 
+        sort_btn = view.findViewById(R.id.btn_sort);
+        sort_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //비어있는 sort용 ArrayList
+                if(chk == false) {
+                    myArrayData = new ArrayList<>();
+                    for (int i = 0; i < adapter.getItemCount(); i++) {
+                        myArrayData.add(adapter.getList(i));
+                    }
+                    for (int j = 0; j < myArrayData.size(); j++) {
+                        for (int k = 0; k < myArrayData.size() - j - 1; k++) {
+                            if (myArrayData.get(k).getLikeCount() < myArrayData.get(k + 1).getLikeCount()) {
+                                WorkBookItemData tmp = myArrayData.get(k);
+                                myArrayData.set(k, myArrayData.get(k + 1));
+                                myArrayData.set(k + 1, tmp);
+                            }
+                        }
+                    }
+
+                    adapter = new WorkBookAdapter(getActivity(), myArrayData);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    recyclerView.setAdapter(adapter);
+                    chk = true;
+                    sort_btn.setText(back);
+                }
+                else if(chk == true){
+                    myArrayData = new ArrayList<>();
+                    list = new ArrayList<>();
+                    page=0;
+                    pageDone = false;
+                    checkLike(page);
+                    getList(page);
+                    chk =false;
+                    sort_btn.setText(sort);
+                }
+
+            }
+        });
+
+
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
@@ -136,24 +181,26 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
         return view;
 
     }
-
     @Override
     public void onStop() {
         super.onStop();
-        list = new ArrayList<>();
-        page= 0;
-        pageDone = false;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        myArrayData = new ArrayList<>();
         list = new ArrayList<>();
+        page=0;
+        pageDone = false;
+        chk =false;
+        sort_btn.setText(sort);
         checkLike(page);
         getList(page);
     }
     public void getList(int page){
         search= false;
+        checkLike(page);
         Call<WorkBookResponseDto> test = workbookController.getWorkbook(PreferencesManager.getString(getContext(),"token"),page);
         test.enqueue(new Callback<WorkBookResponseDto>() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -225,12 +272,15 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
     }
     public void getSearchList(int page,String title, String description){
         search = true;
+        checkLike(page);
         Call<WorkBookResponseDto> test = workbookController.getWorkBookSearch(PreferencesManager.getString(getContext(),"token"),title,description,page);
         test.enqueue(new Callback<WorkBookResponseDto>() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onResponse(Call<WorkBookResponseDto> call, Response<WorkBookResponseDto> response) {
                 if(response.code() == 200) {
+                    sort_btn.setText(sort);
+                    chk = false;
                     gsonParsing instance = gsonParsing.getInstance();
                     WorkBookResponseDto body = response.body();
                     List<?> data = body.getData();
@@ -249,6 +299,7 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
                                 if(key == id){
                                     System.out.println("key = " + key);
                                     drawable = getContext().getDrawable(R.drawable.ic_baseline_favorite_24);
+
                                     break;
                                 }
                                 else{

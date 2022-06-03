@@ -3,6 +3,8 @@ package com.smp.frontend.workbook.list;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +41,11 @@ import retrofit2.http.Path;
 
 public class WorkBookAdapter extends RecyclerView.Adapter<WorkBookAdapter.Holder> {
     private Context context;
+
+    public WorkBookItemData getList(int i) {
+        return list.get(i);
+    }
+
     private List<WorkBookItemData> list = new ArrayList<>();
     private int id,itemposition;
     Map<Integer, Integer> intentId = new HashMap<>();
@@ -47,7 +54,6 @@ public class WorkBookAdapter extends RecyclerView.Adapter<WorkBookAdapter.Holder
     Map<Integer, String> intentDescription = new HashMap<>();
     Map<Integer, Boolean> intentSearch = new HashMap<>();
     Map<Integer,Integer> likecount = new HashMap<>();
-    private Map<Long,Boolean> likeMap = new HashMap<>();
 
     Intent intent;
     private RetrofitClientWorkbook retrofitClientWorkbook = RetrofitClientWorkbook.getInstance();
@@ -128,7 +134,7 @@ public class WorkBookAdapter extends RecyclerView.Adapter<WorkBookAdapter.Holder
             tv_description_workbook = (TextView) view.findViewById(R.id.tv_description_workbook);
             likeView = (ImageView) view.findViewById(R.id.like);
             cntLike = (TextView) view.findViewById(R.id.likeCount);
-
+            likeView.setColorFilter(Color.parseColor("#ffff0000"), PorterDuff.Mode.SRC_IN);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android">
+    <font
+        android:font="@font/nanum_acb"
+        android:fontStyle="normal"
+        android:fontWeight="400"
+        />
+    <font
+        android:font="@font/nanum_aceb"
+        android:fontStyle="normal"
+        android:fontWeight="400"
+        />
+    <font
+        android:font="@font/nanum_acl"
+        android:fontStyle="normal"
+        android:fontWeight="400"
+        />    <font
+    android:font="@font/nanum_acr"
+    android:fontStyle="normal"
+    android:fontWeight="400"
+    />
+    <font
+        android:font="@font/nanum_b"
+        android:fontStyle="normal"
+        android:fontWeight="400"
+        />
+    <font
+        android:font="@font/nanum_eb"
+        android:fontStyle="normal"
+        android:fontWeight="400"
+        />
+    <font
+        android:font="@font/nanum_l"
+        android:fontStyle="normal"
+        android:fontWeight="400"
+        />
+    <font
+        android:font="@font/nanum_r"
+        android:fontStyle="normal"
+        android:fontWeight="400"
+        />
+</font-family>

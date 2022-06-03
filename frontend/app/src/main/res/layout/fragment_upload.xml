@@ -16,7 +16,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="88dp"
         android:background="@color/background"
         android:padding="0sp"
         android:scaleType="centerCrop"
@@ -26,55 +26,68 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_content_send" />
 
-    <EditText
-        android:id="@+id/et_title_send"
-        android:layout_width="288dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="36dp"
-        android:hint="문제집 제목을 입력해주세요"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.287"
-        app:layout_constraintStart_toEndOf="@+id/title"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
         android:id="@+id/make_workbooks_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/radius"
+        android:fontFamily="@font/nanum_b"
+        android:text="파일전송"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_upload" />
+
+    <EditText
+        android:id="@+id/et_title_send"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:fontFamily="@font/nanum_acl"
+        android:gravity="center_horizontal"
+        android:hint="문제집 제목을 입력해주세요"
+        android:singleLine="true"
+        android:lines="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="파일 전송하기 버튼"
-        app:layout_constraintTop_toBottomOf="@+id/btn_upload" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="제목 : "
-        app:layout_constraintBottom_toBottomOf="@+id/et_title_send"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/et_title_send" />
+        android:layout_margin="10dp"
+        android:fontFamily="@font/nanum_b"
+        android:text="제목"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/et_title_send"
+        app:layout_constraintEnd_toEndOf="@+id/et_title_send"
+        app:layout_constraintStart_toStartOf="@+id/et_title_send" />
 
     <TextView
         android:id="@+id/content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:text="설명 : "
-        app:layout_constraintBottom_toBottomOf="@+id/et_content_send"
-        app:layout_constraintEnd_toStartOf="@+id/et_content_send"
-        app:layout_constraintTop_toTopOf="@+id/et_content_send"
-        app:layout_constraintVertical_bias="0.466" />
+        android:layout_margin="10dp"
+        android:fontFamily="@font/nanum_b"
+        android:text="설명"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/et_content_send"
+        app:layout_constraintEnd_toEndOf="@+id/et_content_send"
+        app:layout_constraintStart_toStartOf="@+id/et_content_send" />
 
     <EditText
         android:id="@+id/et_content_send"
-        android:layout_width="289dp"
-        android:layout_height="49dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:fontFamily="@font/nanum_acl"
+        android:gravity="center_horizontal"
+        android:singleLine="true"
+        android:lines="1"
         android:hint="문제집 설명을 입력해주세요"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_title_send" />
 
