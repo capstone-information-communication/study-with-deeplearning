@@ -183,7 +183,7 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
                                         InputMethodManager manager = (InputMethodManager)context.getSystemService(INPUT_METHOD_SERVICE);
                                         manager.hideSoftInputFromWindow(itemView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                                 }
-                                return true;
+                                return false;
                             }
                         });
 
