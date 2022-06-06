@@ -27,4 +27,29 @@ public class MemberSginInResponseDto {
         return token;
     }
 
+    private MemberSginInResponseDto wrongFigure;
+
+    public MemberSginInResponseDto getWrongFigure() {
+        return wrongFigure;
+    }
+    private float blankCount;
+    private float  multipleCount;
+    private float shortCount;
+    private float orderCount;
+
+    public float getBlankCount() {
+        return blankCount;
+    }
+
+    public float getMultipleCount() {
+        return multipleCount;
+    }
+
+    public float getShortCount() {
+        return shortCount;
+    }
+
+    public float getOrderCount() {
+        return orderCount;
+    }
 }

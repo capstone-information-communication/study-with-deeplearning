@@ -1,5 +1,6 @@
 package com.smp.frontend.wrongAnswer;
 
+import com.smp.frontend.member.dto.MemberSginInResponseDto;
 import com.smp.frontend.workbook.dto.UploadWorkBookRequestDto;
 import com.smp.frontend.workbook.dto.UploadWorkBookResponseDto;
 import com.smp.frontend.workbook.dto.WorkBookTestResponse;
@@ -21,5 +22,8 @@ public interface WrongAnswerController {
 
     @HTTP(method = "DELETE", path = "api/v1/wrong-workbook/{id}",hasBody = false)
     Call<DeleteWrongAnswerResponseDto> DeletWrongAnswer(@Header("Authorization") String token, @Path("id") long id);
+
+    @GET("api/v1/member")
+    Call<MemberSginInResponseDto> GetUser(@Header("Authorization") String token);
 
 }
