@@ -2,6 +2,7 @@
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -14,9 +15,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.smp.frontend.global.PreferencesManager;
 import com.smp.frontend.R;
 import com.smp.frontend.global.gsonParsing;
+import com.smp.frontend.member.MemberController;
+import com.smp.frontend.member.dto.MemberSginInResponseDto;
+import com.smp.frontend.member.dto.MemberSignInRequestDto;
 import com.smp.frontend.workbook.RetrofitClientWorkbook;
 import com.smp.frontend.workbook.WorkbookController;
 import com.smp.frontend.workbook.dto.WorkBookResponseDto;
@@ -50,8 +60,9 @@ public class WrongAnswerFragment extends Fragment implements RecyclerItemTouchHe
     private ArrayList<WrongAnswerBookItemData> list = new ArrayList<>();
     RetrofitClientWrongAnswer retrofitClient = RetrofitClientWrongAnswer.getInstance();
     WrongAnswerController wrongAnswerController = RetrofitClientWrongAnswer.getRetrofitInterface();
-    ItemTouchHelper helper;
-    private boolean first =true;
+
+    private PieChart pieChart;
+    private float getblank, getmutiple, getorder , getshort ;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +83,7 @@ public class WrongAnswerFragment extends Fragment implements RecyclerItemTouchHe
         recyclerView = (RecyclerView)view.findViewById(R.id.rv_WrongAnswerBook);
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelperWrong(0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
-
+        pieChart = view.findViewById(R.id.pieChart);
         // Inflate the layout for this fragment
         return view;
     }
@@ -87,6 +98,7 @@ public class WrongAnswerFragment extends Fragment implements RecyclerItemTouchHe
         super.onResume();
         list = new ArrayList<>();
         RetrofitStart();
+        getMembers();
     }
 
     public void RetrofitStart(){
@@ -203,4 +215,75 @@ public class WrongAnswerFragment extends Fragment implements RecyclerItemTouchHe
 
         }
     }
+    public void  getMembers(){
+
+        Call<MemberSginInResponseDto> member = wrongAnswerController.GetUser(PreferencesManager.getString(getActivity(),"token"));
+        member.enqueue(new Callback<MemberSginInResponseDto>() {
+            @Override
+            public void onResponse(Call<MemberSginInResponseDto> call, Response<MemberSginInResponseDto> response) {
+                MemberSginInResponseDto body = response.body();
+                ArrayList NoOfEmp = new ArrayList();
+                ArrayList name = new ArrayList();
+
+                MemberSginInResponseDto  afa= body.getWrongFigure();
+                getblank = afa.getBlankCount();
+                getmutiple = afa.getMultipleCount();
+                getorder = afa.getOrderCount();
+                getshort = afa.getShortCount();
+
+                if(getblank != 0) {
+                    NoOfEmp.add(new Entry(getblank,0));
+                    name.add("빈칸");
+                }
+                if(getmutiple != 0){
+                    NoOfEmp.add(new Entry(getmutiple,1));
+                    name.add("객관");
+
+                }
+                if(getorder != 0) {
+                    NoOfEmp.add(new Entry(getorder,2));
+                    name.add("주관");
+
+                }
+                if(getshort != 0) {
+                    NoOfEmp.add(new Entry(getshort,3));
+                    name.add("단답");
+                }
+
+
+                pieChart.setUsePercentValues(true);
+                pieChart.setExtraOffsets(5,10,5,5);
+
+                pieChart.setDragDecelerationFrictionCoef(0.95f);
+
+                pieChart.setDrawHoleEnabled(false);
+                pieChart.setHoleColor(Color.WHITE);
+                pieChart.setTransparentCircleRadius(61f);
+
+                PieDataSet dataSet = new PieDataSet(NoOfEmp,"문제");
+
+                pieChart.setDescription("오답 유형");
+
+
+                dataSet.setSliceSpace(3f);
+                dataSet.setSelectionShift(5f);
+
+                dataSet.setColors(ColorTemplate.LIBERTY_COLORS);
+                pieChart.animateY(1000, Easing.EasingOption.EaseInOutCubic); //애니메이션
+
+
+                PieData data = new PieData(name, dataSet);          // MPAndroidChart v3.X 오류 발생
+                data.setValueTextSize(15);
+                pieChart.setData(data);
+
+
+            }
+
+            @Override
+            public void onFailure(Call<MemberSginInResponseDto> call, Throwable t) {
+
+            }
+        });
+    }
+
 }
