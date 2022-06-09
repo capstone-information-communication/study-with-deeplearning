@@ -250,8 +250,6 @@ public class WrongAnswerFragment extends Fragment implements RecyclerItemTouchHe
                     name.add("단답");
                 }
 
-
-                pieChart.setUsePercentValues(true);
                 pieChart.setExtraOffsets(5,10,5,5);
 
                 pieChart.setDragDecelerationFrictionCoef(0.95f);

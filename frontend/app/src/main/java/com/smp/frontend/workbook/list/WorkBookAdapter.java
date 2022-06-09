@@ -1,5 +1,6 @@
 package com.smp.frontend.workbook.list;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -89,7 +90,7 @@ public class WorkBookAdapter extends RecyclerView.Adapter<WorkBookAdapter.Holder
      * */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public void onBindViewHolder(Holder holder, int position) {
+    public void onBindViewHolder(Holder holder, @SuppressLint("RecyclerView") int position) {
         // 각 위치에 문자열 세팅
         itemposition = position;
         holder.tv_title_workbook.setText(list.get(itemposition).getTitle());

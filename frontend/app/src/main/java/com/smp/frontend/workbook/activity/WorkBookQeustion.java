@@ -1,11 +1,14 @@
 package com.smp.frontend.workbook.activity;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -48,6 +51,7 @@ public class WorkBookQeustion extends AppCompatActivity {
     private Toast toast;
     private RetrofitClientWorkbook retrofitClientWorkbook = RetrofitClientWorkbook.getInstance();
     private WorkbookController workbookController = RetrofitClientWorkbook.getRetrofitInterface();
+    SparseArray<View> specials = new SparseArray<>();
     @Override
     public void onBackPressed() {
         finish();
@@ -74,10 +78,7 @@ public class WorkBookQeustion extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 List<Long> questionList = new ArrayList<>();
-                if(adapter.getChoiceCount() <= 0 || list.size() != adapter.getChoiceCount()){
-                    System.out.println("getQeustionCount = " + adapter.getQeustionCount());
-                    System.out.println("getChoiceCount = " + adapter.getChoiceCount());
-                    System.out.println("list.size() = " + list.size());
+                if(adapter.getChoiceCount() <= 0 || list.size() -1 != adapter.getChoiceCount()  ){
                     System.out.println("문제 선택 해주세요 하나라도");
                     return;
                 }
@@ -163,6 +164,8 @@ public class WorkBookQeustion extends AppCompatActivity {
                                         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                                         recyclerView.setAdapter(adapter);
                                         recyclerView.setHasFixedSize(true);
+
+
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -214,7 +217,7 @@ public class WorkBookQeustion extends AppCompatActivity {
                                         adapter = new WorkBookQuestionAdapter(getApplicationContext(), list);
                                         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                                         recyclerView.setAdapter(adapter);
-                                        recyclerView.setHasFixedSize(true);
+                                        recyclerView.setHasFixedSize(false);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -266,7 +269,7 @@ public class WorkBookQeustion extends AppCompatActivity {
                                         adapter = new WorkBookQuestionAdapter(getApplicationContext(), list);
                                         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                                         recyclerView.setAdapter(adapter);
-                                        recyclerView.setHasFixedSize(true);
+                                        recyclerView.setHasFixedSize(false);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
