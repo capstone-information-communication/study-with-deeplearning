@@ -44,10 +44,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private NavigationView navigationView;
 
-
-
     BottomNavigationView bottomNavigationView;
-
 
     // Storage Permissions
     Boolean PermissionGranted = false;
@@ -58,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String extractedText ="";
 
     ViewPager2 pager;
-    ViewPagerAdapter adapter;
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
@@ -66,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
 
     };
+
     private void extractPDF(InputStream Filename) {
         try {
             PdfReader reader = new PdfReader(Filename);
@@ -82,8 +79,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
     }
-    public void startUpload(Intent intent){
+    public String startUpload(Intent intent){
         startReuslt.launch(intent);
+        System.out.println("extractedText22222222222 = " + extractedText);
+        return extractedText;
+
 
     }
     ActivityResultLauncher<Intent> startReuslt =registerForActivityResult(

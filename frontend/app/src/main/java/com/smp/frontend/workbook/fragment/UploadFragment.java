@@ -132,14 +132,50 @@ public class UploadFragment extends Fragment {
                 intent.setType("application/pdf");
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
                 extractedText="";
-                ((MainActivity)getActivity()).startUpload(intent);
-                extractedText= ((MainActivity)getActivity()).getExtractedText();
+                startReuslt.launch(intent);
                 make_workbooks.setEnabled(true);
             }
         });
         // Inflate the layout for this fragment
         return view;
     }
+    private void extractPDF(InputStream Filename) {
+        try {
+            PdfReader reader = new PdfReader(Filename);
+            int n = reader.getNumberOfPages();
+            for (int i = 0; i < n; i++) {
+                extractedText = extractedText + PdfTextExtractor.getTextFromPage(reader, i + 1).trim();
+                if(extractedText.length() >= 3000){
+                    break;
+                }
+            }
+            reader.close();
+        } catch (Exception e) {
+            System.out.println("Error found is : \n" + e);
+        }
+
+    }
+    ActivityResultLauncher<Intent> startReuslt =registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if(result.getResultCode() == RESULT_OK){
+                    extractedText ="";
+                    Intent Getresponse = result.getData();
+                    Uri path = Getresponse.getData();
+                    ContentResolver res = getActivity().getContentResolver();
+                    try {
+                        InputStream in = res.openInputStream(path);
+                        extractPDF(in);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    System.out.println("result.toString() = " + result.toString());
+                    extractedText ="";
+
+                }
+            });
 
     @Override
     public void onResume() {

@@ -62,7 +62,7 @@ public class WrongAnswerFragment extends Fragment implements RecyclerItemTouchHe
     WrongAnswerController wrongAnswerController = RetrofitClientWrongAnswer.getRetrofitInterface();
 
     private PieChart pieChart;
-    private float getblank, getmutiple, getorder , getshort ;
+    private int getblank, getmutiple, getorder , getshort ;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -252,7 +252,7 @@ public class WrongAnswerFragment extends Fragment implements RecyclerItemTouchHe
 
                 pieChart.setExtraOffsets(5,10,5,5);
 
-                pieChart.setDragDecelerationFrictionCoef(0.95f);
+
 
                 pieChart.setDrawHoleEnabled(false);
                 pieChart.setHoleColor(Color.WHITE);

@@ -18,10 +18,17 @@ public class likeBookItemData {
     private String title;
     private String description;
 
-    public likeBookItemData(int id, String title, String description) {
+    public int getPage() {
+        return page;
+    }
+
+    private int page;
+
+    public likeBookItemData(int id, String title, String description,int page) {
         this.id = id;
         this.title = title;
         this.description = description;
+        this.page = page;
     }
     // 입력받은 숫자의 리스트생성
 

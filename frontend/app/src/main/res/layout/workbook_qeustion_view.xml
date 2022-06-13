@@ -9,19 +9,24 @@
     android:layout_height="wrap_content">
 
     <EditText
+        android:fontFamily="@font/nanum_l"
+        android:layout_margin="20dp"
         android:id="@+id/Ed_Short"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@drawable/custom_input"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:lines="1"
+        android:privateImeOptions="actionDone"
+        android:singleLine="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_content"
-        android:singleLine="true"
-        android:lines="1"
-        android:inputType="text"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/tv_content" />
 
     <TextView
+        android:fontFamily="@font/nanum_b"
         android:id="@+id/tv_title_wronganswers"
         android:layout_width="match_parent"
         android:layout_height="48dp"
@@ -35,6 +40,7 @@
         app:layout_constraintVertical_bias="0.026" />
 
     <TextView
+        android:fontFamily="@font/nanum_r"
         android:id="@+id/tv_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,6 +51,8 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_title_wronganswers" />
 
     <RadioGroup
+        android:layout_margin="10dp"
+        android:imeOptions="actionDone"
         android:id="@+id/RadioGroup_answers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -53,21 +61,25 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_content">
 
         <RadioButton
+            android:fontFamily="@font/nanum_l"
             android:id="@+id/radio_btn1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <RadioButton
+            android:fontFamily="@font/nanum_l"
             android:id="@+id/radio_btn2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <RadioButton
+            android:fontFamily="@font/nanum_l"
             android:id="@+id/radio_btn3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <RadioButton
+            android:fontFamily="@font/nanum_l"
             android:id="@+id/radio_btn4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

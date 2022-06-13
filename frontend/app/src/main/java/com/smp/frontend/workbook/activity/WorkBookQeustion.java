@@ -78,13 +78,13 @@ public class WorkBookQeustion extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 List<Long> questionList = new ArrayList<>();
-                if(adapter.getChoiceCount() <= 0 || list.size() -1 != adapter.getChoiceCount()  ){
-                    System.out.println("문제 선택 해주세요 하나라도");
+                if(adapter.getChoiceCount() <= 0 || adapter.getChoiceCount() != adapter.getItemCount()){ //문제 수 수정 해야됨
+                    Toast.makeText(getApplication(),"문제를 다 풀어주세요\n" + "선택수 : " +adapter.getChoiceCount() +"\n" +"문제수 : "+ adapter.getItemCount() ,Toast.LENGTH_LONG).show();
                     return;
                 }
                 Set<Integer> keySet = adapter.getQuestion().keySet();
                 for (Integer key : keySet) {
-                    System.out.println(key + " : " + adapter.getQuestion().get(key));
+                    System.out.println(key + " :111 " + adapter.getQuestion().get(key));
                     questionList.add(adapter.getQuestion().get(key));
                 }
 

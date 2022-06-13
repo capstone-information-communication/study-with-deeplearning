@@ -32,24 +32,24 @@ public class MemberSginInResponseDto {
     public MemberSginInResponseDto getWrongFigure() {
         return wrongFigure;
     }
-    private float blankCount;
-    private float  multipleCount;
-    private float shortCount;
-    private float orderCount;
+    private int blankCount;
+    private int  multipleCount;
+    private int shortCount;
+    private int orderCount;
 
-    public float getBlankCount() {
+    public int getBlankCount() {
         return blankCount;
     }
 
-    public float getMultipleCount() {
+    public int getMultipleCount() {
         return multipleCount;
     }
 
-    public float getShortCount() {
+    public int getShortCount() {
         return shortCount;
     }
 
-    public float getOrderCount() {
+    public int getOrderCount() {
         return orderCount;
     }
 }

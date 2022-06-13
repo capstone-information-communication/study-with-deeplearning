@@ -82,6 +82,8 @@ public class likeWorkBookFragment extends Fragment {
     @Override
     public void onResume() {
         list = new ArrayList<>();
+        page =0;
+        pageDone = false;
             getlikeList(page);
         super.onResume();
     }
@@ -107,7 +109,7 @@ public class likeWorkBookFragment extends Fragment {
                             String title = parsing.getTitle();
                             String description = parsing.getDescription();
                             int likeCount = (int) parsing.getLikeCount();
-                            list.add(new likeBookItemData(id, title, description));
+                            list.add(new likeBookItemData(id, title, description,page));
                             adapter = new likeBookAdapter(getActivity(), list);
                             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                             recyclerView.setAdapter(adapter);

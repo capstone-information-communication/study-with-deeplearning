@@ -78,14 +78,9 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
     public long getItemId(int position) {
         return position;
     }
-
     @Override
     public int getItemViewType(int position) {
         return position;
-    }
-
-    public int getQeustionCount() {
-        return quesiton.size(); // RecyclerView의 size return
     }
 
     public HashMap<Integer, Long> getQuestion() {
@@ -180,6 +175,7 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
                             @Override
                             public void afterTextChanged(Editable editable) {
                                 System.out.println("choiceList = " + choiceList.get(0));
+                                System.out.println("itemposition = " + itemposition);
                                 choice.put(itemposition, "선택");
                                 if (shortAnswer.equals(choiceList.get(0))) {
                                     System.out.println("shortAnswer = " + shortAnswer);
@@ -187,16 +183,6 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
                                 } else {
                                     System.out.println("틀린 답 입력");
                                 }
-                            }
-                        });
-                        Ed_text.setOnKeyListener(new View.OnKeyListener() {
-                            @Override
-                            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                                switch (keyCode) {
-                                    case KeyEvent.KEYCODE_ENTER:
-                                        System.out.println("엔터키 입력");
-                                }
-                                return false;
                             }
                         });
 
@@ -220,6 +206,7 @@ public class WorkBookQuestionAdapter extends RecyclerView.Adapter<WorkBookQuesti
                     @Override
                     public void onCheckedChanged(RadioGroup radioGroup, int i) {
                         choice.put(itemposition, "선택");
+                        System.out.println("itemposition = " + itemposition);
                         switch (i) {
                             case R.id.radio_btn1:
                                 if (choiceState.get(0).equals("WRONG")) {

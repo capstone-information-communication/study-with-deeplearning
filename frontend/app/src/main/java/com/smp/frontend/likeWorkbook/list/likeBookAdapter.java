@@ -53,8 +53,10 @@ public class likeBookAdapter extends RecyclerView.Adapter<likeBookAdapter.Holder
         // 각 위치에 문자열 세팅
         itemposition = position;
         holder.wordText.setText(list.get(itemposition).getTitle());
+        holder.meaningText.setText(list.get(itemposition).getDescription());
         id =  list.get(itemposition).getId();
         intentId.put(itemposition,id);
+        intentPage.put(itemposition,list.get(itemposition).getPage());
     }
 
     // 몇개의 데이터를 리스트로 뿌려줘야하는지 반드시 정의해줘야한다
@@ -68,6 +70,15 @@ public class likeBookAdapter extends RecyclerView.Adapter<likeBookAdapter.Holder
         notifyItemRemoved(absoluteAdapterPosition);
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 
     // ViewHolder는 하나의 View를 보존하는 역할을 한다
     public class Holder extends RecyclerView.ViewHolder{
@@ -86,7 +97,7 @@ public class likeBookAdapter extends RecyclerView.Adapter<likeBookAdapter.Holder
                     if(pos != RecyclerView.NO_POSITION) {
                         intent = new Intent(context, WorkBookQeustion.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent.putExtra("ID", intentId.get(pos));
-                        System.out.println("intentId.get(pos) = " + intentId.get(pos));
+                        intent.putExtra("page", intentPage.get(pos));
                         intent.putExtra("likeBook",true);
                         context.startActivity(intent);
                     }

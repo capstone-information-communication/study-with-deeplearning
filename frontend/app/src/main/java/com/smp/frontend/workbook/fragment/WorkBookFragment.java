@@ -207,7 +207,6 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
             @Override
             public void onResponse(Call<WorkBookResponseDto> call, Response<WorkBookResponseDto> response) {
                 gsonParsing instance = gsonParsing.getInstance();
-
                 if(response.code() == 200){
                     WorkBookResponseDto body = response.body();
                     List<?> data = body.getData();
@@ -281,6 +280,7 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
                 if(response.code() == 200) {
                     sort_btn.setText(sort);
                     chk = false;
+
                     gsonParsing instance = gsonParsing.getInstance();
                     WorkBookResponseDto body = response.body();
                     List<?> data = body.getData();
@@ -347,6 +347,7 @@ public class WorkBookFragment extends Fragment implements MaterialSearchBar.OnSe
         int selectedItemPosition = spinner.getSelectedItemPosition();
         page=0;
         list = new ArrayList<>();
+
         int keyevent =66;
         if( keyevent == KeyEvent.KEYCODE_ENTER){
             System.out.println("엔터키 입력");

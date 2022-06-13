@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.smp.frontend.R;
@@ -31,8 +32,9 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity {
 
     private AlertDialog dialog;
-    private Button btn_login, btn_register;
+    private Button btn_login ;
     private EditText et_id, et_pass;
+    private TextView btn_register;
 
     private RetrofitClientMember retrofitClient = RetrofitClientMember.getInstance();
     private MemberController memberController =  RetrofitClientMember.getRetrofitInterface();
@@ -107,7 +109,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
         btn_login = (Button)findViewById(R.id.btn_login); //로그인 버튼
-        btn_register = (Button)findViewById(R.id.btn_register); //회원가입 버튼
+        btn_register = (TextView)   findViewById(R.id.btn_register); //회원가입 버튼
 
         et_id = (EditText)findViewById( R.id.et_id ); //아이디 텍스트
         et_pass = (EditText)findViewById( R.id.et_pass ); //비밀번호 텍스트
