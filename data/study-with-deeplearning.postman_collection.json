@@ -1,0 +1,1304 @@
+{
+	"info": {
+		"_postman_id": "f4663abe-4ec3-41b8-ad64-c90d379db20f",
+		"name": "study-with-deeplearning",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10870234"
+	},
+	"item": [
+		{
+			"name": "member",
+			"item": [
+				{
+					"name": "http://{{URL}}/api/v1/sign-up",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@gmail.com\",\n    \"name\": \"test\",\n    \"nickname\": \"상남자 람머스\",\n    \"role\": \"USER\",\n    \"password\": \"askdhj123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/sign-up",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"sign-up"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://{{URL}}/api/v1/sign-in",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@gmail.com\",\n    \"password\": \"askdhj123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/sign-in",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://{{URL}}/api/v1/member",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjMiLCJpc3MiOiJjb3JlIiwiaWF0IjoxNjUzODk4OTE4LCJleHAiOjE2NTM5MDA3MTh9.fdXuEc9lUigqshabJIjs0ytqNtG87Rz215JpxZ3qQ9YrBGdOvHQHNnuxh1fhLEdobm2fznR6ejw-auuWrXyw5Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/member",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"member"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://{{URL}}/api/v1/members",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1MDEiLCJpc3MiOiJjb3JlIiwiaWF0IjoxNjUxMjA1MTc2LCJleHAiOjE2NTEyMDY5NzZ9.A6eB40NDrX4h3QhFUuWdL9W3npFUpo3iIH5tihm27o3GZQQJ1GEofxjRKCf5ZX8iBFGcLN1s5Ul-38W14pvmxg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/members",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"members"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "question",
+			"item": [
+				{
+					"name": "http://{{URL}}/api/v1/questions",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/questions",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"questions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://{{URL}}/api/v1/question/{id}",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/question/3",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"question",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://{{URL}}/api/v1/question",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/question?category=BLANK",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"question"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "BLANK"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://{{URL}}/api/v1/question",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"workbookId\": 2,\r\n    \"title\": \"다음 중 옳은 보기를 고르시오\",\r\n    \"content\": \"필요한 보기 또는 상황이 들어갈 곳\",\r\n    \"commentary\": {\r\n        \"comment\": \"1번 어쩌구, 2번 어쩌구, 3번 어쩌구\"\r\n    },\r\n    \"category\": \"MULTIPLE\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/question",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"question"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://{{URL}}/api/v1/questions",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"workbookId\": 2,\r\n        \"title\": \"다음 중 옳은 보기를 고르시오1\",\r\n        \"content\": \"필요한 보기 또는 상황이 들어갈 곳\",\r\n        \"commentary\": {\r\n            \"comment\": \"1번 어쩌구, 2번 어쩌구, 3번 어쩌구\"\r\n        },\r\n        \"category\": \"MULTIPLE\"\r\n    },\r\n    {\r\n        \"workbookId\": 2,\r\n        \"title\": \"다음 중 옳은 보기를 고르시오2\",\r\n        \"content\": \"필요한 보기 또는 상황이 들어갈 곳\",\r\n        \"commentary\": {\r\n            \"comment\": \"1번 어쩌구, 2번 어쩌구, 3번 어쩌구\"\r\n        },\r\n        \"category\": \"MULTIPLE\"\r\n    },\r\n    {\r\n        \"workbookId\": 2,\r\n        \"title\": \"다음 중 옳은 보기를 고르시오3\",\r\n        \"content\": \"필요한 보기 또는 상황이 들어갈 곳\",\r\n        \"commentary\": {\r\n            \"comment\": \"1번 어쩌구, 2번 어쩌구, 3번 어쩌구\"\r\n        },\r\n        \"category\": \"MULTIPLE\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/questions",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"questions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://{{URL}}/api/v1/question/{id}",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"수정 제목\",\r\n    \"content\": \"수정 보기\",\r\n    \"category\": \"BLANK\",\r\n    \"commentary\": {\r\n        \"comment\": \"수정 해설\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/question/504",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"question",
+								"504"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://{{URL}}/api/v1/question/{id}",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"수정 제목\",\r\n    \"content\": \"수정 보기\",\r\n    \"category\": \"BLANK\",\r\n    \"commentary\": {\r\n        \"comment\": \"수정 해설\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/question/504",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"question",
+								"504"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "choice",
+			"item": [
+				{
+					"name": "http://{{URL}}/api/v1/choice/{id}",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{URL}}/api/v1/choice/1004",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"choice",
+								"1004"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://{{URL}}/api/v1/choices",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{URL}}/api/v1/choices",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"choices"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://{{URL}}/api/v1/choice",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"questionId\": 3,\n    \"state\": \"ANSWER\",\n    \"content\": \"세종대왕\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/choices",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"choices"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://{{URL}}/api/v1/choices",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAwIiwiaXNzIjoiY29yZSIsImlhdCI6MTY1MTYyODYxMywiZXhwIjoxNjUxNjMwNDEzfQ.CXN6Ji84QUfHkm6d_x-W7dAPMkZFODWpKvkaN070rZH_2htcLXmqffQ07oSldSpsPjRgu0UJJONZIDznpagNCA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n        \"questionId\": 4,\n        \"state\": \"ANSWER\",\n        \"content\": \"세종대왕\"\n    },\n    {\n        \"questionId\": 4,\n        \"state\": \"WRONG\",\n        \"content\": \"영조\"\n    },\n    {\n        \"questionId\": 4,\n        \"state\": \"WRONG\",\n        \"content\": \"정조\"\n    },\n    {\n        \"questionId\": 4,\n        \"state\": \"WRONG\",\n        \"content\": \"태조\"\n    }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/choices",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"choices"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://{{URL}}/api/v1/choice/{id}",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"state\": \"ANSWER\",\n    \"content\": \"선택지 수정\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/choice/802",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"choice",
+								"802"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://{{URL}}/api/v1/choice/{id}",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{URL}}/api/v1/choice/1004",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"choice",
+								"1004"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "wrongAnswer",
+			"item": [
+				{
+					"name": "http://{{URL}}/api/v1/wrong-answer/workbook",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAwIiwiaXNzIjoiY29yZSIsImlhdCI6MTY1MTY2MTU4NSwiZXhwIjoxNjUxNjYzMzg1fQ.7uzzHBrGzugbc1uUeDMbvnKPJBbMQRj03q3l4D8-8ocJ53AhxhidylxY7P2M-A22xQYQo0CqBzmlUXtQJb0kVQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{URL}}/api/v1/wrong-answer/workbook",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"wrong-answer",
+								"workbook"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://{{URL}}/api/v1/wrong-answer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAwIiwiaXNzIjoiY29yZSIsImlhdCI6MTY1MTYzMDQwNywiZXhwIjoxNjUxNjMyMjA3fQ.VCT8KfioKU7DPCK7sBby2L9ZKjxZiwOY1xqt4682yfHCj5X2CFFod61RTsQzXRnMTa1ygO6R5G3rVafi5RL22g",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n    \"questionId\": 3,\n    \"workbookId\": 2\n    },\n    {\n    \"questionId\": 3,\n    \"workbookId\": 2\n    },\n    {\n    \"questionId\": 3,\n    \"workbookId\": 2\n    }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/wrong-answers",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"wrong-answers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://{{URL}}/api/v1/wrong-answer/{id}",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAwIiwiaXNzIjoiY29yZSIsImlhdCI6MTY1MTYzMDQwNywiZXhwIjoxNjUxNjMyMjA3fQ.VCT8KfioKU7DPCK7sBby2L9ZKjxZiwOY1xqt4682yfHCj5X2CFFod61RTsQzXRnMTa1ygO6R5G3rVafi5RL22g",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n    \"questionId\": 3,\n    \"workbookId\": 2\n    },\n    {\n    \"questionId\": 3,\n    \"workbookId\": 2\n    },\n    {\n    \"questionId\": 3,\n    \"workbookId\": 2\n    }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/wrong-answer/1003",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"wrong-answer",
+								"1003"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "likeWorkbook",
+			"item": [
+				{
+					"name": "http://{{URL}}/api/v1/like-workbooks",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAwIiwiaXNzIjoiY29yZSIsImlhdCI6MTY1MTQ2MDY4OSwiZXhwIjoxNjUxNDYyNDg5fQ.FjixKFQLOJYsLWPG1AU8Y04ZFeT3ir4Ifi-U-yA1-9we4R8LJBrWHU-gJyvvnQelMQ2pHLABIQGPNzAD26tHTQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/like-workbooks",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"like-workbooks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://{{URL}}/api/v1/like-workbook",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAwIiwiaXNzIjoiY29yZSIsImlhdCI6MTY1MTQ2MDY4OSwiZXhwIjoxNjUxNDYyNDg5fQ.FjixKFQLOJYsLWPG1AU8Y04ZFeT3ir4Ifi-U-yA1-9we4R8LJBrWHU-gJyvvnQelMQ2pHLABIQGPNzAD26tHTQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"workbook_id\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/like-workbook",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"like-workbook"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://{{URL}}/api/v1/like-workbook/{id}",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAwIiwiaXNzIjoiY29yZSIsImlhdCI6MTY1MTYzMDQwNywiZXhwIjoxNjUxNjMyMjA3fQ.VCT8KfioKU7DPCK7sBby2L9ZKjxZiwOY1xqt4682yfHCj5X2CFFod61RTsQzXRnMTa1ygO6R5G3rVafi5RL22g",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"workbook_id\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/like-workbook/1006",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"like-workbook",
+								"1006"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "workbook",
+			"item": [
+				{
+					"name": "http://{{URL}}/api/v1/workbook/{id}/category",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/workbook/2/category",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"workbook",
+								"2",
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://{{URL}}/api/v1/workbook/{id}",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/workbook/502",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"workbook",
+								"502"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://{{URL}}/api/v1/workbooks",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaXNzIjoiY29yZSIsImlhdCI6MTY1MTIwMzcxNiwiZXhwIjoxNjUxMjA1NTE2fQ.WA_cXmzjijJRdO4s7pnsVFOM7JkAdiAJHrHqZUwpYs5rsc_ATWa1_K1G1CdCveflZOE96rw2sZr3-FLLZbTbQQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/workbooks",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"workbooks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://{{URL}}/api/v1/workbook/search?title=운영체제&description=",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaXNzIjoiY29yZSIsImlhdCI6MTY1MTIwMzcxNiwiZXhwIjoxNjUxMjA1NTE2fQ.WA_cXmzjijJRdO4s7pnsVFOM7JkAdiAJHrHqZUwpYs5rsc_ATWa1_K1G1CdCveflZOE96rw2sZr3-FLLZbTbQQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/workbook/search?title=운영체제&description=대비",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"workbook",
+								"search"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "운영체제"
+								},
+								{
+									"key": "description",
+									"value": "대비"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://{{URL}}/api/v1/workbook",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1MDEiLCJpc3MiOiJjb3JlIiwiaWF0IjoxNjUxMjA1NDI4LCJleHAiOjE2NTEyMDcyMjh9.MEVHtpFSK0zoi_cDUFuI3GxLpbzwc-OjrmT4eggq7wEuu0oNvaDBM9qleFIreL1meENkSfD8Tza5EYPoBv6uHw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"운영체제 4주차 강의 자료\",\n    \"description\": \"운영체제 중간고사 대비 문제집입니다\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/workbook",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"workbook"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://{{URL}}/api/v1/workbook/{id}/check",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAwIiwiaXNzIjoiY29yZSIsImlhdCI6MTY1MTY1OTQyNiwiZXhwIjoxNjUxNjYxMjI2fQ.SQMi8km9WaMv0zcgtj45FYAjyvrHoNDQRlswWZLzlRIsEecba9dVajd-WsTz_eJxdtu1KTUUVMqjH1_OYsbuhQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n        \"questionId\": 10,\n        \"choiceId\": 806\n    },\n    {\n        \"questionId\": 11,\n        \"choiceId\": 808\n    },\n    {\n        \"questionId\": 12,\n        \"choiceId\": 810\n    }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/workbook/9/check",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"workbook",
+								"9",
+								"check"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://{{URL}}/api/v1/workbook-with-text",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"운영체제 4주차 강의 자료\",\n    \"description\": \"운영체제 중간고사 대비 문제집입니다\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/workbook-with-text",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"workbook-with-text"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://{{URL}}/api/v1/workbook/{id}",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1MDEiLCJpc3MiOiJjb3JlIiwiaWF0IjoxNjUxMjA0Nzg3LCJleHAiOjE2NTEyMDY1ODd9.r4akJ9JN4fzEOIbRWDjM260j9--lj9jJejdGB_cUThU62BhmcVZvYpWUsgPQgrS96VM1eI8L2SOrSdDvfTdgMQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"운영체제 5주차 강의 자료였던 거였어\",\r\n    \"description\": \"운영체제 중간고사가 아니라 기말고사 였던 것\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/workbook/502",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"workbook",
+								"502"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://{{URL}}/api/v1/workbook/{id}",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1MDEiLCJpc3MiOiJjb3JlIiwiaWF0IjoxNjUxMjA1NDI4LCJleHAiOjE2NTEyMDcyMjh9.MEVHtpFSK0zoi_cDUFuI3GxLpbzwc-OjrmT4eggq7wEuu0oNvaDBM9qleFIreL1meENkSfD8Tza5EYPoBv6uHw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"운영체제 5주차 강의 자료였던 거였어\",\r\n    \"description\": \"운영체제 중간고사가 아니라 기말고사 였던 것\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/workbook/502",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"workbook",
+								"502"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "flask",
+			"item": [
+				{
+					"name": "http://{{FLASK}}/workbook-with-text",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"text\": \"1979년 10월 26일 박정희 대통령 피살 사건. 1987년 노태우 6·29 선언. 2017년 3월 10일 박근혜 대통령 탄핵 사태. 1973년 8월 8일 김대중 납치 사건. 2019년 10월 14일 법무부장관 조국은 사퇴.  2004년  3월 12일 노무현 대통령 탄핵 사태. 2008년 4월 17일 이명박 대통령 취임 후 처음으로 방미.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{FLASK}}/workbook-with-text",
+							"host": [
+								"{{FLASK}}"
+							],
+							"path": [
+								"workbook-with-text"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "wrongWorkbook",
+			"item": [
+				{
+					"name": "http://{{URL}}/api/v1/wrong-workbook",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaXNzIjoiY29yZSIsImlhdCI6MTY1MzkwNTA3MywiZXhwIjoxNjUzOTA2ODczfQ.KTsfaoUEzsb7io7MiZX45zzmzw6MeihDrb1GmaGOdaAknU0fcd5bck8ZLeW3QDuazKbSIt76oTBStTR4cT9GgA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 11,\r\n    \"questionIdList\": [\r\n        12, 14\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/wrong-workbook",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"wrong-workbook"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://{{URL}}/api/v1/wrong-workbook",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaXNzIjoiY29yZSIsImlhdCI6MTY1MzkwNTA3MywiZXhwIjoxNjUzOTA2ODczfQ.KTsfaoUEzsb7io7MiZX45zzmzw6MeihDrb1GmaGOdaAknU0fcd5bck8ZLeW3QDuazKbSIt76oTBStTR4cT9GgA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 2,\r\n    \"questionIdList\": [\r\n        3, 4\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{URL}}/api/v1/my/wrong-workbook",
+							"protocol": "http",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"my",
+								"wrong-workbook"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
